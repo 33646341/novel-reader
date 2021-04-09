@@ -1,0 +1,16 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="WpfApp1.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <CheckBox x:Name="mycheck_Copy" Content="CheckBox" HorizontalAlignment="Left" Margin="470,196,0,0" VerticalAlignment="Top" Checked="mycheck_Copy_Checked" Unchecked="mycheck_Copy_Unchecked"/>
+        <Label x:Name="lbl" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="470,219,0,0"/>
+        <Button Content="加载新窗口" HorizontalAlignment="Left" Margin="152,204,0,0" VerticalAlignment="Top" Width="84" Height="34" Click="Button_Click"/>
+
+    </Grid>
+</Window>
