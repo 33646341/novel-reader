@@ -26,10 +26,15 @@ namespace Novel_Spider
             this.progressBar1.Value = 0;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) 
+        {
+            run(Url_Txt.Text);
+        }
+
+        public void run(String Url_Txt)
         {
 
-            string html = HttpGet(Url_Txt.Text);
+            string html = HttpGet(Url_Txt);
 
             string Novel_Name = Regex.Match(html, @"(?<=<h1>)([\S\s]*?)(?=</h1>)").Value; //获取书名
 

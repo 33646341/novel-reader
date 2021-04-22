@@ -38,5 +38,12 @@ namespace WpfApp1
         {
             lbl.Content = "已取消";
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Novel_Spider.Form1 f = new Novel_Spider.Form1();
+            f.Show();
+            //f.run("https://www.biquzhh.com/29719_29719087/");
+        }
     }
 }
