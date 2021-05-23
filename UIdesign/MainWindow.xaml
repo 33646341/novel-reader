@@ -4,9 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UIdesign"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="900">
+        Title="MainWindow" Height="600" Width="800">
     <Grid>
-        
+        <TabControl Margin="0,-1,-0.4,0.4" SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="首页" IsSelected="True" FontSize="24" Width="200">
+                <Grid>
+                    <Button  Width="120" Content="搜索" HorizontalAlignment="Left" Margin="570,20,0,0" VerticalAlignment="Top" Height="40" FontSize="20"></Button>
+                    <TextBox Width="400" Text="搜索" Height="40" Margin="165,20,228.6,464.2" FontSize="20"></TextBox>
+                    <Label Content="C#R" HorizontalAlignment="Left" Margin="60,20,0,0" VerticalAlignment="Top" Width="100"></Label>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="下载" IsSelected="True" FontSize="24" Width="200">
+                <Grid>
+                    <TabItem Header="正在下载" IsSelected="True" FontSize="24" VerticalAlignment="Top" Margin="0,0,569.6,0"/>
+                    <TabItem Header="已下载" IsSelected="True" FontSize="24" VerticalAlignment="Top" Margin="224,0,326.6,0"/>
+                    <TabItem Header="下载设置" IsSelected="True" FontSize="24" VerticalAlignment="Top" Margin="467,0,83.6,0"/>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="书架" IsSelected="True" FontSize="24" Width="200">
+
+            </TabItem>
+            <TabItem Header="设置" IsSelected="True" FontSize="24" Width="194">
+                <Grid>
+                    <Grid Height="200"  VerticalAlignment="Top" Margin="0,0,-0.4,0">
+                        <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="0,0,659,159" />
+                    </Grid>
+                    <Grid HorizontalAlignment="Left" Height="156" Margin="0,205,-0.4,0" VerticalAlignment="Top" Width="794">
+                        <Label Content="下载设置" Width="136" Height="44" FontSize="18" Margin="0,0,658,106"></Label>
+                        <TextBox Text="11" Width="100" Height="32" Margin="148,49,546,69" FontSize="14"/>
+                        <Label Content="下载队列大小"  Width="132" Height="32" FontSize="15" Margin="0,49,662,69"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>
