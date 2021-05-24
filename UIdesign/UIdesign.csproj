@@ -100,5 +100,19 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NovelManager\NovelManager\NovelManager.csproj">
+      <Project>{62a76172-9a41-495f-aa3c-88bc15fd5314}</Project>
+      <Name>NovelManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Novel_Spider\Novel_Spider.csproj">
+      <Project>{745f8227-4881-4cc9-933f-2161f434139d}</Project>
+      <Name>Novel_Spider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlineSearchAndRead2.0\OnlineSearchAndRead\OnlineSearchAndRead.csproj">
+      <Project>{92e11434-475d-45be-90be-8fcea52d07c3}</Project>
+      <Name>OnlineSearchAndRead</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
