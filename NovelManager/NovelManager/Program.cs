@@ -11,7 +11,7 @@ namespace NovelManager
     {
         static void Main(string[] args)
         {
-            Settings.Main();
+            Settings.Main(args);
             Console.ReadLine();
         }
     }
