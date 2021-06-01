@@ -14,10 +14,32 @@ namespace NovelManager
 
         public static void Main()
         {
+            var novelDAL = new NovelDAL();
+            Console.WriteLine($"1 isStarred? {novelDAL.isStarred(1)}");
+            Console.WriteLine($"2 isStarred? {novelDAL.isStarred(2)}");
+
+            Console.WriteLine($"cid=1 的阅读进度? {novelDAL.readingProgress(1)}");
+
             增删查测试();
-
             Console.ReadLine();
+        }
 
+        public bool isStarred(int nid)
+        {
+            return ExecuteReader($@"
+                SELECT `cid`,`nid`
+                FROM collection
+                where nid = {nid}
+            ").Count() > 0;
+        }
+
+        public double readingProgress(int cid)
+        {
+            return ExecuteReader($@"
+                SELECT readWords/totalWords
+                FROM chapter
+                where chaid = {cid}
+            ").First().GetFloat(0);
         }
 
         #region "增删查的功能函数与测试"
@@ -210,13 +232,14 @@ namespace NovelManager
         //    }
         //}
 
+        public delegate object GetObject(SqliteDataReader reader);
 
         /// <summary>
         /// 查询语句的一般封装形式
         /// </summary>
         /// <param name="SQLStatement">要请求的SQL语句</param>
         /// <returns>SqliteDataReader</returns>
-        private IEnumerable<SqliteDataReader> ExecuteReader(string SQLStatement)
+        private IEnumerable<SqliteDataReader> ExecuteReader(string SQLStatement, GetObject getObject = null)
         {
             using (var connection = new SqliteConnection($@"Data Source={dbName}.db;"))
             {
@@ -228,6 +251,10 @@ namespace NovelManager
                     Console.WriteLine("打开数据库连接成功");
                     while (reader.Read())
                     {
+                        if (getObject != null)
+                        {
+                            getObject(reader);
+                        }
                         yield return reader;
                     }
                 }
