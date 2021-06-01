@@ -10,55 +10,26 @@ namespace NovelManager
 {
     class NovelDAL
     {
+        private string dbName = "ndb";
+
         public static void Main()
         {
-            Console.WriteLine("hi");
-
-            var novelDAL = new NovelDAL();
-
-            var re = novelDAL.delNovel(10);
-            Console.WriteLine(re);
-
-            re = novelDAL.addNovel("测试小说", "www.login.com");
-            Console.WriteLine(re);
-
-            foreach (var obj in novelDAL.getNovel())
-            {
-                var ns = obj as object[];
-                Console.WriteLine($"小说编号 : {ns[0]}");
-                Console.WriteLine($"小说名字 : {ns[1]}");
-                Console.WriteLine($"小说链接 : {ns[2]}");
-            }
-            //while (true)
-            //{
-            //    novelDAL.get();
-            //    Console.ReadLine();
-            //}
+            增删查测试();
 
             Console.ReadLine();
 
         }
 
-        private string dbName = "ndb";
-
-        public int addNovel(string name,string url)
+        #region "增删查的功能函数与测试"
+        public int addNovel(string name, string url)
         {
-            var rows = 0;
-            using (var connection = new SqliteConnection($@"Data Source={dbName}.db;"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText =
-                $@"
-                    INSERT INTO `novel` 
-                    (`name`, `url`) VALUES ('{name}', '{url}');
-                 ";
-                rows = command.ExecuteNonQuery();
-            }
-            return rows;
+            return ExecuteNonQuery($@"
+                INSERT INTO `novel` 
+                (`name`, `url`) VALUES ('{name}', '{url}');
+            ");
         }
 
-        public ArrayList getNovel()
+        public ArrayList getNovel2()
         {
             ArrayList al = new ArrayList();
 
@@ -81,7 +52,7 @@ namespace NovelManager
                         var id = reader.GetInt32(0);
                         var zh = reader.GetString(1);
                         var en = reader.GetString(2);
-                        al.Add(new object[] { id,zh, en });
+                        al.Add(new object[] { id, zh, en });
                         //Console.WriteLine(zh);
                         //Console.WriteLine(en);
                     }
@@ -91,22 +62,50 @@ namespace NovelManager
             return al;
         }
 
-        public int delNovel(int nid)
+        public IEnumerable<SqliteDataReader> getNovel()
         {
-            var rows = 0;
-            using (var connection = new SqliteConnection($@"Data Source={dbName}.db;"))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText =
-                $@"
-                    DELETE FROM `novel` WHERE rowid = {nid}
-                 ";
-                rows = command.ExecuteNonQuery();
-            }
-            return rows;
+            return ExecuteReader(@"
+                SELECT `nid`,`name`,`url`
+                FROM novel
+                order by `name`
+            ");
         }
 
+        public int delNovel(int nid)
+        {
+            return ExecuteNonQuery($@"
+                DELETE FROM `novel` WHERE rowid = {nid};
+            ");
+        }
+
+        static void 增删查测试()
+        {
+            var novelDAL = new NovelDAL();
+            Console.WriteLine("你好，数据库连接测试");
+
+            // 删除10号小说记录，返回是否成功
+
+            var re = novelDAL.delNovel(10);
+            Console.WriteLine(re);
+
+            // 添加小说(小说名，小说链接)，返回是否成功
+
+            re = novelDAL.addNovel("测试小说", "www.login.com");
+            Console.WriteLine(re);
+
+            // 查询库中所有小说
+
+            foreach (var obj in novelDAL.getNovel())
+            {
+                Console.WriteLine($"小说编号 : {obj[0]}");
+                Console.WriteLine($"小说名字 : {obj[1]}");
+                Console.WriteLine($"小说链接 : {obj[2]}");
+            }
+        }
+        #endregion
+
+
+        /*
         private IEnumerator words;
 
         public NovelDAL()
@@ -172,6 +171,8 @@ namespace NovelManager
             }
         }
 
+        */
+
         //private void button1_Click(object sender, EventArgs e)
         //{
         //    if (input.Text == anwser)
@@ -208,5 +209,48 @@ namespace NovelManager
         //        button1.PerformClick();
         //    }
         //}
+
+
+        /// <summary>
+        /// 查询语句的一般封装形式
+        /// </summary>
+        /// <param name="SQLStatement">要请求的SQL语句</param>
+        /// <returns>SqliteDataReader</returns>
+        private IEnumerable<SqliteDataReader> ExecuteReader(string SQLStatement)
+        {
+            using (var connection = new SqliteConnection($@"Data Source={dbName}.db;"))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = SQLStatement;
+                using (var reader = command.ExecuteReader())
+                {
+                    Console.WriteLine("打开数据库连接成功");
+                    while (reader.Read())
+                    {
+                        yield return reader;
+                    }
+                }
+            }
+            //Console.WriteLine("关闭数据库连接成功");
+        }
+
+        /// <summary>
+        /// 无需返回查询结果的查询语句一般封装形式
+        /// </summary>
+        /// <param name="SQLStatement">要请求的SQL语句</param>
+        /// <returns>受影响的行数，一般不为零表示成功调用</returns>
+        private int ExecuteNonQuery(string SQLStatement)
+        {
+            var rows = 0;
+            using (var connection = new SqliteConnection($@"Data Source={dbName}.db;"))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = SQLStatement;
+                rows = command.ExecuteNonQuery();
+            }
+            return rows;
+        }
     }
 }

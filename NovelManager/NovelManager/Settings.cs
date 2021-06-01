@@ -9,7 +9,7 @@ namespace NovelManager
 {
     class Settings
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
             var appSettings = ReadAllSettings();
             foreach (var key in appSettings.AllKeys)
