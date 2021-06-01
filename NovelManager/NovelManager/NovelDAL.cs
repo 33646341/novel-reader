@@ -15,12 +15,15 @@ namespace NovelManager
         public static void Main()
         {
             var novelDAL = new NovelDAL();
+
             Console.WriteLine($"1 isStarred? {novelDAL.isStarred(1)}");
             Console.WriteLine($"2 isStarred? {novelDAL.isStarred(2)}");
 
             Console.WriteLine($"cid=1 的阅读进度? {novelDAL.readingProgress(1)}");
+            Console.WriteLine($"cid=2 的阅读进度? {novelDAL.readingProgress(2)}");
 
             增删查测试();
+
             Console.ReadLine();
         }
 
@@ -35,11 +38,19 @@ namespace NovelManager
 
         public double readingProgress(int cid)
         {
-            return ExecuteReader($@"
+            // 此处低调的foreach实则是GetEnumerator()的优雅形式。
+            foreach (var obj in ExecuteReader($@"
                 SELECT readWords/totalWords
                 FROM chapter
                 where chaid = {cid}
-            ").First().GetFloat(0);
+            "))
+            {
+                if (!obj.IsDBNull(0))
+                {
+                    return obj.GetDouble(0); // 成功返回
+                }
+            }
+            return 0; // 失败返回
         }
 
         #region "增删查的功能函数与测试"
@@ -108,12 +119,12 @@ namespace NovelManager
             // 删除10号小说记录，返回是否成功
 
             var re = novelDAL.delNovel(10);
-            Console.WriteLine(re);
+            Console.WriteLine($"删除10号记录！影响了{re}行");
 
             // 添加小说(小说名，小说链接)，返回是否成功
 
             re = novelDAL.addNovel("测试小说", "www.login.com");
-            Console.WriteLine(re);
+            Console.WriteLine($"添加一行记录！影响了{re}行");
 
             // 查询库中所有小说
 
@@ -232,14 +243,12 @@ namespace NovelManager
         //    }
         //}
 
-        public delegate object GetObject(SqliteDataReader reader);
-
         /// <summary>
         /// 查询语句的一般封装形式
         /// </summary>
         /// <param name="SQLStatement">要请求的SQL语句</param>
         /// <returns>SqliteDataReader</returns>
-        private IEnumerable<SqliteDataReader> ExecuteReader(string SQLStatement, GetObject getObject = null)
+        private IEnumerable<SqliteDataReader> ExecuteReader(string SQLStatement)
         {
             using (var connection = new SqliteConnection($@"Data Source={dbName}.db;"))
             {
@@ -248,13 +257,9 @@ namespace NovelManager
                 command.CommandText = SQLStatement;
                 using (var reader = command.ExecuteReader())
                 {
-                    Console.WriteLine("打开数据库连接成功");
+                    //Console.WriteLine("打开数据库连接成功");
                     while (reader.Read())
                     {
-                        if (getObject != null)
-                        {
-                            getObject(reader);
-                        }
                         yield return reader;
                     }
                 }
