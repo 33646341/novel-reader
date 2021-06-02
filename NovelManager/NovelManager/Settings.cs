@@ -34,7 +34,6 @@ namespace NovelManager
             //Console.WriteLine(ReadSetting("NotValid"));
             AddUpdateAppSettings("NewSetting", "May 7, 2014");
             AddUpdateAppSettings("Setting1", "May 8, 2014");
-            ReadAllSettings();
             Console.ReadLine();
         }
 
