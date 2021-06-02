@@ -27,19 +27,13 @@ namespace UIdesign
         {
             InitializeComponent();
         }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.te = kw;
             List<fiction_info> _ltfi_Search = form.button1_Click();
-            Lv_HomePage.BeginInvoke(new Action(() =>
+           /* Lv_HomePage.BeginInvoke(new Action(() =>
             {
                 if (_ltfi_Search == null || _ltfi_Search.Count == 0)
                 {
@@ -51,9 +45,15 @@ namespace UIdesign
                 }
                 Lv_HomePage.Enabled = true;
             }));
-        
+           */
+        }
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
         }
+
+      
+        /*
         public void Show_Search_List(List<fiction_info> _ltfi_Search)
         {
             Lv_HomePage.Items.Clear();
@@ -76,6 +76,8 @@ namespace UIdesign
                 }
             }
         }
+         */
+        
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             
@@ -90,5 +92,7 @@ namespace UIdesign
         {
 
         }
+
+        
     }
 }
