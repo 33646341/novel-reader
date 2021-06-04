@@ -22,9 +22,63 @@ namespace NovelManager
             Console.WriteLine($"cid=1 的阅读进度? {novelDAL.readingProgress(1)}");
             Console.WriteLine($"cid=2 的阅读进度? {novelDAL.readingProgress(2)}");
 
-            增删查测试();
+            Console.WriteLine($"collect nid 1? {novelDAL.collectNovel(1)}");
+
+            //Console.WriteLine($"updateNovel nid 1? {novelDAL.updateNovel(1, "号", "www.ggg.vom", "分类")}");
+
+            //增删查测试();
 
             Console.ReadLine();
+        }
+
+        public int updateNovel(int nid, string name, string url, string category = "默认分类")
+        {
+            if (exsitsNovel(nid) > 0)
+            {
+                return ExecuteNonQuery($@"
+                    UPDATE novel
+                    set ????
+                    ('nid') VALUES ({nid});
+                ");
+            }
+            return addNovel(name, url, category);
+        }
+
+        /// <summary>
+        /// 查询小说是否已存在小说数据库中
+        /// </summary>
+        /// <param name="nid">小说id</param>
+        /// <returns></returns>
+        public int exsitsNovel(int nid)
+        {
+            // 此处低调的foreach实则是GetEnumerator()的优雅形式。
+            foreach (var obj in ExecuteReader($@"
+                SELECT novel.nid 
+                FROM novel 
+                WHERE novel.nid = {nid};
+            "))
+            {
+                if (!obj.IsDBNull(0))
+                {
+                    return obj.GetInt32(0); // 成功返回
+                }
+            }
+            return 0; // 失败返回
+        }
+
+        public int collectNovel(int nid)
+        {
+            try
+            {
+                return ExecuteNonQuery($@"
+                    INSERT INTO `collection`
+                    ('nid') VALUES ({nid});
+                ");
+            }
+            catch
+            {
+                return 0; // 违反唯一性约束，已收藏的小说重复收藏了
+            }
         }
 
         public bool isStarred(int nid)
@@ -32,7 +86,7 @@ namespace NovelManager
             return ExecuteReader($@"
                 SELECT `cid`,`nid`
                 FROM collection
-                where nid = {nid}
+                where nid = {nid};
             ").Count() > 0;
         }
 
@@ -54,11 +108,11 @@ namespace NovelManager
         }
 
         #region "增删查的功能函数与测试"
-        public int addNovel(string name, string url)
+        public int addNovel(string name, string url, string category = "默认分类")
         {
             return ExecuteNonQuery($@"
                 INSERT INTO `novel` 
-                (`name`, `url`) VALUES ('{name}', '{url}');
+                (`name`, `url`,`category`) VALUES ('{name}', '{url}','{category}');
             ");
         }
 
