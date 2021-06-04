@@ -67,6 +67,12 @@ namespace UIdesign
         {
 
         }
+        private void SListBox_ItemDoubleClick(object sender, RoutedEventArgs e)
+        {
+            Window1 login1 = new Window1();   //Login为窗口名，把要跳转的新窗口实例化
+            login1.Show();   //打开新窗口
+            //this.Close();
+        }
     }
     public class Student
     {

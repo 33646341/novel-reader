@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="UIdesign.Window1"
         mc:Ignorable="d"
         Title="Window1" Height="748.2" Width="636.8">
-
+    
     <DockPanel LastChildFill="True">
         <Grid Margin="0,0,0,0.4">
             <Grid.RowDefinitions>

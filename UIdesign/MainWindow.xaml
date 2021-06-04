@@ -4,11 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UIdesign"
-        
-        
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
         Title="MainWindow" Height="671.1" Width="863.9">
+    <Window.Resources>
+        <Style x:Key="ListItemstyle" TargetType="ListBoxItem">
+            <EventSetter Event="MouseDoubleClick" Handler="SListBox_ItemDoubleClick"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="696*"/>
@@ -25,7 +28,7 @@
                     <!--ListView x:Name="Lv_HomePage" Height="540" Margin="0,0,0.8,0" SelectionChanged="Lv_HomePage_SelectionChanged" >
                         <ListViewItem x:Name="LV_Item"  VerticalAlignment="Top" Content="123456" Height="7" Margin="0" IsEnabled="True"/>
                     </-->
-                    <ListBox x:Name="listBoxStudents" Height="495" Margin="5,5,4.8,5" SelectionChanged="listBoxStudents_SelectionChanged">
+                    <ListBox x:Name="listBoxStudents" Height="495" Margin="5,5,4.8,5" SelectionChanged="listBoxStudents_SelectionChanged" ItemContainerStyle="{StaticResource ListItemstyle}">
                     
                     </ListBox>
 
