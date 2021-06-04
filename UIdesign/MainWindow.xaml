@@ -4,12 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UIdesign"
+        
+        
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
         Title="MainWindow" Height="671.1" Width="863.9">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="46*"/>
+            <ColumnDefinition Width="696*"/>
         </Grid.ColumnDefinitions>
         <TabControl Margin="0,-1,0.6,-0.4" SelectionChanged="TabControl_SelectionChanged" Grid.ColumnSpan="2">
             <TabItem Header="首页" IsSelected="True" FontSize="24" Width="200">
@@ -20,9 +22,13 @@
                         <TextBox x:Name="keySearch" Width="623" Text="搜索"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
                         <Button Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
                     </WrapPanel>
-                    <ListView x:Name="Lv_HomePage" Height="540" Margin="0,0,0.8,0" SelectionChanged="Lv_HomePage_SelectionChanged" >
+                    <!--ListView x:Name="Lv_HomePage" Height="540" Margin="0,0,0.8,0" SelectionChanged="Lv_HomePage_SelectionChanged" >
                         <ListViewItem x:Name="LV_Item"  VerticalAlignment="Top" Content="123456" Height="7" Margin="0" IsEnabled="True"/>
-                    </ListView>
+                    </-->
+                    <ListBox x:Name="listBoxStudents" Height="495" Margin="5,5,4.8,5" SelectionChanged="listBoxStudents_SelectionChanged">
+                    
+                    </ListBox>
+
                 </StackPanel>
             </TabItem>
             <TabItem Header="下载" IsSelected="True" FontSize="24" Width="200">
@@ -36,11 +42,11 @@
                         </TabItem>
                         <TabItem Header="已下载" IsSelected="True" FontSize="24" Width="200">
                             <Button Content="123456">
-                            </Button> 
+                            </Button>
                         </TabItem>
                         <TabItem Header="下载设置" IsSelected="True" FontSize="24" Width="200">
-                        <Button Content="123456" Margin="537,0,255.8,0">
-                        </Button>
+                            <Button Content="123456" Margin="537,0,255.8,0">
+                            </Button>
                         </TabItem>
                     </TabControl>
                 </Grid>

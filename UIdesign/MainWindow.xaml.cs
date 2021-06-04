@@ -26,73 +26,52 @@ namespace UIdesign
         public MainWindow()
         {
             InitializeComponent();
+            
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
-            String kw = keySearch.Text;
-            form.te = kw;
-            List<fiction_info> _ltfi_Search = form.button1_Click();
-           /* Lv_HomePage.BeginInvoke(new Action(() =>
-            {
-                if (_ltfi_Search == null || _ltfi_Search.Count == 0)
-                {
-                    Lv_HomePage.Items.Clear();
-                }
-                else
-                {
-                    Show_Search_List(_ltfi_Search);
-                }
-                Lv_HomePage.Enabled = true;
-            }));
-           */
-        }
+
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
-      
-        /*
-        public void Show_Search_List(List<fiction_info> _ltfi_Search)
+        private void textBoxId_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Lv_HomePage.Items.Clear();
-            if (_ltfi_Search != null && _ltfi_Search.Count > 0)
-            {
-                foreach (fiction_info _tfi in _ltfi_Search)
-                {
 
-                    ListViewItem _lvi = new ListViewItem();
-                    _lvi.
-                    _lvi.SubItems.Add(_tfi.col_fiction_name);
-                    _lvi.SubItems.Add(_tfi.col_fiction_author);
-                    _lvi.SubItems.Add(_tfi.col_update_chapter);
-                    _lvi.SubItems.Add(_tfi.col_update_time.ToString("yyyy-MM-dd"));
-                    _lvi.SubItems.Add(_tfi.col_fiction_stata);
-                    _lvi.SubItems.Add(_tfi.col_click_count);
-                    _lvi.Tag = _tfi;
-
-                    Lv_HomePage.Items.Add(_lvi);
-                }
-            }
         }
-         */
-        
+
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
+            String kw = keySearch.Text;
+            form.te = kw;
+            List<fiction_info> _ltfi_Search = form.button1_Click();//_ltfi_Search是列表，每一项是一个小说信息
+
+            //为ListView设置Binding
+            this.listBoxStudents.ItemsSource = _ltfi_Search;//数据源
+            this.listBoxStudents.DisplayMemberPath = "col_fiction_name";//路径
+            //ListView.ItemsSourceProperty.
+            //为TextBox设置Binding
+            //Binding binding = new Binding("SelectedItem.col_fiction_name") { Source = this.listBoxStudents };
+            //this.textBoxId.SetBinding(TextBox.TextProperty, binding);
+
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+
         }
 
-        private void Lv_HomePage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void listBoxStudents_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
-
-        private void LV_Item_Selected(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        
+    }
+    public class Student
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
     }
 }
