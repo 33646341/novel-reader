@@ -18,8 +18,8 @@ namespace OnlineSearchAndRead
         Thread _thread_Search;
         public Form1()
         {
-            InitializeComponent();
-            anotherForm = new form_fiction_content();
+              //InitializeComponent();
+              //anotherForm = new form_fiction_content();
         }
 
         public List<fiction_info> Thread_Fiction_Search()
@@ -91,6 +91,16 @@ namespace OnlineSearchAndRead
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
