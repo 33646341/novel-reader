@@ -23,13 +23,14 @@
                     <WrapPanel VerticalAlignment="Top" Height="60">
                         <Label Content="C#R" VerticalAlignment="Bottom" Width="100"></Label>
                         <TextBox x:Name="keySearch" Width="623" Text="搜索"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
-                        <Button Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
+                        <Button x:Name="searchBtn" Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
                     </WrapPanel>
                     <!--ListView x:Name="Lv_HomePage" Height="540" Margin="0,0,0.8,0" SelectionChanged="Lv_HomePage_SelectionChanged" >
                         <ListViewItem x:Name="LV_Item"  VerticalAlignment="Top" Content="123456" Height="7" Margin="0" IsEnabled="True"/>
                     </-->
+                    <hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}"/>
                     <ListBox x:Name="listBoxStudents" Height="495" Margin="5,5,4.8,5" SelectionChanged="listBoxStudents_SelectionChanged" ItemContainerStyle="{StaticResource ListItemstyle}">
-                    
+                        
                     </ListBox>
 
                 </StackPanel>

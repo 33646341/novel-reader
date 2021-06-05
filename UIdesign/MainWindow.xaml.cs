@@ -15,18 +15,35 @@ using System.Windows.Shapes;
 using OnlineSearchAndRead;
 using Novel_Spider;
 using NovelManager;
+using System.ComponentModel;
+using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace UIdesign
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Visibility showProgress = Visibility.Collapsed;
+
+        public Visibility ShowProgress
+        {
+            get { return showProgress; }
+            set
+            {
+                showProgress = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowProgress)));
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
-            
+            DataContext = this;
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -46,11 +63,37 @@ namespace UIdesign
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.te = kw;
-            List<fiction_info> _ltfi_Search = form.button1_Click();//_ltfi_Search是列表，每一项是一个小说信息
 
-            //为ListView设置Binding
+            ShowProgress = Visibility.Visible;
+
+            List<fiction_info> _ltfi_Search = new List<fiction_info>();
+
             this.listBoxStudents.ItemsSource = _ltfi_Search;//数据源
             this.listBoxStudents.DisplayMemberPath = "col_fiction_name";//路径
+
+            new Thread(() =>
+            {
+                for (int i = 10000; i < 10020; i++)
+                {
+                    var fiction_i = new fiction_info();
+                    fiction_i.col_fiction_name = i.ToString();
+                    Thread.Sleep(200);
+
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        _ltfi_Search.Add(fiction_i);
+                        listBoxStudents.ItemsSource = null;
+                        listBoxStudents.ItemsSource = _ltfi_Search;//刷新数据源
+                    });
+                    //listBoxStudents.ItemsSource = _ltfi_Search;//数据源
+                    //PropertyChanged(this, new PropertyChangedEventArgs(nameof(_ltfi_Search)));
+                }
+                ShowProgress = Visibility.Collapsed;
+            }).Start();
+            //List<fiction_info> _ltfi_Search = form.button1_Click();//_ltfi_Search是列表，每一项是一个小说信息
+
+            //为ListView设置Binding
+
             //ListView.ItemsSourceProperty.
             //为TextBox设置Binding
             //Binding binding = new Binding("SelectedItem.col_fiction_name") { Source = this.listBoxStudents };
