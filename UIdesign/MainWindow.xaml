@@ -25,6 +25,7 @@
                         <TextBox x:Name="keySearch" Width="623" Text="搜索"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
                         <Button x:Name="searchBtn" Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
                     </WrapPanel>
+                    <hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}"/>
                     <ListView x:Name="Lv_HomePage" 
                               Background="#FFF1ECEC" 
                               Height="541"  
