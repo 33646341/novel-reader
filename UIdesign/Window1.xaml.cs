@@ -19,14 +19,18 @@ namespace UIdesign
     /// </summary>
     public partial class Window1 : Window
     {
-        public Window1()
+        public Window1(string fiction_name,int author_name,int total_number)
         {
             InitializeComponent();
+            Fiction_name.Text = fiction_name;
+            //Author_name.Text = Convert.ToString(author_name);
+            Total_number.Text = $"小说|完结|{total_number}字";
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -35,6 +39,16 @@ namespace UIdesign
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
         {
 
         }
