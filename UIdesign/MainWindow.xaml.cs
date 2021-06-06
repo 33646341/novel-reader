@@ -46,7 +46,7 @@ namespace UIdesign
             DataContext = this;
             #endregion
         }
-        #region
+        #region 控件函数定义
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -61,7 +61,13 @@ namespace UIdesign
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
         }
+        private void Boksf_lv_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
         #endregion
+        #region 首页
+        #region 搜索按钮
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
@@ -101,16 +107,17 @@ namespace UIdesign
             }).Start();
 
         }
-
-        private void SListView_ItemDoubleClick(object sender, RoutedEventArgs e)
+        #endregion
+        #region 双击详情页
+        private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Student emp = (sender as ListViewItem).Content as Student;
 
             Window1 login1 = new Window1(emp.Name, emp.Id, emp.Age);   //Login为窗口名，把要跳转的新窗口实例化
             login1.Show();
         }   //打开新窗口
-
-        #region
+        #endregion
+        #region 排序代码
         //单击表头排序
         GridViewColumnHeader _lastHeaderClicked = null;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
@@ -177,8 +184,56 @@ namespace UIdesign
             dataView.Refresh();
         }
         #endregion
+        #region 右键功能
+        public void InfoPage(object sender, RoutedEventArgs e) {
+            MessageBox.Show("info!");
+        }
+        public void BookShelf(object sender, RoutedEventArgs e)
+        {
+
+        }
+        public void DownLoadBook(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
+        #endregion
+        #region 书架页
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            List<Student> stuList = new List<Student>()
+            {
+                new Student() { Id = 0, Name = "Tim", Age = 29 },
+                new Student() { Id = 1, Name = "Tom", Age = 28 },
+                new Student() { Id = 2, Name = "Kyle", Age = 27 },
+                new Student() { Id = 3, Name = "Tony", Age = 24 },
+                new Student() { Id = 4, Name = "Vina", Age = 26 },
+                new Student() { Id = 5, Name = "Mike", Age = 22 },
+            };
+            this.Boksf_lv.ItemsSource = stuList;//数据源
+
+            new Thread(() =>
+            {
+                for (int i = 10000; i < 10020; i++)
+                {
+                    var fiction_i = new Student() { Id = 5, Name = "Mike", Age = 22 };
+                    fiction_i.Id = i;
+                    Thread.Sleep(200);
+
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        stuList.Add(fiction_i);
+                        Boksf_lv.ItemsSource = null;
+                        Boksf_lv.ItemsSource = stuList;//刷新数据源
+                    });
+                }
+                ShowProgress = Visibility.Collapsed;
+            }).Start();
+        }
+        #endregion
     }
-    #region
+    #region 数据源
     public class Student
     {
 
