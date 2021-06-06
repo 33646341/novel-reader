@@ -6,8 +6,13 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="UIdesign.Window1"
         mc:Ignorable="d"
-        Title="Window1" Height="748.2" Width="636.8">
-
+        Title="Window1" Height="800" Width="1000">
+    <Window.Resources>
+        <Style x:Key="ListItemstyle" TargetType="ListViewItem">
+            <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
+        </Style>
+        <local:topic x:Key="t"/>
+    </Window.Resources>
     <DockPanel LastChildFill="True">
         <Grid Margin="0,0,0,0.4">
             <Grid.RowDefinitions>
@@ -47,11 +52,28 @@
                     </Grid.RowDefinitions>
                     <hc:TextBox x:Name="Fiction_name" Canvas.Left="327" TextWrapping="Wrap" Text="XXXXXX" Canvas.Top="40" FontSize="30" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFA3A1A1" Foreground="#FF424141" Margin="0,0.333,105.333,0.333" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
                     <hc:TextBox x:Name="Author_name" Height="46" Canvas.Left="327" TextWrapping="Wrap" Text="XXXX | XXX" Canvas.Top="116" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFF35E5E" FontSize="22" Foreground="#FF5C5B5B" Grid.Row="1" Margin="0,48.333,119.333,3" Grid.RowSpan="2" TextChanged="TextBox_TextChanged_1"/>
-                    <hc:TextBox x:Name="Total_number" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 |" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FF424141" Grid.Row="4" Margin="0,3,0,2" />
+                    <hc:TextBox x:Name="Total_number" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 |" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FF424141" Grid.Row="4" Margin="0,5,122.933,3.333" />
 
                 </Grid>
             </Grid>
             <Grid Margin="0,239,0.4,0.4" Grid.RowSpan="2">
+                <ListView x:Name="detaillist" 
+                              Background="#FFF1ECEC" 
+                              Style="{Binding Source= {StaticResource t}}"
+                              ItemContainerStyle="{StaticResource ListItemstyle}"
+                              Grid.Row="2" Height="578" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
+                              >
+                    <ListView.View >
+                        <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
+                            <GridViewColumn x:Name="number" DisplayMemberBinding=
+                          "{Binding Path=number}"  Header="number" Width="100"></GridViewColumn>
+                            <GridViewColumn x:Name="name" DisplayMemberBinding=
+                          "{Binding Path=name}" Header="name" Width="100"></GridViewColumn>
+                            <GridViewColumn x:Name="content" DisplayMemberBinding=
+                          "{Binding Path=content}" Header="content" Width="500"></GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
                 <!--<DataGrid x:Name="topiclist" IsReadOnly="True" AutoGenerateColumns="True">
                     
@@ -72,8 +94,6 @@
                     </DataGrid.Columns>-->
                 <!--
                 </DataGrid>-->
-
-
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
