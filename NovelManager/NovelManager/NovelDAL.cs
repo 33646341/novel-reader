@@ -8,14 +8,14 @@ using System.Collections;
 
 namespace NovelManager
 {
-    class NovelDAL
+    public class NovelDAL
     {
-        private string dbName = "ndb";
+        private string dbName = @"..\..\..\..\NovelManager\NovelManager\bin\Debug\ndb";
 
         public static void Main()
         {
             var novelDAL = new NovelDAL();
-
+            
             Console.WriteLine($"1 isStarred? {novelDAL.isStarred(1)}");
             Console.WriteLine($"2 isStarred? {novelDAL.isStarred(2)}");
 
@@ -31,6 +31,31 @@ namespace NovelManager
             Console.ReadLine();
         }
 
+        public IEnumerable<SqliteDataReader> getChapters(int nid)
+        {
+            return ExecuteReader($@"
+                SELECT `cno`,`cname`,`downloadPath`
+                FROM chapter
+                WHERE nid = {nid}
+                order by cno
+            ");
+        }
+
+        public int addChapter(int nid, int cno, string cname, string curl)
+        {
+            try
+            {
+                return ExecuteNonQuery($@"
+                    INSERT INTO chapter
+                    ('nid','cno','cname','curl') VALUES ({nid},{cno},'{cname}','{curl}');
+                ");
+            }
+            catch
+            {
+                return 0; // 违反唯一性约束
+            }
+        }
+
         public int updateNovel(int nid, string name, string url, string category = "默认分类")
         {
             if (exsitsNovel(nid) > 0)
@@ -42,6 +67,28 @@ namespace NovelManager
                 ");
             }
             return addNovel(name, url, category);
+        }
+
+        /// <summary>
+        /// 查询小说是否已存在小说数据库中
+        /// </summary>
+        /// <param name="name">小说名</param>
+        /// <returns></returns>
+        public int exsitsNovel(string name)
+        {
+            // 此处低调的foreach实则是GetEnumerator()的优雅形式。
+            foreach (var obj in ExecuteReader($@"
+                SELECT novel.nid 
+                FROM novel 
+                WHERE novel.name = '{name}';
+            "))
+            {
+                if (!obj.IsDBNull(0))
+                {
+                    return obj.GetInt32(0); // 成功返回
+                }
+            }
+            return 0; // 失败返回
         }
 
         /// <summary>
@@ -306,6 +353,9 @@ namespace NovelManager
         {
             using (var connection = new SqliteConnection($@"Data Source={dbName}.db;"))
             {
+                Console.WriteLine($@"Data Source='{dbName}.db';");
+                //SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_dynamic_cdecl());
+                SQLitePCL.Batteries.Init();
                 connection.Open();
                 var command = connection.CreateCommand();
                 command.CommandText = SQLStatement;
