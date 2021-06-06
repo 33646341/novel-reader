@@ -10,7 +10,7 @@ namespace NovelManager
 {
     public class NovelDAL
     {
-        private string dbName = @"..\..\..\..\NovelManager\NovelManager\bin\Debug\ndb";
+        private string dbName = @"..\..\..\..\ndb";
 
         public static void Main()
         {
