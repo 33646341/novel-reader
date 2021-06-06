@@ -32,11 +32,12 @@
                               SelectionChanged="ListView_SelectionChanged" 
                               Style="{Binding Source= {StaticResource stu}}"
                               ItemContainerStyle="{StaticResource ListItemstyle}"
+                              GridViewColumnHeader.Click="Sort_Click"
                               >
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
                                 <GridViewColumn x:Name="s_Id" DisplayMemberBinding=
-                          "{Binding Path=Id}" Header="Id" Width="180"></GridViewColumn>
+                          "{Binding Path=Id}"  Header="Id" Width="180"></GridViewColumn>
                                 <GridViewColumn x:Name="s_Name" DisplayMemberBinding=
                           "{Binding Path=Name}" Header="Name" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="s_age" DisplayMemberBinding=

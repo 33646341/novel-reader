@@ -96,31 +96,89 @@ namespace UIdesign
                         Lv_HomePage.ItemsSource = null;
                         Lv_HomePage.ItemsSource = stuList;//刷新数据源
                     });
-                    //Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
-                    //PropertyChanged(this, new PropertyChangedEventArgs(nameof(_ltfi_Search)));
                 }
                 ShowProgress = Visibility.Collapsed;
             }).Start();
-
-            //List<fiction_info> _ltfi_Search = form.button1_Click();//_ltfi_Search是列表，每一项是一个小说信息
-
-            //为ListView设置Binding
-
-            //ListView.ItemsSourceProperty.
-            //为TextBox设置Binding
-            //Binding binding = new Binding("SelectedItem.col_fiction_name") { Source = this.Lv_HomePage };
-            //this.textBoxId.SetBinding(TextBox.TextProperty, binding);
 
         }
 
         private void SListView_ItemDoubleClick(object sender, RoutedEventArgs e)
         {
-            Student emp = Lv_HomePage.SelectedItem as Student;
+            Student emp = (sender as ListViewItem).Content as Student;
+
             Window1 login1 = new Window1(emp.Name, emp.Id, emp.Age);   //Login为窗口名，把要跳转的新窗口实例化
             login1.Show();
         }   //打开新窗口
 
+        #region
+        //单击表头排序
+        GridViewColumnHeader _lastHeaderClicked = null;
+        ListSortDirection _lastDirection = ListSortDirection.Ascending;
+
+        void Sort_Click(object sender,RoutedEventArgs e)
+        {
+            var headerClicked = e.OriginalSource as GridViewColumnHeader;
+            ListSortDirection direction;
+
+            if (headerClicked != null)
+            {
+                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+                {
+                    if (headerClicked != _lastHeaderClicked)
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                    else
+                    {
+                        if (_lastDirection == ListSortDirection.Ascending)
+                        {
+                            direction = ListSortDirection.Descending;
+                        }
+                        else
+                        {
+                            direction = ListSortDirection.Ascending;
+                        }
+                    }
+
+                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
+                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+
+                    Sort(sortBy, direction);
+
+                    if (direction == ListSortDirection.Ascending)
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowUp"] as DataTemplate;
+                    }
+                    else
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowDown"] as DataTemplate;
+                    }
+
+                    // Remove arrow from previously sorted header
+                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
+                    {
+                        _lastHeaderClicked.Column.HeaderTemplate = null;
+                    }
+
+                    _lastHeaderClicked = headerClicked;
+                    _lastDirection = direction;
+                }
+            }
+        }
+        private void Sort(string sortBy, ListSortDirection direction)
+        {
+            ICollectionView dataView =
+              CollectionViewSource.GetDefaultView(Lv_HomePage.ItemsSource);
+            dataView.SortDescriptions.Clear();
+            SortDescription sd = new SortDescription(sortBy, direction);
+            dataView.SortDescriptions.Add(sd);
+            dataView.Refresh();
+        }
+        #endregion
     }
+    #region
     public class Student
     {
 
@@ -128,4 +186,7 @@ namespace UIdesign
         public string Name { get; set; }
         public int Age { get; set; }
     }
+    
+    #endregion
+
 }
