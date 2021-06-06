@@ -7,213 +7,152 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.IO.Compression;
+using System.Data.SQLite;
 
 namespace Novel_Spider
 {
+    //https://www.biquzhh.com/0_4
     public partial class Form1 : Form
     {
+        int index = -1;
+
+        double num = 0;
+
+        double sum = 0;
+
         Queue<Chapter> chapters = new Queue<Chapter>();
 
+        List<string> book = new List<string>();
+
+        List<string> path = new List<string>();
+
         double download_progress;
+        //double download_progress2;
 
-        double chapter_num = 0;
+        //string novel_name;
 
-        double chapter_sum = 0;
+        List<int> chapter_num = new List<int>();
+        //double chapter_num2 = 0;
 
-        bool tag = true;//标记是否暂停
 
+        List<int> chapter_sum = new List<int>();
+        //double chapter_sum2 = 0;
+
+        bool tag = true;//标记是否暂停,初始为未暂停
+       
         public Form1()
-        {
+        {   
             InitializeComponent();
-            this.progressBar1.Minimum = 0;
-            this.progressBar1.Maximum = 100;
-            this.progressBar1.Value = 0;
-            this.button1.Enabled = true;
-            this.button2.Enabled = false;
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
+            progressBar1.Value = 0;
+            button1.Enabled = true;
+            button2.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            button2.Enabled = true;
+
+            button1.Enabled = false;
+
             tag = true;
 
-            this.button1.Enabled = false;
-
-            this.button2.Enabled = true;
-
-            string html = HttpGet(Url_Txt.Text);
-
-            string Novel_Name = Regex.Match(html, @"(?<=<h1>)([\S\s]*?)(?=</h1>)").Value; //获取书名
-
-            string path = System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name;
-
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }//创建小说名文件夹
-
-            string strregex = "(?<=<dt>《" + Novel_Name + "》正文卷)([\\S\\s]*?).+?(?=list3())";
-            //string strregex = @"(?<=<dt>《小世界其乐无穷》正文卷)([\S\s]*?).+?(?=list3())";
-            Regex Regex_Menu = new Regex(strregex);
-            string Result_Menu = Regex_Menu.Match(html).Value; //获取列表内容
-
-
-            MatchCollection Matches = Regex.Matches(
-            Result_Menu,
-            "(?<=<dd>)([\\S\\s]*?)(?=</dd>)",
-            RegexOptions.IgnoreCase |         //忽略大小写  
-            RegexOptions.ExplicitCapture    //提高检索效率   
-            );
-
-            chapter_sum = Matches.Count;
-
-            if(chapters.Count == 0)
-            {
-                foreach (Match NextMatch in Matches)
-                {
-                    Chapter this_chapter = new Chapter();
-                    this_chapter.file_name = Regex.Match(NextMatch.Value, "(?<=\">)([\\S\\s]*?)(?=</a>)").Value; //获取章节名
-                    this_chapter.Aref_Name = Regex.Match(NextMatch.Value, "(?<=<a href =\")([\\S\\s]*?)(?=\">)").Value; //获取章节地址
-                    chapters.Enqueue(this_chapter);
-                }
-            }
-
             Task task1 = new Task(() =>
-            {
-               while(chapters.Count != 0)
                 {
-                    if (tag == false)
-                        break;
-                    Chapter this_chapter = new Chapter();
-                    lock(chapters)
+                    while (chapters.Count != 0)
                     {
-                        this_chapter = chapters.Dequeue();
+                        if (tag == false)
+                            break;
+                        Chapter this_chapter = new Chapter();
+                        lock (chapters)
+                        {
+                            this_chapter = chapters.Dequeue();
+                        }
+                        string Aref_Name = this_chapter.Aref_Name; //获取章节地址
+                        string file_name = this_chapter.file_name;//获取章节名
+                        if(path.Count!=0)
+                        Write_Novel(path[0] + "/" + file_name + ".txt", file_name, Aref_Name);
+                        num++;
+                        if (chapter_num.Count != 0 && chapter_sum.Count != 0)
+                        {
+                            chapter_num[0]++;
+                            if (chapter_sum[0] - 1 == chapter_num[0])
+                            {
+                                path.RemoveAt(0);
+                                book.RemoveAt(0);
+                                chapter_num.RemoveAt(0);
+                                chapter_sum.RemoveAt(0);
+                                MethodInvoker mi = new MethodInvoker(() =>
+                                {
+                                    listBox1.Items.RemoveAt(0);
+                                });
+                                this.BeginInvoke(mi);
+                            }
+                        }
+                        download_progress = num / sum * 100;
+                        MethodInvoker m = new MethodInvoker(() =>
+                        {
+                            progressBar1.Value = Convert.ToInt32(download_progress);
+                        });
+                        this.BeginInvoke(m);
                     }
-                    string Aref_Name = this_chapter.Aref_Name; //获取章节地址
-                    string file_name = this_chapter.file_name;//获取章节名
-                    Write_Novel(path + "/" + file_name + ".txt", file_name, Aref_Name);
-                    chapter_num++;
-                    download_progress = chapter_num / chapter_sum * 100;
-                    MethodInvoker m = new MethodInvoker(() =>
+                    if (tag == true)
                     {
-                        progressBar1.Value = Convert.ToInt32(download_progress);
-                    });
-                    this.BeginInvoke(m);
-                }
-                if (tag == true)
-                {
-                    MethodInvoker mi = new MethodInvoker(() =>
-                    {
-                        download_progress = 100;
-                        MessageBox.Show("已完成");
-                        this.Close();
-                    });
-                    this.BeginInvoke(mi);
-                }
-            });
+                        MethodInvoker mi = new MethodInvoker(() =>
+                        {
+                            progressBar1.Value = 100;
+                            MessageBox.Show("确定");
+                            this.Close();
+                        });
+                        this.BeginInvoke(mi);
+                    }
+                });
 
-            Task task2 = new Task(() =>
-            {
-                while (chapters.Count != 0)
+                Task task2 = new Task(() =>
                 {
-                    if (tag == false)
-                        break;
-                    Chapter this_chapter = new Chapter();
-                    lock (chapters)
+                    while (chapters.Count != 0)
                     {
-                        this_chapter = chapters.Dequeue();
+                        if (tag == false)
+                            break;
+                        Chapter this_chapter = new Chapter();
+                        lock (chapters)
+                        {
+                            this_chapter = chapters.Dequeue();
+                        }
+                        string Aref_Name = this_chapter.Aref_Name; //获取章节地址
+                        string file_name = this_chapter.file_name;//获取章节名
+                        if (path.Count != 0)
+                            Write_Novel(path[0] + "/" + file_name + ".txt", file_name, Aref_Name);
+                        num++;
+                        if (chapter_num.Count != 0 && chapter_sum.Count != 0)
+                        {
+                            chapter_num[0]++;
+                            if (chapter_sum[0] == chapter_num[0])
+                            {
+                                path.RemoveAt(0);
+                                book.RemoveAt(0);
+                                chapter_num.RemoveAt(0);
+                                chapter_sum.RemoveAt(0);
+                                MethodInvoker mi = new MethodInvoker(() =>
+                                {
+                                    listBox1.Items.RemoveAt(0);
+                                });
+                                this.BeginInvoke(mi);
+                            }
+                        }
                     }
-                    string Aref_Name = this_chapter.Aref_Name; //获取章节地址
-                    string file_name = this_chapter.file_name;//获取章节名
-                    Write_Novel(path + "/" + file_name + ".txt", file_name, Aref_Name);
-                    chapter_num++;
-                }
-            });
-
-            Task task3 = new Task(() =>
-            {
-                while (chapters.Count != 0)
-                {
-                    if (tag == false)
-                        break;
-                    Chapter this_chapter = new Chapter();
-                    lock (chapters)
-                    {
-                        this_chapter = chapters.Dequeue();
-                    }
-                    string Aref_Name = this_chapter.Aref_Name; //获取章节地址
-                    string file_name = this_chapter.file_name;//获取章节名
-                    Write_Novel(path + "/" + file_name + ".txt", file_name, Aref_Name);
-                    chapter_num++;
-                }
-            });
-
-            Task task4 = new Task(() =>
-            {
-                while (chapters.Count != 0)
-                {
-                    if (tag == false)
-                        break;
-                    Chapter this_chapter = new Chapter();
-                    lock (chapters)
-                    {
-                        this_chapter = chapters.Dequeue();
-                    }
-                    string Aref_Name = this_chapter.Aref_Name; //获取章节地址
-                    string file_name = this_chapter.file_name;//获取章节名
-                    Write_Novel(path + "/" + file_name + ".txt", file_name, Aref_Name);
-                    chapter_num++;
-                }
-            });
-
-            Task task5 = new Task(() =>
-            {
-                while (chapters.Count != 0)
-                {
-                    if (tag == false)
-                        break;
-                    Chapter this_chapter = new Chapter();
-                    lock (chapters)
-                    {
-                        this_chapter = chapters.Dequeue();
-                    }
-                    string Aref_Name = this_chapter.Aref_Name; //获取章节地址
-                    string file_name = this_chapter.file_name;//获取章节名
-                    Write_Novel(path + "/" + file_name + ".txt", file_name, Aref_Name);
-                    chapter_num++;
-                }
-            });
-
-            Task task6 = new Task(() =>
-            {
-                while (chapters.Count != 0)
-                {
-                    if (tag == false)
-                        break;
-                    Chapter this_chapter = new Chapter();
-                    lock (chapters)
-                    {
-                        this_chapter = chapters.Dequeue();
-                    }
-                    string Aref_Name = this_chapter.Aref_Name; //获取章节地址
-                    string file_name = this_chapter.file_name;//获取章节名
-                    Write_Novel(path + "/" + file_name + ".txt", file_name, Aref_Name);
-                    chapter_num++;
-                }
-            });
+                });
 
             task1.Start();
             task2.Start();
-            task3.Start();
-            task4.Start();
-            task5.Start();
-            task6.Start();
+            
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             tag = false;
-            this.button1.Enabled = true;
-            this.button2.Enabled = false;
+            button1.Enabled = true;
+            button2.Enabled = false;
         }
 
         private void Write_Novel(string filename, string title, string url_name)
@@ -221,10 +160,11 @@ namespace Novel_Spider
             bool Novel_type = false;
             string Content_Html = HttpGet("https://www.biquzhh.com" + url_name);//获取内容页
             //string Content_Name = Regex.Match(Content_Html, "(?<=class=\"Readarea ReadAjax_content\">)([\\S\\s]*?)(?=<br />)").Value; //获取书名
+
             Regex Rege_Content0 = new Regex("(?<=false;</script><br />)([\\S\\s]*?)(?<=(<br /><script>))");
             Regex Rege_Content1 = new Regex("(?<=false;</script></div>)([\\S\\s]*?)(?=(<script>))");
             string Result_Content = Rege_Content0.Match(Content_Html).Value;
-            Result_Content = Rege_Content1.Match(Result_Content).Value;//获取文章内容
+            Result_Content = Rege_Content1.Match(Result_Content).Value;
 
             if (Result_Content == "")
                 {
@@ -232,7 +172,8 @@ namespace Novel_Spider
                 Rege_Content0 = new Regex("(?<=();</script><br />)([\\S\\s]*?)(?<=(<br /><script>))");
                 Rege_Content1 = new Regex("(?<=();</script></div>)([\\S\\s]*?)(?=(<script>))");
                 Result_Content = Rege_Content0.Match(Content_Html).Value;
-                Result_Content = Rege_Content1.Match(Result_Content).Value;//获取文章内容
+                Result_Content = Rege_Content1.Match(Result_Content).Value;
+                Result_Content = Result_Content.Replace("&nbsp;", "");
             }
 
             Regex Regex_Main = new Regex(@"(&nbsp;&nbsp;&nbsp;&nbsp;)(.*)");
@@ -242,13 +183,15 @@ namespace Novel_Spider
             if (Novel_type || Rsult_Main == "")
             {
                 Screen_Content = Result_Content.Replace("<br />", "\r\n");
+                Screen_Content = Screen_Content.Replace("&nbsp;", "");
             }
             else
             {
                 Screen_Content = Rsult_Main.Replace("&nbsp;", "").Replace("<br />", "\r\n");
-                Screen_Content = System.Text.RegularExpressions.Regex.Unescape(Screen_Content); //字符串转意
+                Screen_Content = Regex.Unescape(Screen_Content); //字符串转意
             }
 
+            
             using (FileStream fsWrite = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 fsWrite.Seek(0, SeekOrigin.Begin);
@@ -256,6 +199,7 @@ namespace Novel_Spider
                 fsWrite.Write(novel, 0, novel.Length);
                 fsWrite.Close();
             }
+            
         }
 
         /// <summary>
@@ -270,7 +214,7 @@ namespace Novel_Spider
             HttpWebRequest Web_Request = (HttpWebRequest)WebRequest.Create(url);
             Web_Request.Timeout = 30000;
             Web_Request.Method = "GET";
-            Web_Request.UserAgent = "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0";
+            Web_Request.UserAgent = "User-Agent:Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1";
             Web_Request.Headers.Add("Accept-Encoding", "gzip, deflate");
             //Web_Request.Credentials = CredentialCache.DefaultCredentials;
             //设置代理属性WebProxy-------------------------------------------------
@@ -313,5 +257,67 @@ namespace Novel_Spider
             public string Aref_Name;
         }
 
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string html;
+
+            string Novel_Name;
+
+            bool OLD = book.Contains(textBox1.Text);
+
+            if (!OLD)
+            {
+                index++;
+
+                book.Add(textBox1.Text);
+
+                html = HttpGet(book[index]);
+
+                Novel_Name = Regex.Match(html, @"(?<=<h1>)([\S\s]*?)(?=</h1>)").Value;
+                //novel_name1 = Novel_Name;//获取书名
+
+                path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
+
+                
+                if (!Directory.Exists(path[index]))
+                {
+                    Directory.CreateDirectory(path[index]);
+                }//创建小说名文件夹
+
+
+                string strregex = "(?<=<dt>《" + Novel_Name + "》正文卷)([\\S\\s]*?).+?(?=list3())";
+                //string strregex = @"(?<=<dt>《小世界其乐无穷》正文卷)([\S\s]*?).+?(?=list3())";
+                Regex Regex_Menu = new Regex(strregex);
+                string Result_Menu = Regex_Menu.Match(html).Value; //获取列表内容
+
+
+                MatchCollection Matches = Regex.Matches(
+                Result_Menu,
+                "(?<=<dd>)([\\S\\s]*?)(?=</dd>)",
+                RegexOptions.IgnoreCase |         //忽略大小写  
+                RegexOptions.ExplicitCapture    //提高检索效率   
+                );
+
+
+                if (chapters.Count == 0 || book.Count > 1)
+                {
+                    foreach (Match NextMatch in Matches)
+                    {
+                        Chapter this_chapter = new Chapter();
+                        this_chapter.file_name = Regex.Match(NextMatch.Value, "(?<=\">)([\\S\\s]*?)(?=</a>)").Value; //获取章节名
+                        this_chapter.Aref_Name = Regex.Match(NextMatch.Value, "(?<=<a href =\")([\\S\\s]*?)(?=\">)").Value; //获取章节地址
+                        chapters.Enqueue(this_chapter);
+                    }
+                }
+                sum += Matches.Count;
+                chapter_sum.Add(Matches.Count);
+                chapter_num.Add(0);
+                listBox1.Items.Add(Novel_Name);
+            }
+        }
     }
 }
