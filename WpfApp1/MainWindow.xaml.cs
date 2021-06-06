@@ -16,9 +16,6 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Window1 w1 = new Window1();
-            //w1.Show();
-
             NavigationWindow window = new NavigationWindow();
             window.Source = new Uri("Page1.xaml", UriKind.Relative);
             window.Show();
@@ -41,8 +38,11 @@ namespace WpfApp1
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Novel_Spider.Form1 f = new Novel_Spider.Form1();
-            f.Show();
+            Window2 w2 = new Window2();
+            w2.Show();
+
+            //Novel_Spider.Form1 f = new Novel_Spider.Form1();
+            //f.Show();
             //f.run("https://www.biquzhh.com/29719_29719087/");
         }
     }
