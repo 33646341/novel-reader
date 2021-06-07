@@ -49,7 +49,8 @@ namespace OnlineSearchAndRead
                 return _s_ret;
 
             HtmlWeb _web_Main = new HtmlWeb();
-            _web_Main.OverrideEncoding = Encoding.UTF8;
+            _web_Main.OverrideEncoding = Encoding.GetEncoding("gb2312");
+            //_web_Main.OverrideEncoding = Encoding.;
             try
             {
                 HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
@@ -63,8 +64,8 @@ namespace OnlineSearchAndRead
 
                 //获取章节内容，存在部分章节内容为null
                 if (_doc_Main.DocumentNode
-                 .SelectNodes("//div[starts-with(@class,'content')]")!=null)
-                    _hnc_Chapter_Content = _doc_Main.DocumentNode.SelectNodes("//div[starts-with(@class,'content')]");///reader-maindiv[starts-with(@class,'box_con')]/div[starts-with(@id,'content')]
+                 .SelectNodes("//div[starts-with(@id,'content')]")!=null)
+                    _hnc_Chapter_Content = _doc_Main.DocumentNode.SelectNodes("//div[starts-with(@id,'content')]");///reader-maindiv[starts-with(@class,'box_con')]/div[starts-with(@id,'content')]
                 //未实例化，查看原网页解决，原网页给了超链接，但打不开，直接置为没有
                 else
                     return "抱歉,该内容暂时缺失";
@@ -80,9 +81,11 @@ namespace OnlineSearchAndRead
                         script.Remove();
                 }
                 _s_ret = _hnc_Chapter_Content[0].InnerHtml.Trim()
+                    .Replace("<br />", "\r\n\r\n")
                     .Replace("<br>", "\r\n\r\n")
                     .Replace("&nbsp", "")
                     .Replace("  ","")
+                    .Replace("天才一秒记住本站地址：www.biquzhh.com。笔趣阁手机版阅读网址：m.biquzhh.com", "")
                     .Replace(";", "");
                 
                 //_doc_Main.DocumentNode.Attributes["div"].Remove();

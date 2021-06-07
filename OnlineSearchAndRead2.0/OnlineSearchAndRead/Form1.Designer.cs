@@ -32,7 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.Lv_HomePage = new System.Windows.Forms.ListView();
-            this.col_fiction_type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_fiction_id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_fiction_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_fiction_author = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_update_chapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -70,7 +70,7 @@
             // Lv_HomePage
             // 
             this.Lv_HomePage.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.col_fiction_type,
+            this.col_fiction_id,
             this.col_fiction_name,
             this.col_fiction_author,
             this.col_update_chapter,
@@ -78,28 +78,28 @@
             this.col_fiction_stata});
             this.Lv_HomePage.FullRowSelect = true;
             this.Lv_HomePage.HideSelection = false;
-            this.Lv_HomePage.Location = new System.Drawing.Point(72, 76);
+            this.Lv_HomePage.Location = new System.Drawing.Point(144, 85);
             this.Lv_HomePage.Name = "Lv_HomePage";
-            this.Lv_HomePage.Size = new System.Drawing.Size(675, 371);
+            this.Lv_HomePage.Size = new System.Drawing.Size(607, 371);
             this.Lv_HomePage.TabIndex = 3;
             this.Lv_HomePage.UseCompatibleStateImageBehavior = false;
             this.Lv_HomePage.View = System.Windows.Forms.View.Details;
             this.Lv_HomePage.SelectedIndexChanged += new System.EventHandler(this.Lv_HomePage_SelectedIndexChanged);
             // 
-            // col_fiction_type
+            // col_fiction_id
             // 
-            this.col_fiction_type.Text = "作品分类";
-            this.col_fiction_type.Width = 100;
+            this.col_fiction_id.Text = "序号";
+            this.col_fiction_id.Width = 100;
             // 
             // col_fiction_name
             // 
             this.col_fiction_name.Text = "作品名称";
-            this.col_fiction_name.Width = 150;
+            this.col_fiction_name.Width = 346;
             // 
             // col_fiction_author
             // 
             this.col_fiction_author.Text = "作者";
-            this.col_fiction_author.Width = 70;
+            this.col_fiction_author.Width = 156;
             // 
             // col_update_chapter
             // 
@@ -127,7 +127,6 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -139,7 +138,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ListView Lv_HomePage;
-        private System.Windows.Forms.ColumnHeader col_fiction_type;
+        private System.Windows.Forms.ColumnHeader col_fiction_id;
         private System.Windows.Forms.ColumnHeader col_fiction_name;
         private System.Windows.Forms.ColumnHeader col_fiction_author;
         private System.Windows.Forms.ColumnHeader col_update_chapter;

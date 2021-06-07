@@ -73,7 +73,7 @@ namespace NovelManager
         /// 查询小说是否已存在小说数据库中
         /// </summary>
         /// <param name="name">小说名</param>
-        /// <returns></returns>
+        /// <returns>小说标识符nid</returns>
         public int exsitsNovel(string name)
         {
             // 此处低调的foreach实则是GetEnumerator()的优雅形式。
