@@ -8,7 +8,112 @@
         mc:Ignorable="d"
         Title="ReadWindow" Height="800" Width="1000">
 
+    <Window.Resources>
+        <Style TargetType="{x:Type ProgressBar}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Height" Value="15"/>
+            <Setter Property="Background" Value="#FF5FAE91"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="IsIndeterminate" RepeatBehavior="Forever">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="Animation">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
+                                </DoubleAnimationUsingKeyFrames>
+                                <PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="Animation">
+                                    <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
+                                    <EasingPointKeyFrame KeyTime="0:0:5" Value="1.5,0.5"/>
+                                </PointAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Grid Background="#00000000">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Determinate"/>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
+                                                <EasingPointKeyFrame KeyTime="0:0:0" Value="0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:1.5" Value="1.95,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:3" Value="0.5,0.5"/>
+                                            </PointAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Grid Height="{TemplateBinding Height}">
+                                <Border Background="#FFFFFF" CornerRadius="7.5" Opacity="0.05" BorderBrush="White"/>
+                                <Border BorderBrush="#FFFFFF" BorderThickness="1" CornerRadius="7.5" Opacity="0.1"/>
+                                <Grid Margin="{TemplateBinding BorderThickness}">
+                                    <Border x:Name="PART_Track"/>
+                                    <Grid x:Name="PART_Indicator" ClipToBounds="True" HorizontalAlignment="Left" >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition x:Name="width1"/>
+                                            <ColumnDefinition x:Name="width2" Width="0"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid x:Name="Animation"  RenderTransformOrigin="0.5,0.5">
+                                            <Grid.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                                                    <SkewTransform AngleY="0" AngleX="0"/>
+                                                    <RotateTransform Angle="180"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Grid.RenderTransform>
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="7.5">
+                                                <Viewbox HorizontalAlignment="Left" StretchDirection="DownOnly" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                                                    <TextBlock Foreground="#ffffff" SnapsToDevicePixels="True" FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Value,StringFormat={}{0}%}" RenderTransformOrigin="0.5,0.5">
+                                                        <TextBlock.RenderTransform>
+                                                            <TransformGroup>
+                                                                <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                                                <SkewTransform AngleY="0" AngleX="0"/>
+                                                                <RotateTransform Angle="0"/>
+                                                                <TranslateTransform/>
+                                                            </TransformGroup>
+                                                        </TextBlock.RenderTransform>
+                                                    </TextBlock>
+                                                </Viewbox>
+                                            </Border>
+                                            <Border BorderBrush="#000000" BorderThickness="1" CornerRadius="7.5" Opacity="0.1"/>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+
+                            <!--<Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#c5c5c5"/>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter TargetName="width1" Property="Width" Value="0.25*"/>
+                                <Setter TargetName="width2" Property="Width" Value="0.725*"/>
+                            </Trigger>-->
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource IsIndeterminate}"/>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
+
+
+
+
+
+
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="10*"/>
@@ -24,15 +129,15 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Button Content="上一章" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="79" Foreground="#FFFBFBFB" Background="#FF5A5858" BorderBrush="#FF5A5858" FontSize="15" Height="35" Margin="10,10,0,0"/>
-            <Button Content="下一章" Grid.Column="2" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF1EFEF" FontSize="15" Height="35" Margin="22.667,10,0,0"/>
+            <Button Content="下一章" Grid.Column="2" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF1EFEF" FontSize="15" Height="35" Margin="22.667,10,0,0" Click="Button_Click_3"/>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2
                                       *"/>
                     <ColumnDefinition Width="7*"/>
                 </Grid.ColumnDefinitions>
-                <ProgressBar HorizontalAlignment="Left" Height="15" Margin="102,22,0,0" VerticalAlignment="Top" Width="528" Grid.ColumnSpan="2"/>
-                <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="35" Margin="10,10,0,0" TextWrapping="Wrap" Text="阅读进度" VerticalAlignment="Top" Width="80" Background="#FF5A5858" BorderBrush="#FF5A5858" CaretBrush="#FFF5F2F2" Foreground="#FFF6F5F5" FontSize="15" Grid.ColumnSpan="2"/>
+                <ProgressBar Value="89" x:Name="ProgressBar1" HorizontalAlignment="Left" Height="24" Margin="98,17,0,0" VerticalAlignment="Top" Width="532" Grid.ColumnSpan="2" Visibility="Visible" Background="#FF47C798"/>
+                <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="35" Margin="10,11,0,13.333" TextWrapping="Wrap" Text="阅读进度" VerticalAlignment="center" Width="80" Background="#FF5A5858" BorderBrush="#FF5A5858" CaretBrush="#FFF5F2F2" Foreground="#FFF6F5F5" FontSize="15"/>
 
             </Grid>
         </Grid>
@@ -55,8 +160,8 @@
                 </Label>
             </Popup>
 
-            <Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="33.333,16,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>
-            <Button x:Name="smaller" Content="-" Grid.Column="1" HorizontalAlignment="Left" Margin="82.333,16,0,0" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="0.315,0.407" Background="#FFA46464" Foreground="#FFFEFDFD" Height="34" FontSize="15" Width="35" Click="smaller_Click"/>
+            <Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="80.333,40,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>
+            <Button x:Name="smaller" Content="-" Grid.Column="1" HorizontalAlignment="Left" Margin="130.333,40,0,0" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="0.315,0.407" Background="#FFA46464" Foreground="#FFFEFDFD" Height="34" FontSize="15" Width="35" Click="smaller_Click"/>
             <Image Grid.Column="0" Source="img\read.png" HorizontalAlignment="Left" Height="39" Margin="112,30,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="1.883,0.564"/>
             <Image x:Name="fontimg" Visibility="Visible"  Grid.Column="1" Source="img\font.png" HorizontalAlignment="Left" Height="39" Margin="108.333,30,0,0" VerticalAlignment="Top" Width="39"/>
             <Image Grid.Column="2" Source="img\write.png" HorizontalAlignment="Left" Height="39" Margin="109.667,30,0,0" VerticalAlignment="Top" Width="37"/>
@@ -64,8 +169,12 @@
 
         </Grid>
         <Grid x:Name="Grid1" Grid.Row="1" Background="#FFF3F1EC">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="238*"/>
+                <ColumnDefinition Width="93*"/>
+            </Grid.ColumnDefinitions>
 
-            <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,29,42.333,0"  VerticalAlignment="Top" Height="513" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Content="test"/>
+            <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,29,42.333,0"  VerticalAlignment="Top" Height="513" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Content="test" Grid.ColumnSpan="2"/>
         </Grid>
     </Grid>
 </Window>

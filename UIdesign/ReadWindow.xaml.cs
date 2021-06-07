@@ -19,10 +19,11 @@ namespace UIdesign
     /// </summary>
     public partial class ReadWindow : Window
     {
-        public ReadWindow(int number,string name,string content)
+        public ReadWindow(int number,string name,string content,int propotion)
         {
             InitializeComponent();
             label1.Content = content;
+            ProgressBar1.Value = propotion;
         }
         char i = '0';
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -132,6 +133,11 @@ namespace UIdesign
         private void smaller_Click(object sender, RoutedEventArgs e)
         {
             label1.FontSize--;
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

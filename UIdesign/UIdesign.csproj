@@ -135,7 +135,9 @@
       <Name>OnlineSearchAndRead</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="img\emp.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="img\font.png" />
     <Resource Include="img\fullscreen.png" />

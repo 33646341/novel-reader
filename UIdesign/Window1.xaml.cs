@@ -27,6 +27,7 @@ namespace UIdesign
             new topic() { number = 4, name = "第四章名", content = "内容4" },
             new topic() { number = 5, name = "第五章名", content = "内容5" }
             };
+        
         public Window1(string fiction_name,int author_name,int total_number)
         {
             InitializeComponent();
@@ -43,12 +44,16 @@ namespace UIdesign
             //};
             this.detaillist.ItemsSource = topiclist;
         }
+        
 
         #region 立即阅读
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var firstint = topiclist.First();
-            ReadWindow readWindow1 = new ReadWindow(firstint.number,firstint.name,firstint.content);
+            var listsize = topiclist.Count;
+            MessageBox.Show(listsize.ToString());
+            int propotion = 1;
+            ReadWindow readWindow1 = new ReadWindow(firstint.number,firstint.name,firstint.content,propotion);
             readWindow1.Show();
             this.Close();
         }
@@ -57,8 +62,11 @@ namespace UIdesign
         #region 双击item阅读
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            topic emp = (sender as ListViewItem).Content as topic;
-            ReadWindow readWindow1 = new ReadWindow(emp.number,emp.name,emp.content);
+            topic emp = detaillist.SelectedItem as topic;
+            var listsize = topiclist.Count;
+            Console.WriteLine(listsize);
+            int propotion = (emp.number - 1) *100 / listsize;
+            ReadWindow readWindow1 = new ReadWindow(emp.number,emp.name,emp.content,propotion);
             readWindow1.Show();
         }
         #endregion
