@@ -7,35 +7,37 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.IO.Compression;
-using System.Data.SQLite;
+using NovelManager;
+//using System.Data.SQLite;
 
 namespace Novel_Spider
 {
     //https://www.biquzhh.com/0_4
     public partial class Form1 : Form
     {
-        int index = -1;
+        //假设一共添加了两本书到下载队列
+        int index = -1;//记录下载队列里的小说数，包含已下载的和正在下载的,在这里等于2
 
-        double num = 0;
+        double num = 0;//这两本书下载好的章节数，包含已下载的和正在下载的
 
-        double sum = 0;
+        double sum = 0;//这两本书需要下载的小说总章节数，包含已下载的和正在下载的
 
-        Queue<Chapter> chapters = new Queue<Chapter>();
+        Queue<Chapter> chapters = new Queue<Chapter>();//这两本书需要下载的小说章节队列（已下载的会出队）
 
-        List<string> book = new List<string>();
+        List<string> book = new List<string>();//需要下载的小说url（已下载的会删除），第一本是book[0]，下载完成会删去这个元素，第二本书book[1]变成book[0]
 
-        List<string> path = new List<string>();
+        List<string> path = new List<string>();//小说存放路径（已下载的会删除），同上
 
         double download_progress;
         //double download_progress2;
 
         //string novel_name;
 
-        List<int> chapter_num = new List<int>();
+        List<int> chapter_num = new List<int>();//记录每本小说已经下载的章节数，chapter_num[0]是第一本书下载好的章节，下载完会删去这个元素
         //double chapter_num2 = 0;
 
 
-        List<int> chapter_sum = new List<int>();
+        List<int> chapter_sum = new List<int>();//记录每本书需要下载的章节，同上
         //double chapter_sum2 = 0;
 
         bool tag = true;//标记是否暂停,初始为未暂停
@@ -278,6 +280,17 @@ namespace Novel_Spider
                 html = HttpGet(book[index]);
 
                 Novel_Name = Regex.Match(html, @"(?<=<h1>)([\S\s]*?)(?=</h1>)").Value;
+
+                // 数据库开始
+                var novelDAL = new NovelManager.NovelDAL();
+                if (novelDAL.exsitsNovel(Novel_Name)==0)
+                {
+                    novelDAL.addNovel(Novel_Name, book[index]);
+                }
+                var Novel_id = novelDAL.exsitsNovel(Novel_Name);
+                Console.WriteLine(Novel_id);
+                // 数据库结束
+
                 //novel_name1 = Novel_Name;//获取书名
 
                 path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
@@ -305,11 +318,18 @@ namespace Novel_Spider
 
                 if (chapters.Count == 0 || book.Count > 1)
                 {
+                    var counter = 0;
                     foreach (Match NextMatch in Matches)
                     {
                         Chapter this_chapter = new Chapter();
                         this_chapter.file_name = Regex.Match(NextMatch.Value, "(?<=\">)([\\S\\s]*?)(?=</a>)").Value; //获取章节名
                         this_chapter.Aref_Name = Regex.Match(NextMatch.Value, "(?<=<a href =\")([\\S\\s]*?)(?=\">)").Value; //获取章节地址
+
+                        // 数据库开始
+                        novelDAL.addChapter(Novel_id, counter, this_chapter.file_name, this_chapter.Aref_Name);
+                        counter++;
+                        // 数据库结束
+
                         chapters.Enqueue(this_chapter);
                     }
                 }
