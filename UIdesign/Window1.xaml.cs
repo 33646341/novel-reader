@@ -28,12 +28,12 @@ namespace UIdesign
             new topic() { number = 5, name = "第五章名", content = "内容5" }
             };
         
-        public Window1(string fiction_name,int author_name,int total_number)
+        public Window1(string fiction_name,string author_name, string total_number,string id)
         {
             InitializeComponent();
             Fiction_name.Text = fiction_name;
             //Author_name.Text = Convert.ToString(author_name);
-            Total_number.Text = $"小说|完结|{total_number}字";
+            Total_number.Text = $"小说|完结|"+total_number+"字";
             this.detaillist.ItemsSource = topiclist;
         }
         
@@ -79,6 +79,11 @@ namespace UIdesign
         }
 
         private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void detaillist_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }

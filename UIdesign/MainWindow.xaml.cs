@@ -65,6 +65,15 @@ namespace UIdesign
         {
 
         }
+        private void LV_DwnPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void txtJD_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
         #endregion
         #region 首页
         #region 搜索按钮
@@ -72,35 +81,35 @@ namespace UIdesign
         {
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
-            form.te = kw;
+            form.querytext = kw;
 
             ShowProgress = Visibility.Visible;
 
-            List<fiction_info> _ltfi_Search = new List<fiction_info>();
-            List<Student> stuList = new List<Student>()
+            List<Fiction> _ltfi_Search = new List<Fiction>()
             {
-                new Student() { Id = 0, Name = "Tim", Age = 29 },
-                new Student() { Id = 1, Name = "Tom", Age = 28 },
-                new Student() { Id = 2, Name = "Kyle", Age = 27 },
-                new Student() { Id = 3, Name = "Tony", Age = 24 },
-                new Student() { Id = 4, Name = "Vina", Age = 26 },
-                new Student() { Id = 5, Name = "Mike", Age = 22 },
+                new Fiction() { col_fiction_id = "0", col_fiction_name = "Tim", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
+                new Fiction() { col_fiction_id = "1", col_fiction_name = "Kimi", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
+                new Fiction() { col_fiction_id = "2", col_fiction_name = "Amy", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
+                new Fiction() { col_fiction_id = "3", col_fiction_name = "Tommy", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
+                new Fiction() { col_fiction_id = "4", col_fiction_name = "Ricky", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
+
             };
-            this.Lv_HomePage.ItemsSource = stuList;//数据源
+            //this.Lv_HomePage.ItemsSource = stuList;//数据源
+            //this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
 
             new Thread(() =>
             {
                 for (int i = 10000; i < 10020; i++)
                 {
-                    var fiction_i = new Student() { Id = 5, Name = "Mike", Age = 22 };
-                    fiction_i.Id = i;
+                    var fiction_i = new Fiction() { col_fiction_id = "5", col_fiction_name = "Richard", col_fiction_author = "天蚕土豆", col_fiction_type = "热血" };
+                    fiction_i.col_fiction_id = $"{i}";
                     Thread.Sleep(200);
 
                     Dispatcher.Invoke(delegate ()
                     {
-                        stuList.Add(fiction_i);
+                        _ltfi_Search.Add(fiction_i);
                         Lv_HomePage.ItemsSource = null;
-                        Lv_HomePage.ItemsSource = stuList;//刷新数据源
+                        Lv_HomePage.ItemsSource = _ltfi_Search;//刷新数据源
                     });
                 }
                 ShowProgress = Visibility.Collapsed;
@@ -111,9 +120,8 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Student emp = (sender as ListViewItem).Content as Student;
-
-            Window1 login1 = new Window1(emp.Name, emp.Id, emp.Age);   //Login为窗口名，把要跳转的新窗口实例化
+            Fiction emp = (sender as ListViewItem).Content as Fiction;
+            Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_type);   //Login为窗口名，把要跳转的新窗口实例化
             login1.Show();
         }   //打开新窗口
         #endregion
@@ -122,7 +130,7 @@ namespace UIdesign
         GridViewColumnHeader _lastHeaderClicked = null;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
 
-        void Sort_Click(object sender,RoutedEventArgs e)
+        void Sort_Click(object sender, RoutedEventArgs e)
         {
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
             ListSortDirection direction;
@@ -186,7 +194,9 @@ namespace UIdesign
         #endregion
         #region 右键功能
         public void InfoPage(object sender, RoutedEventArgs e) {
-            MessageBox.Show("info!");
+            Fiction emp = (sender as ListViewItem).Content as Fiction;
+            Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_type);   //Login为窗口名，把要跳转的新窗口实例化
+            login1.Show();
         }
         public void BookShelf(object sender, RoutedEventArgs e)
         {
@@ -231,7 +241,52 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
             }).Start();
         }
+
         #endregion
+
+        #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
+        //已完成中每项是可删除
+
+        
+        private void Dwning_btn_click(object sender, RoutedEventArgs e)
+        {
+            Novel_Spider.Form1 form = new Novel_Spider.Form1();
+            //MessageBox.Show(form.tag);
+            List<BarValue> progress = new List<BarValue>()
+            {
+                new BarValue() { name = "0", barvalue=50},
+                new BarValue() { name = "7", barvalue=50},
+                new BarValue() { name = "5", barvalue=50},
+                new BarValue() { name = "6", barvalue=50},
+                new BarValue() { name = "8", barvalue=50},
+            };
+            new Thread(() =>
+            {
+                for (int i = 10000; i < 10020; i++)
+                {
+                    var pro_i = new BarValue() { name = "0", barvalue = 50 };
+                    pro_i.name  = $"{i}";
+                    Thread.Sleep(200);
+
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        progress.Add(pro_i);
+                        LV_DwnPage.ItemsSource = null;
+                        LV_DwnPage.ItemsSource = progress;//刷新数据源
+                    });
+                }
+                ShowProgress = Visibility.Collapsed;
+            }).Start();
+            //得到进度百分数n
+            //执行这个方法
+
+
+        }
+        //执行这个方法
+
+        #endregion
+
+        
     }
     #region 数据源
     public class Student
@@ -241,7 +296,19 @@ namespace UIdesign
         public string Name { get; set; }
         public int Age { get; set; }
     }
-    
+    public class BarValue
+    {
+        public string name { get; set; }
+        public double barvalue { get; set; }
+    }
+    public class Fiction
+    {
+        public string col_fiction_id { get; set; }
+        public string col_fiction_name { get; set; }
+        public string col_fiction_author { get; set; }
+        public string col_fiction_type { get; set; }
+        
+    }
     #endregion
 
 }

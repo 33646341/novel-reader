@@ -62,9 +62,9 @@
             <Grid Margin="0,239,0.4,0.4" Grid.RowSpan="2">
                 <ListView x:Name="detaillist" 
                               Background="#FFF1ECEC" 
-                              Style="{Binding Source= {StaticResource t}}"
+                              ItemsSource="{Binding Source= {StaticResource t}}"
                               ItemContainerStyle="{StaticResource ListItemstyle}"
-                              Grid.Row="2" Height="578" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
+                              Grid.Row="2" Height="578" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489" SelectionChanged="detaillist_SelectionChanged"
                               >
                     <ListView.View >
                         <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
