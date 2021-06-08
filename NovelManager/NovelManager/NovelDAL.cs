@@ -10,6 +10,18 @@ namespace NovelManager
 {
     public class NovelDAL
     {
+        public NovelDAL()
+        {
+            System.Diagnostics.StackTrace ss = new System.Diagnostics.StackTrace(true);
+            System.Reflection.MethodBase mb = ss.GetFrame(1).GetMethod();
+            var ori_ns = mb.DeclaringType.Namespace; // 取得父方法命名空间
+            Console.WriteLine(ori_ns);
+            if(ori_ns == "Novel_Spider")
+            {
+                dbName = @"..\..\..\ndb";
+            }
+        }
+
         private string dbName = @"..\..\..\..\ndb";
 
         public static void Main()
