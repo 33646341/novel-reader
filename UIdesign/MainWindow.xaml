@@ -72,8 +72,7 @@
                         <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="24" Width="200">
                             <StackPanel>
                                 <Button Content="123456" Click="Dwning_btn_click" VerticalAlignment="Top" Margin="422,8,507.6,0"/>
-                                <ListView Name="LV_DwnPage" Height="598" Margin="0,0,-0.4,0" SelectionChanged="LV_DwnPage_SelectionChanged" 
-                                          ItemsSource="{Binding Source={StaticResource Bar}}">
+                                <ListView Name="LV_DwnPage" Height="598" Margin="0,0,-0.4,0" SelectionChanged="LV_DwnPage_SelectionChanged">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="小说名" Width="200">
@@ -85,11 +84,11 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="进度" Width="200"  >
+                                            <GridViewColumn Header="进度" Width="700">
                                                 <GridViewColumn.CellTemplate>
-                                                    <DataTemplate >
+                                                    <DataTemplate>
                                                         <Grid>
-                                                            <ProgressBar Visibility="{Binding ProgressBar}" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="{Binding Path=barvalue}"/>
+                                                            <ProgressBar Width="700" Style="{StaticResource ProgressBarPrimaryStripe}" Value="{Binding barvalue}" Maximum="100" />
                                                         </Grid>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>

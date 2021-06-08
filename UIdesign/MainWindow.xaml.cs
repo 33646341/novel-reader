@@ -81,11 +81,12 @@ namespace UIdesign
         {
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
-            form.querytext = kw;
+            //form.querytext = kw;
 
             ShowProgress = Visibility.Visible;
 
-            List<Fiction> _ltfi_Search = new List<Fiction>()
+            // 不使用List类型，可实现自动刷新而不必切换源
+            ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>()
             {
                 new Fiction() { col_fiction_id = "0", col_fiction_name = "Tim", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
                 new Fiction() { col_fiction_id = "1", col_fiction_name = "Kimi", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
@@ -95,7 +96,7 @@ namespace UIdesign
 
             };
             //this.Lv_HomePage.ItemsSource = stuList;//数据源
-            //this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
+            this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
 
             new Thread(() =>
             {
@@ -108,8 +109,8 @@ namespace UIdesign
                     Dispatcher.Invoke(delegate ()
                     {
                         _ltfi_Search.Add(fiction_i);
-                        Lv_HomePage.ItemsSource = null;
-                        Lv_HomePage.ItemsSource = _ltfi_Search;//刷新数据源
+                        //Lv_HomePage.ItemsSource = null;
+                        //Lv_HomePage.ItemsSource = _ltfi_Search;//刷新数据源
                     });
                 }
                 ShowProgress = Visibility.Collapsed;
@@ -193,7 +194,8 @@ namespace UIdesign
         }
         #endregion
         #region 右键功能
-        public void InfoPage(object sender, RoutedEventArgs e) {
+        public void InfoPage(object sender, RoutedEventArgs e)
+        {
             Fiction emp = (sender as ListViewItem).Content as Fiction;
             Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_type);   //Login为窗口名，把要跳转的新窗口实例化
             login1.Show();
@@ -247,36 +249,37 @@ namespace UIdesign
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
 
-        
+
         private void Dwning_btn_click(object sender, RoutedEventArgs e)
         {
             Novel_Spider.Form1 form = new Novel_Spider.Form1();
             //MessageBox.Show(form.tag);
             List<BarValue> progress = new List<BarValue>()
             {
-                new BarValue() { name = "0", barvalue=50},
-                new BarValue() { name = "7", barvalue=50},
-                new BarValue() { name = "5", barvalue=50},
-                new BarValue() { name = "6", barvalue=50},
-                new BarValue() { name = "8", barvalue=50},
+                new BarValue() { name = "0", barvalue = 1},
+                new BarValue() { name = "7", barvalue = 5.5},
+                new BarValue() { name = "5", barvalue = 50},
+                new BarValue() { name = "6", barvalue = 89},
+                new BarValue() { name = "8", barvalue = 99.99},
             };
-            new Thread(() =>
-            {
-                for (int i = 10000; i < 10020; i++)
-                {
-                    var pro_i = new BarValue() { name = "0", barvalue = 50 };
-                    pro_i.name  = $"{i}";
-                    Thread.Sleep(200);
+            LV_DwnPage.ItemsSource = progress;//刷新数据源
+            //new Thread(() =>
+            //{
+            //    for (int i = 10000; i < 10020; i++)
+            //    {
+            //        var pro_i = new BarValue() { name = "0", barvalue = 50 };
+            //        pro_i.name  = $"{i}";
+            //        Thread.Sleep(200);
 
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        progress.Add(pro_i);
-                        LV_DwnPage.ItemsSource = null;
-                        LV_DwnPage.ItemsSource = progress;//刷新数据源
-                    });
-                }
-                ShowProgress = Visibility.Collapsed;
-            }).Start();
+            //        Dispatcher.Invoke(delegate ()
+            //        {
+            //            progress.Add(pro_i);
+            //            LV_DwnPage.ItemsSource = null;
+            //            LV_DwnPage.ItemsSource = progress;//刷新数据源
+            //        });
+            //    }
+            //    //ShowProgress = Visibility.Collapsed;
+            //}).Start();
             //得到进度百分数n
             //执行这个方法
 
@@ -286,7 +289,7 @@ namespace UIdesign
 
         #endregion
 
-        
+
     }
     #region 数据源
     public class Student
@@ -307,7 +310,7 @@ namespace UIdesign
         public string col_fiction_name { get; set; }
         public string col_fiction_author { get; set; }
         public string col_fiction_type { get; set; }
-        
+
     }
     #endregion
 
