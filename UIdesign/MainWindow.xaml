@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000">
+        Title="MainWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="ListItemstyle" TargetType="ListViewItem">
             <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
@@ -20,7 +20,7 @@
             <RowDefinition Height="89*"/>
             <RowDefinition Height="62*"/>
             <RowDefinition Height="574*"/>
-            <RowDefinition Height="46*"/>
+            <RowDefinition Height="26*"/>
         </Grid.RowDefinitions>
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="3" >
 
@@ -31,7 +31,7 @@
                         <TextBox x:Name="keySearch" Width="623" Text="唐家三少"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
                         <Button x:Name="searchBtn" Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
                     </WrapPanel>
-                    <hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>
+                    <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
                     <ListView x:Name="Lv_HomePage" 
                               Background="#FFF1ECEC" 
                               SelectionChanged="ListView_SelectionChanged" 
@@ -156,6 +156,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBlock Grid.Row="3" Text="就绪！" FontSize="30"></TextBlock>
+        <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
+        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="3" Margin="0,0" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}"/>
+        <!--<TextBlock Visibility="Collapsed" Grid.Row="3" Text="就绪！" FontSize="30"></TextBlock>-->
     </Grid>
 </Window>
