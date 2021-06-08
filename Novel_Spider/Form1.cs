@@ -15,29 +15,28 @@ namespace Novel_Spider
     //https://www.biquzhh.com/0_4
     public partial class Form1 : Form
     {
-        //假设一共添加了两本书到下载队列
-        int index = -1;//记录下载队列里的小说数，包含已下载的和正在下载的,在这里等于2
+        int index = -1;
 
-        double num = 0;//这两本书下载好的章节数，包含已下载的和正在下载的
+        //double num = 0;
 
-        double sum = 0;//这两本书需要下载的小说总章节数，包含已下载的和正在下载的
+        //double sum = 0;
 
-        Queue<Chapter> chapters = new Queue<Chapter>();//这两本书需要下载的小说章节队列（已下载的会出队）
+        Queue<Chapter> chapters = new Queue<Chapter>();
 
-        List<string> book = new List<string>();//需要下载的小说url（已下载的会删除），第一本是book[0]，下载完成会删去这个元素，第二本书book[1]变成book[0]
+        List<string> book = new List<string>();
 
-        List<string> path = new List<string>();//小说存放路径（已下载的会删除），同上
+        List<string> path = new List<string>();
 
         double download_progress;
         //double download_progress2;
 
         //string novel_name;
 
-        List<int> chapter_num = new List<int>();//记录每本小说已经下载的章节数，chapter_num[0]是第一本书下载好的章节，下载完会删去这个元素
+        List<int> chapter_num = new List<int>();
         //double chapter_num2 = 0;
 
 
-        List<int> chapter_sum = new List<int>();//记录每本书需要下载的章节，同上
+        List<int> chapter_sum = new List<int>();
         //double chapter_sum2 = 0;
 
         bool tag = true;//标记是否暂停,初始为未暂停
@@ -75,10 +74,17 @@ namespace Novel_Spider
                         string file_name = this_chapter.file_name;//获取章节名
                         if(path.Count!=0)
                         Write_Novel(path[0] + "/" + file_name + ".txt", file_name, Aref_Name);
-                        num++;
                         if (chapter_num.Count != 0 && chapter_sum.Count != 0)
                         {
                             chapter_num[0]++;
+
+                            download_progress = 1.0 * chapter_num[0] / chapter_sum[0] * 100;
+                            MethodInvoker m = new MethodInvoker(() =>
+                            {
+                                progressBar1.Value = Convert.ToInt32(download_progress);
+                            });
+                            this.BeginInvoke(m);
+
                             if (chapter_sum[0] - 1 == chapter_num[0])
                             {
                                 path.RemoveAt(0);
@@ -88,16 +94,14 @@ namespace Novel_Spider
                                 MethodInvoker mi = new MethodInvoker(() =>
                                 {
                                     listBox1.Items.RemoveAt(0);
+
+                                    if(chapter_sum.Count != 0)
+                                        progressBar1.Value = 0;
                                 });
                                 this.BeginInvoke(mi);
                             }
                         }
-                        download_progress = num / sum * 100;
-                        MethodInvoker m = new MethodInvoker(() =>
-                        {
-                            progressBar1.Value = Convert.ToInt32(download_progress);
-                        });
-                        this.BeginInvoke(m);
+              
                     }
                     if (tag == true)
                     {
@@ -126,10 +130,17 @@ namespace Novel_Spider
                         string file_name = this_chapter.file_name;//获取章节名
                         if (path.Count != 0)
                             Write_Novel(path[0] + "/" + file_name + ".txt", file_name, Aref_Name);
-                        num++;
                         if (chapter_num.Count != 0 && chapter_sum.Count != 0)
                         {
                             chapter_num[0]++;
+
+                            download_progress = 1.0 * chapter_num[0] / chapter_sum[0] * 100;
+                            MethodInvoker m = new MethodInvoker(() =>
+                            {
+                                progressBar1.Value = Convert.ToInt32(download_progress);
+                            });
+                            this.BeginInvoke(m);
+
                             if (chapter_sum[0] == chapter_num[0])
                             {
                                 path.RemoveAt(0);
@@ -139,6 +150,8 @@ namespace Novel_Spider
                                 MethodInvoker mi = new MethodInvoker(() =>
                                 {
                                     listBox1.Items.RemoveAt(0);
+                                    if (chapter_sum.Count != 0)
+                                        progressBar1.Value = 0;
                                 });
                                 this.BeginInvoke(mi);
                             }
@@ -333,7 +346,6 @@ namespace Novel_Spider
                         chapters.Enqueue(this_chapter);
                     }
                 }
-                sum += Matches.Count;
                 chapter_sum.Add(Matches.Count);
                 chapter_num.Add(0);
                 listBox1.Items.Add(Novel_Name);
