@@ -35,9 +35,6 @@
             this.col_fiction_id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_fiction_name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_fiction_author = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.col_update_chapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.col_update_time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.col_fiction_stata = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // button1
@@ -72,10 +69,7 @@
             this.Lv_HomePage.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.col_fiction_id,
             this.col_fiction_name,
-            this.col_fiction_author,
-            this.col_update_chapter,
-            this.col_update_time,
-            this.col_fiction_stata});
+            this.col_fiction_author});
             this.Lv_HomePage.FullRowSelect = true;
             this.Lv_HomePage.HideSelection = false;
             this.Lv_HomePage.Location = new System.Drawing.Point(144, 85);
@@ -94,27 +88,12 @@
             // col_fiction_name
             // 
             this.col_fiction_name.Text = "作品名称";
-            this.col_fiction_name.Width = 346;
+            this.col_fiction_name.Width = 213;
             // 
             // col_fiction_author
             // 
             this.col_fiction_author.Text = "作者";
             this.col_fiction_author.Width = 156;
-            // 
-            // col_update_chapter
-            // 
-            this.col_update_chapter.Text = "最新章节";
-            this.col_update_chapter.Width = 150;
-            // 
-            // col_update_time
-            // 
-            this.col_update_time.Text = "更新时间";
-            this.col_update_time.Width = 100;
-            // 
-            // col_fiction_stata
-            // 
-            this.col_fiction_stata.Text = "状态";
-            this.col_fiction_stata.Width = 100;
             // 
             // Form1
             // 
@@ -141,9 +120,6 @@
         private System.Windows.Forms.ColumnHeader col_fiction_id;
         private System.Windows.Forms.ColumnHeader col_fiction_name;
         private System.Windows.Forms.ColumnHeader col_fiction_author;
-        private System.Windows.Forms.ColumnHeader col_update_chapter;
-        private System.Windows.Forms.ColumnHeader col_update_time;
-        private System.Windows.Forms.ColumnHeader col_fiction_stata;
     }
 }
 

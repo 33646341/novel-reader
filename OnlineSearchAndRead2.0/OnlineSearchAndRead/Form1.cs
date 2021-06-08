@@ -68,10 +68,11 @@ namespace OnlineSearchAndRead
                     ListViewItem _lvi = new ListViewItem(_tfi.col_fiction_id);
                     _lvi.SubItems.Add(_tfi.col_fiction_name);
                     _lvi.SubItems.Add(_tfi.col_fiction_author);
-                    _lvi.SubItems.Add(_tfi.col_update_chapter);
+                   /* _lvi.SubItems.Add(_tfi.col_update_chapter);
                     _lvi.SubItems.Add(_tfi.col_update_time.ToString("yyyy-MM-dd"));
                     _lvi.SubItems.Add(_tfi.col_fiction_stata);
                     _lvi.SubItems.Add(_tfi.col_click_count);
+                    */
                     _lvi.Tag = _tfi;
 
                     Lv_HomePage.Items.Add(_lvi);
