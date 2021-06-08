@@ -6,19 +6,21 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000">
+        Title="MainWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="ListItemstyle" TargetType="ListViewItem">
             <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
         </Style>
         <local:Student x:Key="stu"/>
+        <local:Fiction x:Key="fic"/>
+        <local:BarValue x:Key="Bar"/>
     </Window.Resources>
     <Grid x:Name="Total_grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="89*"/>
             <RowDefinition Height="62*"/>
             <RowDefinition Height="574*"/>
-            <RowDefinition Height="46*"/>
+            <RowDefinition Height="26*"/>
         </Grid.RowDefinitions>
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="3" >
 
@@ -26,26 +28,28 @@
                 <StackPanel >
                     <WrapPanel Grid.Row="1">
                         <Label Content="C#R" VerticalAlignment="Bottom" Width="100"></Label>
-                        <TextBox x:Name="keySearch" Width="623" Text="搜索"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
+                        <TextBox x:Name="keySearch" Width="623" Text="唐家三少"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
                         <Button x:Name="searchBtn" Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
                     </WrapPanel>
-                    <hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>
+                    <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
                     <ListView x:Name="Lv_HomePage" 
                               Background="#FFF1ECEC" 
                               SelectionChanged="ListView_SelectionChanged" 
-                              
-                              
+                              ItemsSource="{Binding Source={StaticResource fic}}"
+                              ItemContainerStyle="{StaticResource ListItemstyle}"
                               GridViewColumnHeader.Click="Sort_Click"
                               Grid.Row="2" Height="578" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
                               >
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
-                                <GridViewColumn x:Name="s_Id" DisplayMemberBinding=
-                          "{Binding Path=Id}"  Header="Id" Width="180"></GridViewColumn>
-                                <GridViewColumn x:Name="s_Name" DisplayMemberBinding=
-                          "{Binding Path=Name}" Header="Name" Width="200"></GridViewColumn>
-                                <GridViewColumn x:Name="s_age" DisplayMemberBinding=
-                          "{Binding Path=Age}" Header="Age" Width="120"></GridViewColumn>
+                                <GridViewColumn x:Name="fiction_id" DisplayMemberBinding=
+                          "{Binding Path=col_fiction_id}"  Header="更新日期" Width="180"></GridViewColumn>
+                                <GridViewColumn x:Name="fiction_name" DisplayMemberBinding=
+                          "{Binding Path=col_fiction_name}" Header="小说名称" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="author_name" DisplayMemberBinding=
+                          "{Binding Path=col_fiction_author}" Header="作者" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="fiction_type" DisplayMemberBinding=
+                          "{Binding Path=col_fiction_type}" Header="小说类型" Width="200"></GridViewColumn>
                             </GridView>
                         </ListView.View>
                         <ListView.ContextMenu>
@@ -65,8 +69,35 @@
                         <ColumnDefinition Width="113*"/>
                     </Grid.ColumnDefinitions>
                     <TabControl Margin="0,0,-0.2,0">
-                        <TabItem Header="正在下载" IsSelected="True" FontSize="24" Width="200">
-                            <Button Content="123456"></Button>
+                        <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="24" Width="200">
+                            <StackPanel>
+                                <Button Content="123456" Click="Dwning_btn_click" VerticalAlignment="Top" Margin="422,8,507.6,0"/>
+                                <ListView Name="LV_DwnPage" Height="598" Margin="0,0,-0.4,0" SelectionChanged="LV_DwnPage_SelectionChanged">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="小说名" Width="200">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Grid>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Path=name}"/>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="进度" Width="700">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Grid>
+                                                            <ProgressBar Width="700" Style="{StaticResource ProgressBarPrimaryStripe}" Value="{Binding barvalue}" Maximum="100" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </StackPanel>
+
                         </TabItem>
                         <TabItem Header="已下载" IsSelected="True" FontSize="24" Width="200">
                             <Button Content="123456">
@@ -88,16 +119,17 @@
                     <ListView x:Name="Boksf_lv" 
                               Background="#FFCEC4C4" 
                               SelectionChanged="Boksf_lv_SelectionChanged" 
-                              ItemContainerStyle="{StaticResource ListItemstyle}" Margin="0,43,-0.4,-660.2" RenderTransformOrigin="0.5,0.489"
+                              Margin="0,43,-0.4,-660.2" RenderTransformOrigin="0.5,0.489"
+                              ItemsSource="{Binding Source={StaticResource stu}}"
                               >
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
-                                <GridViewColumn x:Name="fiction_name" DisplayMemberBinding=
-                          "{Binding Path=Id}"  Header="fiction" Width="180"></GridViewColumn>
-                                <GridViewColumn x:Name="author_name" DisplayMemberBinding=
-                          "{Binding Path=Name}" Header="writer" Width="200"></GridViewColumn>
-                                <GridViewColumn x:Name="update_time" DisplayMemberBinding=
-                          "{Binding Path=Age}" Header="update" Width="120"></GridViewColumn>
+                                <GridViewColumn x:Name="fictionid" DisplayMemberBinding=
+                          "{Binding Path=Id}"  Header="更新日期" Width="180"></GridViewColumn>
+                                <GridViewColumn x:Name="fictionname" DisplayMemberBinding=
+                          "{Binding Path=Name}" Header="小说名称" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="authorname" DisplayMemberBinding=
+                          "{Binding Path=Age}" Header="作者名称" Width="200"></GridViewColumn>
                             </GridView>
                         </ListView.View>
                         <ListView.ContextMenu>
@@ -124,6 +156,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBlock Grid.Row="3" Text="就绪！" FontSize="30"></TextBlock>
+        <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
+        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="3" Margin="0,0" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}"/>
+        <!--<TextBlock Visibility="Collapsed" Grid.Row="3" Text="就绪！" FontSize="30"></TextBlock>-->
     </Grid>
 </Window>

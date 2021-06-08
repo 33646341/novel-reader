@@ -7,7 +7,8 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.IO.Compression;
-using System.Data.SQLite;
+using NovelManager;
+//using System.Data.SQLite;
 
 namespace Novel_Spider
 {
@@ -292,6 +293,17 @@ namespace Novel_Spider
                 html = HttpGet(book[index]);
 
                 Novel_Name = Regex.Match(html, @"(?<=<h1>)([\S\s]*?)(?=</h1>)").Value;
+
+                // 数据库开始
+                var novelDAL = new NovelManager.NovelDAL();
+                if (novelDAL.exsitsNovel(Novel_Name)==0)
+                {
+                    novelDAL.addNovel(Novel_Name, book[index]);
+                }
+                var Novel_id = novelDAL.exsitsNovel(Novel_Name);
+                Console.WriteLine(Novel_id);
+                // 数据库结束
+
                 //novel_name1 = Novel_Name;//获取书名
 
                 path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
@@ -319,11 +331,18 @@ namespace Novel_Spider
 
                 if (chapters.Count == 0 || book.Count > 1)
                 {
+                    var counter = 0;
                     foreach (Match NextMatch in Matches)
                     {
                         Chapter this_chapter = new Chapter();
                         this_chapter.file_name = Regex.Match(NextMatch.Value, "(?<=\">)([\\S\\s]*?)(?=</a>)").Value; //获取章节名
                         this_chapter.Aref_Name = Regex.Match(NextMatch.Value, "(?<=<a href =\")([\\S\\s]*?)(?=\">)").Value; //获取章节地址
+
+                        // 数据库开始
+                        novelDAL.addChapter(Novel_id, counter, this_chapter.file_name, this_chapter.Aref_Name);
+                        counter++;
+                        // 数据库结束
+
                         chapters.Enqueue(this_chapter);
                     }
                 }

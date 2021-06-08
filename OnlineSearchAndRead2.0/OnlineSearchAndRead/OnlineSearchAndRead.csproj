@@ -32,21 +32,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Chloe, Version=4.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chloe.4.12.0\lib\net45\Chloe.dll</HintPath>
+      <HintPath>..\..\UIdesign\packages\Chloe.4.12.0\lib\net45\Chloe.dll</HintPath>
     </Reference>
     <Reference Include="Chloe.Extension, Version=4.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chloe.Extension.4.12.0\lib\net45\Chloe.Extension.dll</HintPath>
+      <HintPath>..\..\UIdesign\packages\Chloe.Extension.4.12.0\lib\net45\Chloe.Extension.dll</HintPath>
     </Reference>
     <Reference Include="Chloe.MySql, Version=4.12.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chloe.MySql.4.12.1\lib\net45\Chloe.MySql.dll</HintPath>
+      <HintPath>..\..\UIdesign\packages\Chloe.MySql.4.12.1\lib\net45\Chloe.MySql.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.32.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.32\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <HintPath>..\..\UIdesign\packages\HtmlAgilityPack.1.11.32\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -66,6 +63,12 @@
   <ItemGroup>
     <Compile Include="chapter_list.cs" />
     <Compile Include="fiction_search.cs" />
+    <Compile Include="Form_detail_content.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_detail_content.Designer.cs">
+      <DependentUpon>Form_detail_content.cs</DependentUpon>
+    </Compile>
     <Compile Include="form_fiction_content.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,10 +83,14 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="get_homepage_content.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_detail_content.resx">
+      <DependentUpon>Form_detail_content.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form_fiction_content.resx">
       <DependentUpon>form_fiction_content.cs</DependentUpon>

@@ -45,11 +45,21 @@ namespace ReadTool
                 DirectoryInfo dirs = new DirectoryInfo(folderPath);
                 FileInfo[] file = dirs.GetFiles();
                 int filecount = file.Count();//获得文件对象数量
-                //循环文件夹
-                for (int i = 0; i < filecount; i++)
+
+                // 数据库开始
+                var novelDAL = new NovelManager.NovelDAL();
+                var nid = novelDAL.exsitsNovel(dirs.Name);
+                foreach (var obj in novelDAL.getChapters(nid))
                 {
-                    treeView1.Nodes.Add(file[i].Name.Replace(".txt",""));//将txt文件加入treeview
+                    treeView1.Nodes.Add(obj[1].ToString());
                 }
+                // 数据库结束
+
+                //循环文件夹
+                //for (int i = 0; i < filecount; i++)
+                //{
+                //    treeView1.Nodes.Add(file[i].Name.Replace(".txt",""));//将txt文件加入treeview
+                //}
             }
         }     
 

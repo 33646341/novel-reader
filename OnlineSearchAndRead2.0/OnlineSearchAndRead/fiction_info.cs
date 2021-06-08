@@ -17,7 +17,7 @@ namespace OnlineSearchAndRead
         /// 小说ID
         /// </summary>
         [Column("col_fiction_id", IsPrimaryKey = true)]
-        public int col_fiction_id { get; set; }
+        public string col_fiction_id { get; set; }
         /// <summary>
         /// 小说名
         /// </summary>
@@ -49,6 +49,10 @@ namespace OnlineSearchAndRead
         /// <summary>
         /// 小说最后更新章节URL
         /// </summary>
+       // public string col_list_chapter { get; set; }
+        /// <summary>
+        /// 小说章节目录URL
+        /// </summary>      
         public string col_update_chapter_url { get; set; }
         /// <summary>
         /// 小说简介

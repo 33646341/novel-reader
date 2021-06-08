@@ -11,7 +11,7 @@ namespace OnlineSearchAndRead
 {
     public class fiction_search
     {
-        const string _url_Search = "https://sou.xanbhx.com/search?siteid=qula&q=";
+        const string _url_Search = "https://so.biqusoso.com/s.php?ie=utf-8&siteid=zanghaihuatxt.com&q=";//https://sou.xanbhx.com/search?siteid=qula&q=
         string _str_KeyWord = "";
         public fiction_search() { }
         public fiction_search(string _keyword)
@@ -41,12 +41,12 @@ namespace OnlineSearchAndRead
                 if (_doc_Main.Text == "")
                     return null;
 
-                //获取查询列表 把查询列表展示在UI
+                //获取查询列表列表名,把查询列表展示在UI
                 HtmlNodeCollection _hnc_Search_List = _doc_Main.DocumentNode.SelectNodes("//div[starts-with(@class,'search-list')]/ul/li");
                 //查询列表第一项为表头，所有查询项数据需要大于1
                 if (_hnc_Search_List.Count == 1)
                     return null;
-                //移除表头
+                //移除表头,即列表名操作每一个元祖
                 _hnc_Search_List.RemoveAt(0);
 
                 foreach (HtmlNode _hn in _hnc_Search_List)
@@ -54,11 +54,11 @@ namespace OnlineSearchAndRead
                     HtmlAgilityPack.HtmlDocument _doc_One = new HtmlAgilityPack.HtmlDocument();
                     _doc_One.LoadHtml(_hn.InnerHtml);
                     fiction_info _tfi = new fiction_info();
-                    //获取小说类型
-                    HtmlNodeCollection _hnc_Fiction_Type = _doc_One.DocumentNode.SelectNodes("//span[starts-with(@class,'s1')]");
-                    if (_hnc_Fiction_Type != null && _hnc_Fiction_Type.Count > 0)
+                    //获取小说序号
+                    HtmlNodeCollection _hnc_Fiction_Number = _doc_One.DocumentNode.SelectNodes("//span[starts-with(@class,'s1')]");
+                    if (_hnc_Fiction_Number != null && _hnc_Fiction_Number.Count > 0)
                     {
-                        _tfi.col_fiction_type = _hnc_Fiction_Type[0].InnerText.Replace("[", "").Replace("]", "");
+                        _tfi.col_fiction_id = _hnc_Fiction_Number[0].InnerText.Replace("[", "").Replace("]", "");
                     }
                     //获取小说名称及主页链接
                     HtmlNodeCollection _hnc_Fiction_Name_URL = _doc_One.DocumentNode.SelectNodes("//span[starts-with(@class,'s2')]/a");
@@ -101,7 +101,8 @@ namespace OnlineSearchAndRead
                     }
                     _tfi.col_fiction_source = "笔趣阁";
 
-                    _ltfi_ret.Add(_tfi);
+                    if(_tfi.col_fiction_stata !="连载"&& _tfi.col_fiction_stata != "完成")
+                        _ltfi_ret.Add(_tfi);
                 }
                 return _ltfi_ret;
             }
