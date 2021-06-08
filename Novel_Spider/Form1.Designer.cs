@@ -66,6 +66,7 @@ namespace Novel_Spider
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(244, 23);
             this.progressBar1.TabIndex = 3;
+            this.progressBar1.Click += new System.EventHandler(this.progressBar1_Click);
             // 
             // download
             // 
@@ -95,6 +96,7 @@ namespace Novel_Spider
             this.textBox1.Size = new System.Drawing.Size(381, 25);
             this.textBox1.TabIndex = 6;
             this.textBox1.Text = "https://www.biquzhh.com/29719_29719087/";
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // listBox1
             // 
@@ -104,6 +106,7 @@ namespace Novel_Spider
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(649, 244);
             this.listBox1.TabIndex = 7;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // button3
             // 

@@ -95,7 +95,6 @@ namespace UIdesign
                 new Fiction() { col_fiction_id = "4", col_fiction_name = "Ricky", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
 
             };
-            //this.Lv_HomePage.ItemsSource = stuList;//数据源
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
 
             new Thread(() =>
@@ -109,8 +108,6 @@ namespace UIdesign
                     Dispatcher.Invoke(delegate ()
                     {
                         _ltfi_Search.Add(fiction_i);
-                        //Lv_HomePage.ItemsSource = null;
-                        //Lv_HomePage.ItemsSource = _ltfi_Search;//刷新数据源
                     });
                 }
                 ShowProgress = Visibility.Collapsed;
@@ -248,45 +245,34 @@ namespace UIdesign
 
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
-
-
         private void Dwning_btn_click(object sender, RoutedEventArgs e)
         {
             Novel_Spider.Form1 form = new Novel_Spider.Form1();
-            //MessageBox.Show(form.tag);
+            form.url = "https://www.biquzhh.com/29719_29719087/";
+            form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
+            form.button1_Click(sender, e);//下载按钮，开始下载
+                // form.button2_Click(sender, e);//暂停按钮
+           // MessageBox.Show($"{form.download_progress}");
+            //MessageBox.Show(form.book[0]);
             List<BarValue> progress = new List<BarValue>()
             {
-                new BarValue() { name = "0", barvalue = 1},
-                new BarValue() { name = "7", barvalue = 5.5},
-                new BarValue() { name = "5", barvalue = 50},
-                new BarValue() { name = "6", barvalue = 89},
-                new BarValue() { name = "8", barvalue = 99.99},
+                new BarValue() { name = "0", barvalue = form.barvalue},
             };
             LV_DwnPage.ItemsSource = progress;//刷新数据源
-            //new Thread(() =>
-            //{
-            //    for (int i = 10000; i < 10020; i++)
-            //    {
-            //        var pro_i = new BarValue() { name = "0", barvalue = 50 };
-            //        pro_i.name  = $"{i}";
-            //        Thread.Sleep(200);
-
-            //        Dispatcher.Invoke(delegate ()
-            //        {
-            //            progress.Add(pro_i);
-            //            LV_DwnPage.ItemsSource = null;
-            //            LV_DwnPage.ItemsSource = progress;//刷新数据源
-            //        });
-            //    }
-            //    //ShowProgress = Visibility.Collapsed;
-            //}).Start();
-            //得到进度百分数n
-            //执行这个方法
-
-
+            while (form.barvalue < 100)
+            {
+                progress[0].barvalue= form.barvalue;
+            }
         }
         //执行这个方法
-
+        private void Dwn_ctl_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Stop!");
+        }   //打开新窗口
+        private void Dwn_del_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Delete!");
+        }   //打开新窗口
         #endregion
 
 

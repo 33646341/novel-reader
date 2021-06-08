@@ -1,4 +1,4 @@
-﻿<Window x:Class="UIdesign.MainWindow"
+﻿<Window x:Name="window" x:Class="UIdesign.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,10 +6,16 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="630" Width="1120" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="ListItemstyle" TargetType="ListViewItem">
             <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
+        </Style>
+        <Style x:Key="Dwn_ctl_Btn" TargetType="Button">
+            <EventSetter Event="MouseDoubleClick" Handler="Dwn_ctl_DoubleClick"/>
+        </Style>
+        <Style x:Key="Dwn_del_Btn" TargetType="Button">
+            <EventSetter Event="MouseDoubleClick" Handler="Dwn_del_DoubleClick"/>
         </Style>
         <local:Student x:Key="stu"/>
         <local:Fiction x:Key="fic"/>
@@ -17,16 +23,23 @@
     </Window.Resources>
     <Grid x:Name="Total_grid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="89*"/>
-            <RowDefinition Height="62*"/>
-            <RowDefinition Height="574*"/>
-            <RowDefinition Height="26*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="47*"/>
+            <RowDefinition Height="58*"/>
+            <RowDefinition Height="407*"/>
+            <RowDefinition Height="48*"/>
         </Grid.RowDefinitions>
-        <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="3" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="5">
 
-            <TabItem Header="首页" IsSelected="True" FontSize="24" Width="240">
+            <TabItem x:Name="tabItem1" Header="首页" IsSelected="True" FontSize="24" Width="255" >
                 <StackPanel >
-                    <WrapPanel Grid.Row="1">
+                    <WrapPanel >
                         <Label Content="C#R" VerticalAlignment="Bottom" Width="100"></Label>
                         <TextBox x:Name="keySearch" Width="623" Text="唐家三少"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
                         <Button x:Name="searchBtn" Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
@@ -38,7 +51,7 @@
                               ItemsSource="{Binding Source={StaticResource fic}}"
                               ItemContainerStyle="{StaticResource ListItemstyle}"
                               GridViewColumnHeader.Click="Sort_Click"
-                              Grid.Row="2" Height="578" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
+                              Grid.Row="2" Height="465" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
                               >
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
@@ -61,9 +74,8 @@
                         </ListView.ContextMenu>
                     </ListView>
                 </StackPanel>
-
             </TabItem>
-            <TabItem Header="下载" IsSelected="True" FontSize="24" Width="250">
+            <TabItem x:Name="tabItem" Header="下载" IsSelected="True" FontSize="24" Width="255">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="113*"/>
@@ -72,7 +84,7 @@
                         <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="24" Width="200">
                             <StackPanel>
                                 <Button Content="123456" Click="Dwning_btn_click" VerticalAlignment="Top" Margin="422,8,507.6,0"/>
-                                <ListView Name="LV_DwnPage" Height="598" Margin="0,0,-0.4,0" SelectionChanged="LV_DwnPage_SelectionChanged">
+                                <ListView Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="427" Margin="0,0,-0.4,0">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="小说名" Width="200">
@@ -88,8 +100,18 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Grid>
-                                                            <ProgressBar Width="700" Style="{StaticResource ProgressBarPrimaryStripe}" Value="{Binding barvalue}" Maximum="100" />
+                                                            <ProgressBar  Width="700" Style="{StaticResource ProgressBarPrimaryStripe}" Value="{Binding barvalue}" Maximum="100" />
                                                         </Grid>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header=" " Width="100">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <WrapPanel>
+                                                            <Button x:Name="dwn_ctrl" Content="暂停/开始" Style="{StaticResource Dwn_ctl_Btn}" Width="50"></Button>
+                                                            <Button x:Name="dwn_del" Content="删除" Style="{StaticResource Dwn_del_Btn}" Width="50"></Button>
+                                                        </WrapPanel>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
@@ -110,7 +132,7 @@
                     </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="书架" IsSelected="True" FontSize="24" Width="250">
+            <TabItem Header="书架" IsSelected="True" FontSize="24"  Width="255">
                 <Grid x:Name="Boksf_grid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
@@ -143,7 +165,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="设置" IsSelected="True" FontSize="24" Width="250">
+            <TabItem Header="设置" IsSelected="True" FontSize="24"  Width="255">
                 <Grid>
                     <Grid Height="200"  VerticalAlignment="Top" Margin="0,0,-0.4,0">
                         <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="0,0,659,159" />
@@ -156,8 +178,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
-        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="3" Margin="0,0" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}"/>
-        <!--<TextBlock Visibility="Collapsed" Grid.Row="3" Text="就绪！" FontSize="30"></TextBlock>-->
+        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="4" Grid.Column="0" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="48" Width="255"/>
+            <TextBlock Grid.Row="4" Text="就绪！" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
     </Grid>
 </Window>

@@ -23,21 +23,22 @@ namespace Novel_Spider
 
         Queue<Chapter> chapters = new Queue<Chapter>();
 
-        List<string> book = new List<string>();
+        public List<string> book = new List<string>();
 
-        List<string> path = new List<string>();
+        public List<string> path = new List<string>();
 
-        double download_progress;
+        public double download_progress;
         //double download_progress2;
 
         //string novel_name;
 
-        List<int> chapter_num = new List<int>();
+        public List<int> chapter_num = new List<int>();
         //double chapter_num2 = 0;
 
 
-        List<int> chapter_sum = new List<int>();
+        public List<int> chapter_sum = new List<int>();
         //double chapter_sum2 = 0;
+        public string url;
 
         bool tag = true;//标记是否暂停,初始为未暂停
        
@@ -50,8 +51,19 @@ namespace Novel_Spider
             button1.Enabled = true;
             button2.Enabled = false;
         }
+        public double barvalue
+        {
+            get
+            {
+                return download_progress;
+            }
+            set
+            {
+                download_progress = value;
+            }
+        }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void button1_Click(object sender, EventArgs e)
         {
             button2.Enabled = true;
 
@@ -83,7 +95,7 @@ namespace Novel_Spider
                             {
                                 progressBar1.Value = Convert.ToInt32(download_progress);
                             });
-                            this.BeginInvoke(m);
+                            //this.BeginInvoke(m);
 
                             if (chapter_sum[0] - 1 == chapter_num[0])
                             {
@@ -98,7 +110,7 @@ namespace Novel_Spider
                                     if(chapter_sum.Count != 0)
                                         progressBar1.Value = 0;
                                 });
-                                this.BeginInvoke(mi);
+                                //this.BeginInvoke(mi);
                             }
                         }
               
@@ -111,7 +123,7 @@ namespace Novel_Spider
                             MessageBox.Show("确定");
                             this.Close();
                         });
-                        this.BeginInvoke(mi);
+                        //this.BeginInvoke(mi);
                     }
                 });
 
@@ -139,7 +151,7 @@ namespace Novel_Spider
                             {
                                 progressBar1.Value = Convert.ToInt32(download_progress);
                             });
-                            this.BeginInvoke(m);
+                            //this.BeginInvoke(m);
 
                             if (chapter_sum[0] == chapter_num[0])
                             {
@@ -153,7 +165,7 @@ namespace Novel_Spider
                                     if (chapter_sum.Count != 0)
                                         progressBar1.Value = 0;
                                 });
-                                this.BeginInvoke(mi);
+                                //this.BeginInvoke(mi);
                             }
                         }
                     }
@@ -163,14 +175,14 @@ namespace Novel_Spider
             task2.Start();
             
         }
-        private void button2_Click(object sender, EventArgs e)
+        public void button2_Click(object sender, EventArgs e)
         {
             tag = false;
             button1.Enabled = true;
             button2.Enabled = false;
         }
 
-        private void Write_Novel(string filename, string title, string url_name)
+        public void Write_Novel(string filename, string title, string url_name)
         {
             bool Novel_type = false;
             string Content_Html = HttpGet("https://www.biquzhh.com" + url_name);//获取内容页
@@ -272,23 +284,23 @@ namespace Novel_Spider
             public string Aref_Name;
         }
 
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        public void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        public void button3_Click(object sender, EventArgs e)
         {
             string html;
 
             string Novel_Name;
 
-            bool OLD = book.Contains(textBox1.Text);
+            bool OLD = book.Contains(url);
 
             if (!OLD)
             {
                 index++;
 
-                book.Add(textBox1.Text);
+                book.Add(url);
 
                 html = HttpGet(book[index]);
 
@@ -350,6 +362,21 @@ namespace Novel_Spider
                 chapter_num.Add(0);
                 listBox1.Items.Add(Novel_Name);
             }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void progressBar1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

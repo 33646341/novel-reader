@@ -23,6 +23,7 @@ namespace NovelManager
         }
 
         private string dbName = @"..\..\..\..\ndb";
+        //private string dbName = @"D:\Richard\C#project\Test\ndb";
 
         public static void Main()
         {
