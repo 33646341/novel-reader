@@ -259,10 +259,22 @@ namespace UIdesign
                 new BarValue() { name = "0", barvalue = form.barvalue},
             };
             LV_DwnPage.ItemsSource = progress;//刷新数据源
-            while (form.barvalue < 100)
+
+            new Thread(() =>
             {
-                progress[0].barvalue= form.barvalue;
-            }
+                while (form.barvalue < 100)
+                {
+                    //MessageBox.Show($"{form.download_progress}");
+                    progress[0].barvalue = form.barvalue;
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        LV_DwnPage.ItemsSource = null;//刷新数据源
+                        LV_DwnPage.ItemsSource = progress;//刷新数据源
+                    });
+                    Thread.Sleep(100);
+                }
+            }).Start();
+
         }
         //执行这个方法
         private void Dwn_ctl_DoubleClick(object sender, MouseButtonEventArgs e)
