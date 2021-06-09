@@ -17,7 +17,7 @@ namespace OnlineSearchAndRead
         //小说查找
         fiction_search _cfs = new fiction_search();
         List<fiction_info> _ltfi_Search;
-
+        public string querytext;
 
         //操作线程
         //查找小说线程
@@ -28,28 +28,11 @@ namespace OnlineSearchAndRead
             anotherForm = new Form_detail_content();
         }
 
-        public void Thread_Fiction_Search(object _s_kw)// List<fiction_info>
+        public List<fiction_info> Thread_Fiction_Search()// List<fiction_info>
         {
-            _ltfi_Search = _cfs._o_Get_Fiction_Info_By_KeyWord(_s_kw.ToString());//关键字得到信息
-            Lv_HomePage.BeginInvoke(new Action(() =>
-            {
-                if (_ltfi_Search == null || _ltfi_Search.Count == 0)
-                {
-                    //UI设计的同学可考虑添加控件
-                    //Show_Btm_Msg("无匹配查询结果，请更换关键词后重试！", 0);
-                    //测试专用
-                    //show_text_box("失败");
-                    Lv_HomePage.Items.Clear();
-                }
-                else
-                {
-                    //show_text_box("成功");
-                    //Show_Btm_Msg("查找成功，相关数据【" + _ltfi_Search.Count + "】条！", 0);
-                    Show_Search_List(_ltfi_Search);
-                }
-                Lv_HomePage.Enabled = true;
-            }));
-            //return _ltfi_Search;
+            _ltfi_Search = _cfs._o_Get_Fiction_Info_By_KeyWord(querytext);//关键字得到信息
+            
+            return _ltfi_Search;
 
         }
         public void show_text_box(string msg)
@@ -91,9 +74,9 @@ namespace OnlineSearchAndRead
                 //_thread_Search.Abort();
                 //_thread_Search.Join();
                 //_thread_Search = null;
-                _thread_Search = new Thread(Thread_Fiction_Search);
-                _thread_Search.IsBackground = true;
-                _thread_Search.Start(textBox1.Text);
+                //_thread_Search = new Thread(Thread_Fiction_Search);
+                //_thread_Search.IsBackground = true;
+                //_thread_Search.Start(querytext);
                 
             }
 

@@ -18,7 +18,7 @@ using NovelManager;
 using System.ComponentModel;
 using System.Threading;
 using System.Collections.ObjectModel;
-
+using System.Runtime.CompilerServices;
 namespace UIdesign
 {
     /// <summary>
@@ -81,28 +81,20 @@ namespace UIdesign
         {
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
-            //form.querytext = kw;
+            form.querytext = kw;
+            List<fiction_info> _fic_info = form.Thread_Fiction_Search();
 
             ShowProgress = Visibility.Visible;
 
             // 不使用List类型，可实现自动刷新而不必切换源
-            ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>()
-            {
-                new Fiction() { col_fiction_id = "0", col_fiction_name = "Tim", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
-                new Fiction() { col_fiction_id = "1", col_fiction_name = "Kimi", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
-                new Fiction() { col_fiction_id = "2", col_fiction_name = "Amy", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
-                new Fiction() { col_fiction_id = "3", col_fiction_name = "Tommy", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
-                new Fiction() { col_fiction_id = "4", col_fiction_name = "Ricky", col_fiction_author = "唐家三少",col_fiction_type="玄幻" },
-
-            };
+            ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
-
             new Thread(() =>
             {
-                for (int i = 10000; i < 10020; i++)
+                for (int i = 0; i < _fic_info.Count; i++)
                 {
-                    var fiction_i = new Fiction() { col_fiction_id = "5", col_fiction_name = "Richard", col_fiction_author = "天蚕土豆", col_fiction_type = "热血" };
-                    fiction_i.col_fiction_id = $"{i}";
+                    var fiction_i = new Fiction() { col_fiction_id = _fic_info[i].col_fiction_id, col_fiction_name = _fic_info[i].col_fiction_name, col_fiction_author = _fic_info[i].col_fiction_author, col_fiction_type = _fic_info[i].col_fiction_type };
+                    //fiction_i.col_fiction_id = $"{i}";
                     Thread.Sleep(200);
 
                     Dispatcher.Invoke(delegate ()
@@ -245,9 +237,10 @@ namespace UIdesign
 
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
+        Novel_Spider.Form1 form = new Novel_Spider.Form1();
         private void Dwning_btn_click(object sender, RoutedEventArgs e)
         {
-            Novel_Spider.Form1 form = new Novel_Spider.Form1();
+            
             form.url = "https://www.biquzhh.com/29719_29719087/";
             form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
             form.button1_Click(sender, e);//下载按钮，开始下载
@@ -264,8 +257,10 @@ namespace UIdesign
             {
                 while (form.barvalue < 100)
                 {
-                    //MessageBox.Show($"{form.download_progress}");
+                    MessageBox.Show($"{form.barvalue}");
                     progress[0].barvalue = form.barvalue;
+                    LV_DwnPage.ItemsSource = null;//刷新数据源
+                    LV_DwnPage.ItemsSource = progress;//刷新数据源
                     Thread.Sleep(100);
                 }
             }).Start();
@@ -274,7 +269,8 @@ namespace UIdesign
         //执行这个方法
         private void Dwn_ctl_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Stop!");
+            form.button2_Click(sender, e);
+            // MessageBox.Show("Stop!");
         }   //打开新窗口
         private void Dwn_del_DoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -306,12 +302,7 @@ namespace UIdesign
 
         public string name { get; set; }
         //public double barvalue { get; set; }
-
-
-
-
         public event PropertyChangedEventHandler PropertyChanged;
-
         private void NotifyPropertyChanged(String info)
         {
             if (PropertyChanged != null)

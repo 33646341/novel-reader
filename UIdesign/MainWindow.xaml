@@ -19,7 +19,6 @@
         </Style>
         <local:Student x:Key="stu"/>
         <local:Fiction x:Key="fic"/>
-        <local:BarValue x:Key="Bar"/>
     </Window.Resources>
     <Grid x:Name="Total_grid">
         <Grid.RowDefinitions>
@@ -37,7 +36,7 @@
         </Grid.ColumnDefinitions>
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="5">
 
-            <TabItem x:Name="tabItem1" Header="首页" IsSelected="True" FontSize="24" Width="255" >
+            <TabItem x:Name="Homepg_item" Header="首页" IsSelected="True" FontSize="24" Width="255" >
                 <StackPanel >
                     <WrapPanel >
                         <Label Content="C#R" VerticalAlignment="Bottom" Width="100"></Label>
@@ -75,7 +74,7 @@
                     </ListView>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="tabItem" Header="下载" IsSelected="True" FontSize="24" Width="255">
+            <TabItem x:Name="Dwn_item" Header="下载" IsSelected="True" FontSize="24" Width="255">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="113*"/>
@@ -91,16 +90,17 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Grid>
-                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Path=name}"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="2020"/>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="进度" Width="700">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
+                                            <GridViewColumn Header="进度" Width="700" >
+                                                <GridViewColumn.CellTemplate >
+                                                    <DataTemplate x:Name="cmbTemplate">
                                                         <Grid>
-                                                            <ProgressBar  Width="700" Style="{StaticResource ProgressBarPrimaryStripe}" Value="{Binding barvalue}" Maximum="100" />
+                                                            <ProgressBar x:Name="pb_import2" Width="700" Maximum="100" />
+                                                            
                                                         </Grid>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -179,6 +179,7 @@
             </TabItem>
         </TabControl>
         <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="4" Grid.Column="0" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="48" Width="255"/>
-            <TextBlock Grid.Row="4" Text="就绪！" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
+        <TextBlock Grid.Row="4" Text="就绪！" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
+        <TextBlock x:Name="txtJD" Text=" " Grid.Column="1"></TextBlock>
     </Grid>
 </Window>
