@@ -28,7 +28,7 @@ namespace UIdesign
             new topic() { number = 5, name = "第五章名", content = "内容5" }
             };
         
-        public Window1(string fiction_name,string author_name, string total_number,string id)
+        public Window1(string id,string fiction_name,string author_name, string total_number)
         {
             InitializeComponent();
             Fiction_name.Text = fiction_name;

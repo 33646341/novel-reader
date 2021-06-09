@@ -8,11 +8,197 @@
         mc:Ignorable="d"
         Title="Window1" Height="800" Width="1000">
     <Window.Resources>
-        <Style x:Key="ListItemstyle" TargetType="ListViewItem">
-            <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
+
+        <Style x:Key="headerListView" TargetType="{x:Type GridViewColumnHeader}">
+
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="Background" Value="#FFFFFF"/>
+
+            <Setter Property="Foreground" Value="#555"/>
+
+            <Setter Property="BorderBrush" Value="#FF0977EF"/>
+
+            <Setter Property="BorderThickness" Value="0,0,0,3"/>
+
+            <Setter Property="Height" Value="60"/>
+
+            <Setter Property="FontSize" Value="24"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <!--<SnippetGVCHControlTemplateStart>-->
+
+                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+
+                        <!--</SnippetGVCHControlTemplateStart>-->
+
+                        <Grid>
+
+                            <DockPanel Background="{TemplateBinding Background}">
+
+                                <!-- Hightlight at bottom -->
+
+                                <Border x:Name="HighlightBorder"
+ 
+                                                DockPanel.Dock="Bottom"
+ 
+                                                Background="Transparent"
+ 
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+ 
+                                                Height="3" BorderThickness="{TemplateBinding BorderThickness}"/>
+
+                                <!-- GridViewColumnHeader Content -->
+
+                                <Border BorderThickness="{TemplateBinding BorderThickness}"
+ 
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+ 
+                                                Padding="{TemplateBinding Padding}"
+ 
+                                                Height="{TemplateBinding Height}">
+
+                                    <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"                              
+ 
+                                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+ 
+                                                              RecognizesAccessKey="True"/>
+
+                                </Border>
+
+                            </DockPanel>
+
+                        </Grid>
+
+
+
+                        <ControlTemplate.Triggers>
+
+                            <!--</SnippetControlTemplateTriggersStart>-->
+
+                            <!--Trigger Property="IsMouseOver" Value="true">
+                                        <Setter TargetName="HighlightBorder" Property="BorderBrush" Value="Red"/>
+                                        <Setter TargetName="HighlightBorder" Property="Background" Value="Blue"/>
+                                        <Setter TargetName="HighlightBorder" Property="CornerRadius" Value="0,0,3,3"/>
+                                        <Setter TargetName="HighlightBorder" Property="BorderThickness" Value="1,0,1,1"/>
+                                        <Setter Property="Background" Value="#ffaa"/>
+                                    </Trigger-->
+
+                            <!--<SnippetIsPressed>-->
+
+                            <Trigger Property="IsPressed" Value="true">
+
+                                <Setter TargetName="HighlightBorder" Property="Visibility" Value="Hidden"/>
+
+                                <Setter Property="Background" Value="#FF0977EF"/>
+
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+
+                            </Trigger>
+
+                            <!--</SnippetIsPressed>-->
+
+                            <Trigger Property="Height" Value="Auto">
+
+                                <Setter Property="MinHeight" Value="20"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="false">
+
+                                <Setter Property="Foreground" Value="mistyrose"/>
+
+                            </Trigger>
+
+                            <!--<SnippetFloating>-->
+
+                            <Trigger Property="Role" Value="Floating">
+
+                                <Setter Property="Background" Value="#FFAA00"/>
+
+                            </Trigger>
+
+                            <!--</SnippetFloating>-->
+
+                            <!--<SnippetControlTemplateTriggersEnd>-->
+
+                        </ControlTemplate.Triggers>
+
+                        <!--</SnippetControlTemplateTriggersEnd>-->
+
+                        <!--<SnippetGVCHControlTemplateEnd>-->
+
+                    </ControlTemplate>
+
+                    <!--</SnippetGVCHControlTemplateEnd>-->
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+
+
+        <Style x:Key="Listviewstyle" TargetType="ListView">
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="transparent"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="AlternationCount" Value="2"/>
+            <!--ListViewItem模板-->
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
+                        <Setter Property="Height" Value="60"/>
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="Background" Value="#fff"/>
+                        <Setter Property="BorderBrush" Value="transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                        <GridViewRowPresenter Content="{TemplateBinding Content}"
+                                                          Columns="{TemplateBinding GridView.ColumnCollection}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="#FFFAEEC0"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#FFF6BB18"/>
+                                <Setter Property="BorderBrush" Value="#FFFFFF"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="FontSize" Value="22"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
         <local:topic x:Key="t"/>
     </Window.Resources>
+
     <DockPanel LastChildFill="True">
         <Grid Margin="0,0,0,0.4">
             <Grid.RowDefinitions>
@@ -20,15 +206,14 @@
                 <RowDefinition Height="7*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+            <Grid Panel.ZIndex="2" Grid.Row="0" hc:BorderElement.CornerRadius="15" hc:BackgroundSwitchElement.MouseHoverBackground ="Blue">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="286*"/>
-                    <ColumnDefinition Width="261*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="11*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FFDEF3F7" Offset="1"/>
-                        <GradientStop Color="#FF85C4CF"/>
+                        <GradientStop Color="#FFFFFF" Offset="1"/>
                     </LinearGradientBrush>
                 </Grid.Background>
                 <Grid.OpacityMask>
@@ -38,13 +223,21 @@
                         <GradientStop Color="#FFF3F3F3" Offset="0.954"/>
                     </LinearGradientBrush>
                 </Grid.OpacityMask>
-                <Grid Grid.Column="0" Margin="59,5,315.333,41.667" RenderTransformOrigin="0.6,0.681">
-                    <StackPanel Background="LightGray" Margin="0,23,0,0" >
-                        <Image Source="img/emp.jpg" />
-                    </StackPanel>
+                <Border HorizontalAlignment="Stretch"  Style="{StaticResource BorderRegion}"  Margin="0,0,32,32">
+                    <Border CornerRadius="15" Background="{DynamicResource PrimaryBrush}" Effect="{StaticResource EffectShadow5}" Margin="-4.333,-5.333,-817.667,-18.667">
+                        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                    </Border>
+                </Border>
+                <Grid Grid.Column="0" Margin="0,0,0,0" RenderTransformOrigin="0.6,0.681">
+                    <Border Background="#FFFFFF" Margin="60,30,0,40" CornerRadius="15">
+                        <Image Source="img/emp.jpg" Height="170" Margin="0,0,0,0" />
+                    </Border>
                 </Grid>
                 <!--Image Height="175" Width="125" Source="OIP (1).jpg" Grid.Column="0"/-->
-                <Grid Grid.ColumnSpan="4" Margin="286,0,-0.6,0.2" >
+                <Border  CornerRadius="15" Background="{DynamicResource PrimaryBrush}" Effect="{StaticResource EffectShadow5}" Margin="62.333,43,65.333,47.667" Grid.Column="1" >
+                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                </Border>
+                <Grid Grid.ColumnSpan="2" Margin="286,0,-0.667,0.667" Height="256" VerticalAlignment="Bottom" >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -53,35 +246,42 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <hc:TextBox x:Name="Fiction_name" Canvas.Left="327" TextWrapping="Wrap" Text="XXXXXX" Canvas.Top="40" FontSize="30" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFA3A1A1" Foreground="#FF424141" Margin="0,0.333,105.333,0.333" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
-                    <hc:TextBox x:Name="Author_name" Height="46" Canvas.Left="327" TextWrapping="Wrap" Text="XXXX | XXX" Canvas.Top="116" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFF35E5E" FontSize="22" Foreground="#FF5C5B5B" Grid.Row="1" Margin="0,48.333,119.333,3" Grid.RowSpan="2" TextChanged="TextBox_TextChanged_1"/>
-                    <hc:TextBox x:Name="Total_number" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 | XX字" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FF424141" Grid.Row="4" Margin="0,5,122.933,3.333" />
+                  
+
+                    <hc:TextBox x:Name="Fiction_name" Panel.ZIndex="10006" Canvas.Left="327" TextWrapping="Wrap" Text="XXXXXX" Canvas.Top="40" FontSize="25" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFA3A1A1" Foreground="#FFFFFF" Margin="0,0.667,100,0.667" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
+                    <hc:TextBox x:Name="Author_name" Panel.ZIndex="10006" Height="46" Canvas.Left="327" TextWrapping="Wrap" Text="XXXX | XXX" Canvas.Top="116" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFF35E5E" FontSize="22" Foreground="#FFFFFF" Grid.Row="1" Margin="0,50.667,99,6" Grid.RowSpan="2" TextChanged="TextBox_TextChanged_1"/>
+                    <hc:TextBox x:Name="Total_number" Panel.ZIndex="10006" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 | XX字" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FFFFFF" Grid.Row="4" Margin="0,5,505,3.333" />
 
                 </Grid>
             </Grid>
-            <Grid Margin="0,239,0.4,0.4" Grid.RowSpan="2">
-                <ListView x:Name="detaillist" 
-                              Background="#FFF1ECEC" 
-                              ItemsSource="{Binding Source= {StaticResource t}}"
-                              ItemContainerStyle="{StaticResource ListItemstyle}"
-                              Grid.Row="2" Height="578" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489" SelectionChanged="detaillist_SelectionChanged"
-                              >
-                    <ListView.View >
-                        <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
-                            <GridViewColumn x:Name="number" DisplayMemberBinding=
-                          "{Binding number}"  Header="number" Width="200" ></GridViewColumn>
-                            <GridViewColumn x:Name="name" DisplayMemberBinding=
-                          "{Binding name}" Header="name" Width="200"></GridViewColumn>
-                            <GridViewColumn x:Name="content" DisplayMemberBinding=
-                          "{Binding content}" Header="content" Width="500"></GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
 
-                <!--<DataGrid x:Name="topiclist" IsReadOnly="True" AutoGenerateColumns="True">
+            <Grid Margin="0,239,0.4,0.4" Grid.RowSpan="2">
+                <ScrollViewer>
+                    <ListView x:Name="detaillist" 
+                              Background="#FFFFFF" 
+                              ItemsSource="{Binding DataList}"
+                              Style="{StaticResource Listviewstyle}"
+                              Margin="20"
+                              FontSize="20"
+                              Grid.Row="2" Height="431" RenderTransformOrigin="0.5,0.489" SelectionChanged="detaillist_SelectionChanged" BorderBrush="#FF0977EF"
+                              >
+                        <ListView.View >
+                            <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black"
+                                      ColumnHeaderContainerStyle="{StaticResource headerListView}">
+                                <GridViewColumn x:Name="number" DisplayMemberBinding=
+                          "{Binding number}"   Header="章节数" Width="200" ></GridViewColumn>
+                                <GridViewColumn x:Name="name" DisplayMemberBinding=
+                          "{Binding name}" Header="章节名" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="content" DisplayMemberBinding=
+                          "{Binding content}" Header="本章内容" Width="550"></GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <!--<DataGrid x:Name="topiclist" IsReadOnly="True" AutoGenerateColumns="True">
                     
                 -->
-                <!--<DataGrid.RenderTransform>
+                    <!--<DataGrid.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform AngleX="-0.507"/>
@@ -90,63 +290,29 @@
                         </TransformGroup>
                     </DataGrid.RenderTransform>-->
 
-                <!--<DataGrid.Columns>
+                    <!--<DataGrid.Columns>
                         <DataGridTextColumn Header="章节数" Width="*" Binding="{Binding number}"/>
                         <DataGridTextColumn Header="章节名称" Width="*" Binding="{Binding name}"/>
                         <DataGridTextColumn Header="简介" Width="5*" Binding="{Binding content}"/>
                     </DataGrid.Columns>-->
-                <!--
+                    <!--
                 </DataGrid>-->
+                </ScrollViewer>
             </Grid>
-            <Grid Grid.Row="2">
+
+            <Grid Grid.Row="2" Background="#FFE9E9E9" Margin="0,0,0.333,-1" OpacityMask="#FFF3F2F2">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Button"  Width="106" Height="44" Foreground="white" FontSize="16" Click="Button_Click_1" Margin="10,8,41.6,8">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border CornerRadius="15,15,15,15" BorderBrush="White">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                                        <GradientStop Color="#FFDD6262" Offset="0.0"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <ContentPresenter Content="立即阅读" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button Content="Button"  Width="106" Height="45" Foreground="white" FontSize="16" Grid.Column="2" Click="Button_Click_2">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border CornerRadius="15,15,15,15" BorderBrush="White">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                                        <GradientStop Color="#FFF69940" Offset="0.0"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <ContentPresenter Content="全部下载" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button Content="Button"  Width="106" Height="45" Foreground="white" FontSize="16" Grid.Column="3" Click="Button_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border CornerRadius="15,15,15,15" BorderBrush="White">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                                        <GradientStop Color="#FF83C3ED" Offset="0.0"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <ContentPresenter Content="加入书架" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                <Button Content=" 立即阅读" HorizontalAlignment="Stretch"  Height="50" hc:IconElement.Geometry="{StaticResource EyeOpenGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonSuccess}" FontSize="16" Click="Button_Click_1" Margin="30,8,41.6,8"/>
+
+                <Button Content=" 全部下载" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource DownloadGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="2" Click="Button_Click_2" Margin="30,8,41.6,8"/>
+
+                <Button Content=" 加入书架" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource AllGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="3" Click="Button_Click" Margin="30,8,41.6,8"/>
             </Grid>
         </Grid>
     </DockPanel>
