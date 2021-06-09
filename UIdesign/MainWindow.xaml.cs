@@ -251,10 +251,10 @@ namespace UIdesign
             form.url = "https://www.biquzhh.com/29719_29719087/";
             form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
             form.button1_Click(sender, e);//下载按钮，开始下载
-                // form.button2_Click(sender, e);//暂停按钮
-           // MessageBox.Show($"{form.download_progress}");
-            //MessageBox.Show(form.book[0]);
-            List<BarValue> progress = new List<BarValue>()
+                                          // form.button2_Click(sender, e);//暂停按钮
+                                          // MessageBox.Show($"{form.download_progress}");
+                                          //MessageBox.Show(form.book[0]);
+            ObservableCollection<BarValue> progress = new ObservableCollection<BarValue>()
             {
                 new BarValue() { name = "0", barvalue = form.barvalue},
             };
@@ -266,11 +266,6 @@ namespace UIdesign
                 {
                     //MessageBox.Show($"{form.download_progress}");
                     progress[0].barvalue = form.barvalue;
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        LV_DwnPage.ItemsSource = null;//刷新数据源
-                        LV_DwnPage.ItemsSource = progress;//刷新数据源
-                    });
                     Thread.Sleep(100);
                 }
             }).Start();
@@ -297,10 +292,33 @@ namespace UIdesign
         public string Name { get; set; }
         public int Age { get; set; }
     }
-    public class BarValue
+    public class BarValue : INotifyPropertyChanged
     {
+        private double Barvalue;
+
+        public double barvalue
+        {
+            get { return Barvalue; }
+            set { Barvalue = value;
+                NotifyPropertyChanged(nameof(barvalue));
+            }
+        }
+
         public string name { get; set; }
-        public double barvalue { get; set; }
+        //public double barvalue { get; set; }
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
     public class Fiction
     {
