@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="630" Width="1120" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="800" Width="1120" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="ListItemstyle" TargetType="ListViewItem">
             <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
@@ -50,7 +50,7 @@
                               ItemsSource="{Binding Source={StaticResource fic}}"
                               ItemContainerStyle="{StaticResource ListItemstyle}"
                               GridViewColumnHeader.Click="Sort_Click"
-                              Grid.Row="2" Height="465" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
+                              Grid.Row="2" Height="618" Margin="0,0,-0.667,0" RenderTransformOrigin="0.5,0.489"
                               >
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
@@ -99,7 +99,7 @@
                                                     <DataTemplate x:Name="cmbTemplate">
                                                         <Grid>
                                                             <ProgressBar x:Name="pb_import2" Width="700" Maximum="100" />
-                                                            
+
                                                         </Grid>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
