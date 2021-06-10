@@ -294,6 +294,8 @@ namespace Novel_Spider
 
             string Novel_Name;
 
+            string Picture_Url;
+
             bool OLD = book.Contains(url);
 
             if (!OLD)
@@ -305,6 +307,8 @@ namespace Novel_Spider
                 html = HttpGet(book[index]);
 
                 Novel_Name = Regex.Match(html, @"(?<=<h1>)([\S\s]*?)(?=</h1>)").Value;
+
+                Picture_Url = Regex.Match(html, "<meta property=\"og:image\" content=\"https://.*?/>").Value.Replace("<meta property=\"og:image\" content=\"", "").Replace("\"/>", "");
 
                 // 数据库开始
                 var novelDAL = new NovelManager.NovelDAL();
@@ -359,7 +363,11 @@ namespace Novel_Spider
                     }
                 }
                 chapter_sum.Add(Matches.Count);
+
                 chapter_num.Add(0);
+
+                download_picture(Picture_Url, Novel_Name);
+
                 listBox1.Items.Add(Novel_Name);
             }
         }
@@ -377,6 +385,15 @@ namespace Novel_Spider
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        public void download_picture(string Picture_url, string Novel_Name)
+        {
+            string fileName = System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name + ".jpg";
+
+            WebClient webClient = new WebClient();
+            //下载url链接文件，并指定到本地的文件夹路径和文件名称
+            webClient.DownloadFile(Picture_url, fileName);
         }
     }
 }

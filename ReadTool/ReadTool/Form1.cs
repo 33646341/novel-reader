@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Speech.Synthesis;
 using System.Linq;
+using NovelManager;
 
 namespace ReadTool
 {
