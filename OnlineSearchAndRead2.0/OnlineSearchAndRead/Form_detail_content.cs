@@ -36,18 +36,20 @@ namespace OnlineSearchAndRead
             anotherForm = new form_fiction_content();
             //显示表格操作
             _fcl_Now = _fcl;
-            /*_fcl_Now = _cfs._o_Get_Fiction_Detail(_fcl_Now.col_url_homepage);
-            Show_TextBox(_fcl_Now);
-            _ltfi_Search = _cfs._o_Get_Chapter_Content(_fcl_Now.col_url_homepage);//关键字得到信息
-            Show_Search_List(_ltfi_Search);
-            */
-            _thread_Search_Fiction = new Thread(Thread_Detail_Search);
+            Tuple<fiction_info, List<chapter_list>> tup = _cfs.TupleDetail(_fcl_Now.col_url_homepage);
+            //_fcl_Now = _cfs._o_Get_Fiction_Detail(_fcl_Now.col_url_homepage);
+            Show_TextBox(tup.Item1);
+            //_ltfi_Search = _cfs._o_Get_Chapter_Content(_fcl_Now.col_url_homepage);//关键字得到信息
+            Show_Search_List(tup.Item2);
+            
+            /*_thread_Search_Fiction = new Thread(Thread_Detail_Search);
             _thread_Search_Fiction.IsBackground = true;
             _thread_Search_Fiction.Start();
 
             _thread_Search_Chapter = new Thread(Thread_Chapter_Search);
             _thread_Search_Chapter.IsBackground = true;
             _thread_Search_Chapter.Start();
+            */
         }
         public void Thread_Detail_Search(object _fcl)// fiction_info
         {
@@ -92,9 +94,9 @@ namespace OnlineSearchAndRead
         public void Show_Search_List(List<chapter_list> _ltfi)
         {
             listView1.Items.Clear();
-            if (_ltfi_Search != null && _ltfi_Search.Count > 0)
+            if (_ltfi != null && _ltfi.Count > 0)
             {
-                foreach (chapter_list _tfi in _ltfi_Search)
+                foreach (chapter_list _tfi in _ltfi)
                 {
                     ListViewItem _lvi = new ListViewItem(_tfi.col_chapter_url);
                     _lvi.SubItems.Add(_tfi.col_chapter_name);
