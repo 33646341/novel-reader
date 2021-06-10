@@ -313,11 +313,11 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content=" 立即阅读" HorizontalAlignment="Stretch"  Height="50" hc:IconElement.Geometry="{StaticResource EyeOpenGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonSuccess}" FontSize="16" Click="Button_Click_1" Margin="30,8,41.6,8"/>
+                <Button Content=" 立即阅读" HorizontalAlignment="Stretch"  Height="50" hc:IconElement.Geometry="{StaticResource EyeOpenGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonSuccess}" FontSize="16" Click="Button_Click_1" Margin="30,8,41.6,8" Padding="15"/>
 
-                <Button Content=" 全部下载" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource DownloadGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="2" Click="Button_Click_2" Margin="30,8,41.6,8"/>
+                <Button Content=" 全部下载" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource DownloadGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="2" Click="Button_Click_2" Margin="30,8,41.6,8" Padding="15"/>
 
-                <Button Content=" 加入书架" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource AllGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="3" Click="Button_Click" Margin="30,8,41.6,8"/>
+                <Button Content=" 加入书架" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource AllGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="3" Click="Button_Click" Margin="30,8,41.6,8" Padding="15"/>
             </Grid>
         </Grid>
     </DockPanel>
