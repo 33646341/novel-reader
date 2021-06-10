@@ -27,8 +27,31 @@ namespace OnlineSearchAndRead
             InitializeComponent();
             anotherForm = new Form_detail_content();
         }
+        public void Thread_Fiction_Search(object _s_kw)// List<fiction_info>
+        {
+            _ltfi_Search = _cfs._o_Get_Fiction_Info_By_KeyWord(_s_kw.ToString());//关键字得到信息
+            Lv_HomePage.BeginInvoke(new Action(() =>
+            {
+                if (_ltfi_Search == null || _ltfi_Search.Count == 0)
+                {
+                    //UI设计的同学可考虑添加控件
+                    //Show_Btm_Msg("无匹配查询结果，请更换关键词后重试！", 0);
+                    //测试专用
+                    // ow_text_box("失败");
+                    Lv_HomePage.Items.Clear();
+                }
+                else
+                {
+                    // ow_text_box("成功");
+                    //Show_Btm_Msg("查找成功，相关数据【" + _ltfi_Search.Count + "】条！", 0);
+                    Show_Search_List(_ltfi_Search);
+                }
+                Lv_HomePage.Enabled = true;
+            }));
+            //return _ltfi_Search;
 
-        public List<fiction_info> Thread_Fiction_Search()// List<fiction_info>
+        }
+        public List<fiction_info> Search_Result()// List<fiction_info>
         {
             _ltfi_Search = _cfs._o_Get_Fiction_Info_By_KeyWord(querytext);//关键字得到信息
             
@@ -71,13 +94,17 @@ namespace OnlineSearchAndRead
             //标识线程正在执行，需要关闭线程
            // if (_thread_Search != null && _thread_Search.IsAlive)
             {
+                _thread_Search = new Thread(Thread_Fiction_Search);
+                _thread_Search.IsBackground = true;
+                _thread_Search.Start(textBox1.Text);
+
                 //_thread_Search.Abort();
                 //_thread_Search.Join();
                 //_thread_Search = null;
                 //_thread_Search = new Thread(Thread_Fiction_Search);
                 //_thread_Search.IsBackground = true;
                 //_thread_Search.Start(querytext);
-                
+
             }
 
         }

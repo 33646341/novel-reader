@@ -82,7 +82,7 @@ namespace UIdesign
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
-            List<fiction_info> _fic_info = form.Thread_Fiction_Search();
+            List<fiction_info> _fic_info = form.Search_Result();
 
             ShowProgress = Visibility.Visible;
 
@@ -93,8 +93,8 @@ namespace UIdesign
             {
                 for (int i = 0; i < _fic_info.Count; i++)
                 {
-                    var fiction_i = new Fiction() { col_fiction_id = _fic_info[i].col_fiction_id, col_fiction_name = _fic_info[i].col_fiction_name, col_fiction_author = _fic_info[i].col_fiction_author, col_fiction_type = _fic_info[i].col_fiction_type };
-                    //fiction_i.col_fiction_id = $"{i}";
+                    var fiction_i = new Fiction() { col_fiction_id = _fic_info[i].col_fiction_id, col_fiction_name = _fic_info[i].col_fiction_name, col_fiction_author = _fic_info[i].col_fiction_author,col_fiction_url=_fic_info[i].col_url_homepage };
+                    //MessageBox.Show(_fic_info[i].col_url_homepage);
                     Thread.Sleep(200);
 
                     Dispatcher.Invoke(delegate ()
@@ -110,10 +110,22 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Fiction emp = (sender as ListViewItem).Content as Fiction;
-            Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_type);   //Login为窗口名，把要跳转的新窗口实例化
-            login1.Show();
+            toinfopage(sender);
+            
+            //Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
+            //login1.Show();
         }   //打开新窗口
+        private void toinfopage( object sender)
+        {
+            Fiction emp = (sender as ListViewItem).Content as Fiction;
+            get_homepage_content content = new get_homepage_content();
+            MessageBox.Show(emp.col_fiction_url);
+            List<chapter_list> lis = content._o_Get_Chapter_Content(emp.col_fiction_url);
+            MessageBox.Show(lis[0].col_chapter_content);
+            fiction_info li = content._o_Get_Fiction_Detail(emp.col_fiction_url);
+            MessageBox.Show(li.col_fiction_introduction);
+
+        }
         #endregion
         #region 排序代码
         //单击表头排序
@@ -185,9 +197,7 @@ namespace UIdesign
         #region 右键功能
         public void InfoPage(object sender, RoutedEventArgs e)
         {
-            Fiction emp = (sender as ListViewItem).Content as Fiction;
-            Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_type);   //Login为窗口名，把要跳转的新窗口实例化
-            login1.Show();
+            toinfopage(sender);
         }
         public void BookShelf(object sender, RoutedEventArgs e)
         {
@@ -316,7 +326,7 @@ namespace UIdesign
         public string col_fiction_id { get; set; }
         public string col_fiction_name { get; set; }
         public string col_fiction_author { get; set; }
-        public string col_fiction_type { get; set; }
+        public string col_fiction_url { get; set; }
 
     }
     #endregion
