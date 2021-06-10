@@ -396,9 +396,25 @@ namespace Novel_Spider
 
             string fileName = System.AppDomain.CurrentDomain.BaseDirectory + "/Novel_Picture/" + Novel_Name + ".jpg";
 
+            //数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(Novel_Name) == 0)
+            {
+                novelDAL.addNovel(Novel_Name, book[index]);
+            }
+            var Novel_id = novelDAL.exsitsNovel(Novel_Name);
+            Console.WriteLine(Novel_id);
+            novelDAL.updateNovel(Novel_id, "image",fileName);
+            //数据库结束
+
             WebClient webClient = new WebClient();
             //下载url链接文件，并指定到本地的文件夹路径和文件名称
             webClient.DownloadFile(Picture_url, fileName);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            url = textBox1.Text;
         }
     }
 }

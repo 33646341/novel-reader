@@ -69,17 +69,17 @@ namespace NovelManager
             }
         }
 
-        public int updateNovel(int nid, string name, string url, string category = "默认分类")
+        public int updateNovel(int nid, string propName, string value)
         {
             if (exsitsNovel(nid) > 0)
             {
                 return ExecuteNonQuery($@"
                     UPDATE novel
-                    set ????
-                    ('nid') VALUES ({nid});
+                    set {propName} = '{value}'
+                    where nid = {nid}
                 ");
             }
-            return addNovel(name, url, category);
+            return 0;
         }
 
         /// <summary>
