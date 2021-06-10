@@ -60,7 +60,7 @@
                           "{Binding Path=col_fiction_name}" Header="小说名称" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="author_name" DisplayMemberBinding=
                           "{Binding Path=col_fiction_author}" Header="作者" Width="200"></GridViewColumn>
-                                
+
                             </GridView>
                         </ListView.View>
                         <ListView.ContextMenu>
@@ -177,8 +177,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="48"/>
-        <TextBlock Grid.Row="4" Text="就绪！" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
+        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="48" />
+        <TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
         <TextBlock x:Name="txtJD" Text=" " Grid.Column="1"></TextBlock>
     </Grid>
 </Window>

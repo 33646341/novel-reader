@@ -79,38 +79,59 @@ namespace UIdesign
         #region 搜索按钮
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+           
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
-            ShowProgress = Visibility.Visible;
             List<fiction_info> _fic_info;
-
             // 不使用List类型，可实现自动刷新而不必切换源
             ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
+            ShowProgress = Visibility.Visible;
+            //textstat(sender, "加载中");
             new Thread(() =>
             {
                 _fic_info = form.Search_Result();
-                for (int i = 0; i < _fic_info.Count; i++)
+                if (_fic_info != null)
                 {
-                    var fiction_i = new Fiction()
+                    for (int i = 0; i < _fic_info.Count; i++)
                     {
-                        col_fiction_id = _fic_info[i].col_fiction_id,
-                        col_fiction_name = _fic_info[i].col_fiction_name,
-                        col_fiction_author = _fic_info[i].col_fiction_author,
-                        col_fiction_url = _fic_info[i].col_url_homepage
-                    };
-                    //MessageBox.Show(_fic_info[i].col_url_homepage);
-                    //Thread.Sleep(200);
+                        var fiction_i = new Fiction()
+                        {
+                            col_fiction_id = _fic_info[i].col_fiction_id,
+                            col_fiction_name = _fic_info[i].col_fiction_name,
+                            col_fiction_author = _fic_info[i].col_fiction_author,
+                            col_fiction_url = _fic_info[i].col_url_homepage
+                        };
+                        //MessageBox.Show(_fic_info[i].col_url_homepage);
+                        //Thread.Sleep(200);
 
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        _ltfi_Search.Add(fiction_i);
-                    });
+                        Dispatcher.Invoke(delegate ()
+                        {
+                            _ltfi_Search.Add(fiction_i);
+                        });
+                    }
+                    ShowProgress = Visibility.Collapsed;
                 }
-                ShowProgress = Visibility.Collapsed;
-            }).Start();
+                else
+                {
+                    ShowProgress = Visibility.Collapsed;
+                    MessageBox.Show("Fault");
+                }
 
+                
+            }).Start();
+            //textstat(sender, "就绪");
+
+        }
+        public void textstat(object sender,string stat)
+        {
+            var fe = (FrameworkElement)sender;
+            BindingOperations.ClearBinding(search_stat, TextBlock.TextProperty);
+            //make a new source
+            var myDataObject = new MyData(stat);
+            var myBinding = new Binding("MyDataProperty") { Source = myDataObject };
+            search_stat.SetBinding(TextBlock.TextProperty, myBinding);
         }
         #endregion
         #region 双击详情页
@@ -336,6 +357,37 @@ namespace UIdesign
         public string col_fiction_author { get; set; }
         public string col_fiction_url { get; set; }
 
+    }
+    public class MyData : INotifyPropertyChanged
+    {
+        private string _myDataProperty;
+
+        public MyData()
+        {
+        }
+
+        public MyData(string txt)
+        {
+            _myDataProperty = txt;
+        }
+
+        public string MyDataProperty
+        {
+            get { return _myDataProperty; }
+            set
+            {
+                _myDataProperty = value;
+                OnPropertyChanged("MyDataProperty");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
     }
     #endregion
 
