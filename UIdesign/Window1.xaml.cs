@@ -17,11 +17,13 @@ namespace UIdesign
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
+   
     public partial class Window1 : Window
     {
+       
         List<topic> topiclist = new List<topic>()
             {
-                new topic(){number = 1,name="第一章名",content="内容1" },
+            new topic(){number = 1,name="第一章名",content="内容1" },
             new topic() { number = 2, name = "第二章名", content = "内容2" },
             new topic() { number = 3, name = "第三章名", content = "内容3" },
             new topic() { number = 4, name = "第四章名", content = "内容4" },

@@ -137,10 +137,10 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            toinfopage(sender);
-
-            //Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
-            //login1.Show();
+            //toinfopage(sender);
+            Fiction emp = (sender as ListViewItem).Content as Fiction;
+            Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
+            login1.Show();
         }   //打开新窗口
         private void toinfopage(object sender)
         {

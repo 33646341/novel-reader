@@ -119,7 +119,7 @@
 
                             <Trigger Property="Role" Value="Floating">
 
-                                <Setter Property="Background" Value="#FFAA00"/>
+                                <Setter Property="Background" Value="#FF326CF3"/>
 
                             </Trigger>
 
@@ -182,10 +182,10 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                <Setter Property="Background" Value="#FFFAEEC0"/>
+                                <Setter Property="Background" Value="#FFD0DEFC"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#FFF6BB18"/>
+                                <Setter Property="Background" Value="#FF326CF3"/>
                                 <Setter Property="BorderBrush" Value="#FFFFFF"/>
                                 <Setter Property="BorderThickness" Value="1"/>
                                 <Setter Property="FontSize" Value="22"/>
@@ -236,7 +236,12 @@
                 <!--Image Height="175" Width="125" Source="OIP (1).jpg" Grid.Column="0"/-->
                 <Border  CornerRadius="15" Background="{DynamicResource PrimaryBrush}" Effect="{StaticResource EffectShadow5}" Margin="62.333,43,65.333,47.667" Grid.Column="1" >
                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+
                 </Border>
+                <Viewbox Margin="43.333,706,503.333,-502.333" Grid.Column="1">
+                    <hc:FlipClock Panel.ZIndex="10000" Margin="0,0,0,0"  Grid.Column="1"  Background="#FFFF6363"/>
+                </Viewbox>
+
                 <Grid Grid.ColumnSpan="2" Margin="286,0,-0.667,0.667" Height="256" VerticalAlignment="Bottom" >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -246,11 +251,11 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                  
 
-                    <hc:TextBox x:Name="Fiction_name" Panel.ZIndex="10006" Canvas.Left="327" TextWrapping="Wrap" Text="XXXXXX" Canvas.Top="40" FontSize="25" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFA3A1A1" Foreground="#FFFFFF" Margin="0,0.667,100,0.667" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
-                    <hc:TextBox x:Name="Author_name" Panel.ZIndex="10006" Height="46" Canvas.Left="327" TextWrapping="Wrap" Text="XXXX | XXX" Canvas.Top="116" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFF35E5E" FontSize="22" Foreground="#FFFFFF" Grid.Row="1" Margin="0,50.667,99,6" Grid.RowSpan="2" TextChanged="TextBox_TextChanged_1"/>
-                    <hc:TextBox x:Name="Total_number" Panel.ZIndex="10006" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 | XX字" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FFFFFF" Grid.Row="4" Margin="0,5,505,3.333" />
+
+                    <hc:TextBox x:Name="Fiction_name" Panel.ZIndex="106" Canvas.Left="327" TextWrapping="Wrap" Text="XXXXXX" Canvas.Top="40" FontSize="25" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFA3A1A1" Foreground="#FFFFFF" Margin="0,0.667,100,0.667" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
+                    <hc:TextBox x:Name="Author_name" Panel.ZIndex="106" Height="46" Canvas.Left="327" TextWrapping="Wrap" Text="XXXX | XXX" Canvas.Top="116" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFF35E5E" FontSize="22" Foreground="#FFFFFF" Grid.Row="1" Margin="0,50.667,99,6" Grid.RowSpan="2" TextChanged="TextBox_TextChanged_1"/>
+                    <hc:TextBox x:Name="Total_number" Panel.ZIndex="106" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 | XX字" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FFFFFF" Grid.Row="4" Margin="0,5,505,3.333" />
 
                 </Grid>
             </Grid>
