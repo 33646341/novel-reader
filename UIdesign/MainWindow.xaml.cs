@@ -147,14 +147,30 @@ namespace UIdesign
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
             get_homepage_content content = new get_homepage_content();
-            MessageBox.Show(emp.col_fiction_url);
-            Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.col_fiction_url);
-            List<chapter_list> lis = result.Item2;
-            MessageBox.Show(lis[0].col_chapter_content);
-            fiction_info li = result.Item1;
-            MessageBox.Show(li.col_fiction_introduction);
-            Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
-            login1.Show();
+            //MessageBox.Show(emp.col_fiction_url);
+
+            ShowProgress = Visibility.Visible;
+            new Thread(() =>
+            {
+                Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.col_fiction_url);
+                List<chapter_list> lis = result.Item2;
+                //MessageBox.Show(lis[0].col_chapter_content);
+                fiction_info li = result.Item1;
+                //MessageBox.Show(li.col_fiction_introduction);
+                ShowProgress = Visibility.Collapsed;
+                Dispatcher.Invoke(delegate ()
+                {
+                    Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
+                    login1.Show();
+                });
+            }).Start();
+
+
+
+
+
+
+
 
         }
         #endregion

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="UIdesign.Window1"
         mc:Ignorable="d"
-        Title="Window1" Height="800" Width="1000">
+        Title="Window1" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <Style x:Key="headerListView" TargetType="{x:Type GridViewColumnHeader}">
