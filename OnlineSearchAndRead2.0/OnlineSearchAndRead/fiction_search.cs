@@ -74,6 +74,7 @@ namespace OnlineSearchAndRead
                         _tfi.col_update_chapter = _hnc_Update_Chapter_URL[0].InnerText;
                         _tfi.col_update_chapter_url = _hnc_Update_Chapter_URL[0].Attributes["href"].Value;
                         //后面会用到链接，点击获得得到对应的文章
+                        
                     }
                     //获取小说作者
                     HtmlNodeCollection _hnc_Fiction_Author = _doc_One.DocumentNode.SelectNodes("//span[starts-with(@class,'s4')]");

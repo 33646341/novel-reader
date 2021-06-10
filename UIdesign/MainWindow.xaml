@@ -55,13 +55,12 @@
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
                                 <GridViewColumn x:Name="fiction_id" DisplayMemberBinding=
-                          "{Binding Path=col_fiction_id}"  Header="更新日期" Width="180"></GridViewColumn>
+                          "{Binding Path=col_fiction_id}"  Header="序号" Width="180"></GridViewColumn>
                                 <GridViewColumn x:Name="fiction_name" DisplayMemberBinding=
                           "{Binding Path=col_fiction_name}" Header="小说名称" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="author_name" DisplayMemberBinding=
                           "{Binding Path=col_fiction_author}" Header="作者" Width="200"></GridViewColumn>
-                                <GridViewColumn x:Name="fiction_type" DisplayMemberBinding=
-                          "{Binding Path=col_fiction_type}" Header="小说类型" Width="200"></GridViewColumn>
+                                
                             </GridView>
                         </ListView.View>
                         <ListView.ContextMenu>
