@@ -389,7 +389,12 @@ namespace Novel_Spider
 
         public void download_picture(string Picture_url, string Novel_Name)
         {
-            string fileName = System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name + ".jpg";
+            if (!Directory.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel_Picture"))
+            {
+                Directory.CreateDirectory(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel_Picture");
+            }
+
+            string fileName = System.AppDomain.CurrentDomain.BaseDirectory + "/Novel_Picture/" + Novel_Name + ".jpg";
 
             WebClient webClient = new WebClient();
             //下载url链接文件，并指定到本地的文件夹路径和文件名称
