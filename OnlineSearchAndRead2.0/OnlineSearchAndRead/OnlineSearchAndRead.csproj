@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{92E11434-475D-45BE-90BE-8FCEA52D07C3}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>OnlineSearchAndRead</RootNamespace>
     <AssemblyName>OnlineSearchAndRead</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -36,17 +36,17 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Chloe, Version=4.15.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chloe.4.15.0\lib\net45\Chloe.dll</HintPath>
+    <Reference Include="Chloe, Version=4.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\UIdesign\packages\Chloe.4.12.0\lib\net45\Chloe.dll</HintPath>
     </Reference>
     <Reference Include="Chloe.Extension, Version=4.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chloe.Extension.4.12.0\lib\net45\Chloe.Extension.dll</HintPath>
+      <HintPath>..\..\UIdesign\packages\Chloe.Extension.4.12.0\lib\net45\Chloe.Extension.dll</HintPath>
     </Reference>
-    <Reference Include="Chloe.MySql, Version=4.15.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Chloe.MySql.4.15.0\lib\net45\Chloe.MySql.dll</HintPath>
+    <Reference Include="Chloe.MySql, Version=4.12.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\UIdesign\packages\Chloe.MySql.4.12.1\lib\net45\Chloe.MySql.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.34.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.34\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.32.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\..\UIdesign\packages\HtmlAgilityPack.1.11.32\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
