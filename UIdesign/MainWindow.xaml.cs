@@ -82,20 +82,26 @@ namespace UIdesign
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
-            List<fiction_info> _fic_info = form.Search_Result();
-
             ShowProgress = Visibility.Visible;
+            List<fiction_info> _fic_info;
 
             // 不使用List类型，可实现自动刷新而不必切换源
             ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
             new Thread(() =>
             {
+                _fic_info = form.Search_Result();
                 for (int i = 0; i < _fic_info.Count; i++)
                 {
-                    var fiction_i = new Fiction() { col_fiction_id = _fic_info[i].col_fiction_id, col_fiction_name = _fic_info[i].col_fiction_name, col_fiction_author = _fic_info[i].col_fiction_author,col_fiction_url=_fic_info[i].col_url_homepage };
+                    var fiction_i = new Fiction()
+                    {
+                        col_fiction_id = _fic_info[i].col_fiction_id,
+                        col_fiction_name = _fic_info[i].col_fiction_name,
+                        col_fiction_author = _fic_info[i].col_fiction_author,
+                        col_fiction_url = _fic_info[i].col_url_homepage
+                    };
                     //MessageBox.Show(_fic_info[i].col_url_homepage);
-                    Thread.Sleep(200);
+                    //Thread.Sleep(200);
 
                     Dispatcher.Invoke(delegate ()
                     {
@@ -111,11 +117,11 @@ namespace UIdesign
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             toinfopage(sender);
-            
+
             //Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
             //login1.Show();
         }   //打开新窗口
-        private void toinfopage( object sender)
+        private void toinfopage(object sender)
         {
             Fiction emp = (sender as ListViewItem).Content as Fiction;
             get_homepage_content content = new get_homepage_content();
@@ -250,7 +256,7 @@ namespace UIdesign
         Novel_Spider.Form1 form = new Novel_Spider.Form1();
         private void Dwning_btn_click(object sender, RoutedEventArgs e)
         {
-            
+
             form.url = "https://www.biquzhh.com/29719_29719087/";
             form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
             form.button1_Click(sender, e);//下载按钮，开始下载
@@ -305,7 +311,9 @@ namespace UIdesign
         public double barvalue
         {
             get { return Barvalue; }
-            set { Barvalue = value;
+            set
+            {
+                Barvalue = value;
                 NotifyPropertyChanged(nameof(barvalue));
             }
         }

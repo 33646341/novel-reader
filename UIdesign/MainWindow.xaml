@@ -177,7 +177,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="4" Grid.Column="0" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="48" Width="255"/>
+        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="48"/>
         <TextBlock Grid.Row="4" Text="就绪！" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
         <TextBlock x:Name="txtJD" Text=" " Grid.Column="1"></TextBlock>
     </Grid>
