@@ -30,13 +30,14 @@ namespace UIdesign
             new topic() { number = 5, name = "第五章名", content = "内容5" }
             };
         
-        public Window1(string fiction_id,string fiction_name,string author_name, string url)
+        public Window1(/*string introduction,*/string fiction_id,string fiction_name,string author_name, string url)
         {
             InitializeComponent();
             Fiction_name.Text = fiction_name;
             //Author_name.Text = Convert.ToString(author_name);
             Total_number.Text = $"小说|完结|字";
             this.detaillist.ItemsSource = topiclist;
+            //this.introduction.Text = introduction;
         }
         
 

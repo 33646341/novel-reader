@@ -161,7 +161,7 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(/*li.col_fiction_introduction,*/emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
                     login1.Show();
                 });
             }).Start();
