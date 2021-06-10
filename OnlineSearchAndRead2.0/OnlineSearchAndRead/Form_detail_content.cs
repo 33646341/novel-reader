@@ -22,7 +22,8 @@ namespace OnlineSearchAndRead
 
         //操作线程
         //查找小说线程
-        //Thread _thread_Search;
+        Thread _thread_Search_Fiction;
+        Thread _thread_Search_Chapter;
         public Form_detail_content()
         {
             InitializeComponent();
@@ -35,25 +36,39 @@ namespace OnlineSearchAndRead
             anotherForm = new form_fiction_content();
             //显示表格操作
             _fcl_Now = _fcl;
-            _fcl_Now = _cfs._o_Get_Fiction_Detail(_fcl_Now.col_url_homepage);
+            /*_fcl_Now = _cfs._o_Get_Fiction_Detail(_fcl_Now.col_url_homepage);
             Show_TextBox(_fcl_Now);
             _ltfi_Search = _cfs._o_Get_Chapter_Content(_fcl_Now.col_url_homepage);//关键字得到信息
             Show_Search_List(_ltfi_Search);
-            //_thread_Search = new Thread(Thread_Detail_Search);
-            //_thread_Search.IsBackground = true;
-            //_thread_Search.Start(textBox1.Text);
-        }
-        
-  /*      public fiction_info Fcl_Now
-        {
-            get => _fcl_Now;
-            set
-            {
-                _fcl_Now = value;
+            */
+            _thread_Search_Fiction = new Thread(Thread_Detail_Search);
+            _thread_Search_Fiction.IsBackground = true;
+            _thread_Search_Fiction.Start();
 
-            }
+            _thread_Search_Chapter = new Thread(Thread_Chapter_Search);
+            _thread_Search_Chapter.IsBackground = true;
+            _thread_Search_Chapter.Start();
         }
-        public void Thread_Detail_Search(object _fcl)// List<fiction_info>
+        public void Thread_Detail_Search(object _fcl)// fiction_info
+        {
+            _fcl_Now = _cfs._o_Get_Fiction_Detail(_fcl_Now.col_url_homepage);//关键字得到信息
+            listView1.BeginInvoke(new Action(() =>
+            {
+                if (_fcl_Now == null)
+                {
+                    //UI设计的同学可考虑添加控件
+                    listView1.Items.Clear();
+                }
+                else
+                {
+                    Show_TextBox(_fcl_Now);
+                }
+                listView1.Enabled = true;
+            }));
+            //return _fcl_Now;
+
+        }
+        public void Thread_Chapter_Search(object _fcl)// List<fiction_info>
         {
             _ltfi_Search = _cfs._o_Get_Chapter_Content(_fcl_Now.col_url_homepage);//关键字得到信息
             listView1.BeginInvoke(new Action(() =>
@@ -72,7 +87,7 @@ namespace OnlineSearchAndRead
             //return _ltfi_Search;
 
         }
-*/
+
         //显示查找列表
         public void Show_Search_List(List<chapter_list> _ltfi)
         {
@@ -92,7 +107,7 @@ namespace OnlineSearchAndRead
         public void Show_TextBox(fiction_info _ftfi)
         {
             textBox1.Clear();
-            textBox1.Text = "小说名: "+_ftfi.col_fiction_name + "小说主页链接  " + _ftfi.col_url_homepage + " 小说作者 " + _ftfi.col_fiction_author + "最后更新时间  " + _ftfi.col_update_time + "最新章节名  " + _ftfi.col_update_chapter + "最新章节链接  " + _ftfi.col_update_chapter_url + "小说简介： " + _ftfi.col_fiction_introduction + "封皮链接：" + _ftfi.col_url_poster;
+            textBox1.Text = "小说名: " + _ftfi.col_fiction_name + "小说主页链接  " + _ftfi.col_url_homepage + " 小说作者 " + _ftfi.col_fiction_author + "最后更新时间  " + _ftfi.col_update_time + "最新章节名  " + _ftfi.col_update_chapter + "最新章节链接  " + _ftfi.col_update_chapter_url + "小说简介： " + _ftfi.col_fiction_introduction + "封皮链接：" + _ftfi.col_url_poster;
             /*if (_ltfi_Search != null && _ltfi_Search.Count > 0)
             {
                 foreach (chapter_list _tfi in _ltfi_Search)
@@ -108,33 +123,34 @@ namespace OnlineSearchAndRead
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-                try
-                {
-                    //
-                    //fiction_info _clc = listView1.SelectedItems[0].Tag as fiction_info;//
-                    //string url_new = _clc.col_update_chapter_url;
-                    //尝试跳进小说详情页
-                    chapter_list _clc = listView1.SelectedItems[0].Tag as chapter_list;//
-                    string url_new = "https://www.biquzhh.com"+_clc.col_chapter_url;
+            try
+            {
+                //
+                //fiction_info _clc = listView1.SelectedItems[0].Tag as fiction_info;//
+                //string url_new = _clc.col_update_chapter_url;
+                //尝试跳进小说详情页
+                chapter_list _clc = listView1.SelectedItems[0].Tag as chapter_list;//
+                string url_new = "https://www.biquzhh.com" + _clc.col_chapter_url;
 
                 //获取章节信息和章节地址
                 anotherForm = new form_fiction_content(new chapter_list()
                 {
                     col_chapter_url = url_new,
                     col_chapter_name = _clc.col_chapter_name//_clc.col_url_homepage//
-                }) ;//_tfdi_All_Info._ltcl_Chapter.Count() 
-                    anotherForm.Owner = this;
-                    anotherForm.Show();
-                }
-                catch
-                {
+                });//_tfdi_All_Info._ltcl_Chapter.Count() 
+                anotherForm.Owner = this;
+                anotherForm.Show();
+            }
+            catch
+            {
 
-                }
+            }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
 
-        }
+
+
+
+
     }
 }
