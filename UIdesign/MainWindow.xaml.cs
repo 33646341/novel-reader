@@ -137,20 +137,23 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            toinfopage(sender);
+            Fiction emp = (sender as ListViewItem).Content as Fiction;
+            toinfopage(emp);
 
             //Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
             //login1.Show();
         }   //打开新窗口
-        private void toinfopage(object sender)
+        private void toinfopage(Fiction emp)
         {
-            Fiction emp = (sender as ListViewItem).Content as Fiction;
+            //Fiction emp = (sender as ListViewItem).Content as Fiction;
             get_homepage_content content = new get_homepage_content();
             MessageBox.Show(emp.col_fiction_url);
             List<chapter_list> lis = content._o_Get_Chapter_Content(emp.col_fiction_url);
             MessageBox.Show(lis[0].col_chapter_content);
             fiction_info li = content._o_Get_Fiction_Detail(emp.col_fiction_url);
             MessageBox.Show(li.col_fiction_introduction);
+            Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
+            login1.Show();
 
         }
         #endregion
@@ -224,7 +227,9 @@ namespace UIdesign
         #region 右键功能
         public void InfoPage(object sender, RoutedEventArgs e)
         {
-            toinfopage(sender);
+            object sen= this.Lv_HomePage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            toinfopage(emp);
         }
         public void BookShelf(object sender, RoutedEventArgs e)
         {

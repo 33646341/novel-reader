@@ -63,7 +63,7 @@
 
                             </GridView>
                         </ListView.View>
-                        <ListView.ContextMenu>
+                        <ListView.ContextMenu >
                             <ContextMenu >
                                 <MenuItem Header="查看详情" Click="InfoPage"/>
                                 <MenuItem Header="添加书架" Click="BookShelf"/>
