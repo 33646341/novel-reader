@@ -8,6 +8,10 @@
         mc:Ignorable="d"
         Title="Window1" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <DataTemplate x:Key="checkBoxTemplate">
+            <CheckBox x:Name="checkbox"
+                    IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" />
+        </DataTemplate>
 
         <Style x:Key="headerListView" TargetType="{x:Type GridViewColumnHeader}">
 
@@ -151,7 +155,7 @@
             <Setter Property="Background" Value="transparent"/>
             <Setter Property="Foreground" Value="#555"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="SelectionMode" Value="Single"/>
+            <!--<Setter Property="SelectionMode" Value="Single"/>-->
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
@@ -230,7 +234,11 @@
                 </Border>
                 <Grid Grid.Column="0" Margin="0,0,0,0" RenderTransformOrigin="0.6,0.681">
                     <Border Background="#FFFFFF" Margin="60,30,0,40" CornerRadius="15">
-                        <Image Source="img/emp.jpg" Height="170" Margin="0,0,0,0" />
+                        <Image Source="img/emp.jpg" Height="170" Margin="0,0,0,0" >
+                            <hc:Magnifier.Instance>
+                                <hc:Magnifier Scale="6" HorizontalOffset="-16" VerticalOffset="-16"/>
+                            </hc:Magnifier.Instance>
+                        </Image>
                     </Border>
                 </Grid>
                 <!--Image Height="175" Width="125" Source="OIP (1).jpg" Grid.Column="0"/-->
@@ -261,6 +269,21 @@
             </Grid>
 
             <Grid Margin="0,239,0.4,0.4" Grid.RowSpan="2">
+                <!--<DataGrid HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding DataList}" hc:DataGridAttach.ShowRowNumber="True">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="60" CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImgPath}" Width="32" Height="32" Stretch="Uniform"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="text1"/>
+                        <DataGridCheckBoxColumn Width="100" CanUserResize="False" Binding="{Binding IsSelected}" Header="checkbox1"/>
+                        <DataGridComboBoxColumn  Width="100" CanUserResize="False" SelectedValueBinding="{Binding Type}" Header="combobox1"/>
+                        <DataGridTextColumn Binding="{Binding Remark}" Header="text2"/>
+                    </DataGrid.Columns>
+                </DataGrid>-->
                 <ScrollViewer>
                     <ListView x:Name="detaillist" 
                               Background="#FFFFFF" 
@@ -274,34 +297,22 @@
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black"
                                       ColumnHeaderContainerStyle="{StaticResource headerListView}">
                                 <GridViewColumn x:Name="number" DisplayMemberBinding=
-                          "{Binding number}"   Header="章节数" Width="200" ></GridViewColumn>
+                          "{Binding number}"   Header="章节数" Width="50" ></GridViewColumn>
                                 <GridViewColumn x:Name="name" DisplayMemberBinding=
                           "{Binding name}" Header="章节名" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="content" DisplayMemberBinding=
-                          "{Binding content}" Header="本章内容" Width="550"></GridViewColumn>
+                          "{Binding content}" Header="本章内容" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="progress" Header="阅读进度" Width="200">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ProgressBar Value="50" Style="{DynamicResource ProgressBarPrimaryStripe}" HorizontalAlignment="Left" Margin="0" Height="24" VerticalAlignment="Top" Width="150" Visibility="Visible" Background="#FFFFFF"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="download"  CellTemplate="{StaticResource checkBoxTemplate}" Header="是否下载" Width="200"></GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
-
-                    <!--<DataGrid x:Name="topiclist" IsReadOnly="True" AutoGenerateColumns="True">
-                    
-                -->
-                    <!--<DataGrid.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform AngleX="-0.507"/>
-                            <RotateTransform/>
-                            <TranslateTransform X="-0.991"/>
-                        </TransformGroup>
-                    </DataGrid.RenderTransform>-->
-
-                    <!--<DataGrid.Columns>
-                        <DataGridTextColumn Header="章节数" Width="*" Binding="{Binding number}"/>
-                        <DataGridTextColumn Header="章节名称" Width="*" Binding="{Binding name}"/>
-                        <DataGridTextColumn Header="简介" Width="5*" Binding="{Binding content}"/>
-                    </DataGrid.Columns>-->
-                    <!--
-                </DataGrid>-->
                 </ScrollViewer>
             </Grid>
 
@@ -315,7 +326,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Content=" 立即阅读" HorizontalAlignment="Stretch"  Height="50" hc:IconElement.Geometry="{StaticResource EyeOpenGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonSuccess}" FontSize="16" Click="Button_Click_1" Margin="30,8,41.6,8"/>
 
-                <Button Content=" 全部下载" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource DownloadGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="2" Click="Button_Click_2" Margin="30,8,41.6,8"/>
+                <Button Content=" 点击下载" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource DownloadGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="2" Click="Button_Click_2" Margin="30,8,41.6,8"/>
 
                 <Button Content=" 加入书架" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource AllGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="3" Click="Button_Click" Margin="30,8,41.6,8"/>
             </Grid>

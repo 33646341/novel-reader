@@ -38,10 +38,10 @@
 
             <TabItem x:Name="Homepg_item" Header="首页" IsSelected="True" FontSize="24" Width="255" >
                 <StackPanel >
-                    <WrapPanel >
-                        <Label Content="C#R" VerticalAlignment="Bottom" Width="100"></Label>
-                        <TextBox x:Name="keySearch" Width="623" Text="唐家三少"  VerticalAlignment="Bottom" Height="42" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
-                        <Button x:Name="searchBtn" Width="120" Content="搜索" VerticalAlignment="Bottom" Height="42" FontSize="20" Click="Button_Click"></Button>
+                    <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
+                        <Label Content="C#R" VerticalAlignment="Bottom" Width="126" Height="72"/>
+                        <TextBox x:Name="keySearch" Width="816" Text="唐家三少"  VerticalAlignment="Bottom" Height="73" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
+                        <Button x:Name="searchBtn" Style="{StaticResource ButtonPrimary}" Width="156" Content="搜索" Height="72" FontSize="20" Click="Button_Click"/>
                     </WrapPanel>
                     <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
                     <ListView x:Name="Lv_HomePage" 
@@ -177,8 +177,9 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <hc:LoadingLine Visibility="{Binding ShowProgress}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="48" />
+        <hc:LoadingLine Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="BlueViolet" Style="{StaticResource LoadingLineLarge}" Height="Auto" Margin="184,266.333,159,219.333" Grid.Row="3" Grid.ColumnSpan="4" Width="771" RenderTransformOrigin="0.452,3.676" />
         <TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
         <TextBlock x:Name="txtJD" Text=" " Grid.Column="1"></TextBlock>
+        <Border Margin="3,0.667,0,-2.333" Grid.Row="4" Grid.ColumnSpan="4" Background="#FF326CF3"/>
     </Grid>
 </Window>

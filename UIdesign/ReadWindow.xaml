@@ -148,17 +148,18 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <hc:SplitButton Style="{StaticResource SplitButtonSuccess}" Grid.Column="0" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372">
+            <hc:SplitButton Style="{StaticResource SplitButtonSuccess}" Grid.Column="0" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372" Width="173" Height="31">
                 <hc:SplitButton.DropDownContent>
                     <StackPanel>
                         <MenuItem Header="改变背景颜色" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command1" Click="Button_Click"/>
                         <MenuItem Header="改变字体颜色" hc:IconElement.Geometry="{StaticResource SubGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command2" Click="SecondButton_Click"/>
+                        <MenuItem Header="关闭所有取色器" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command3" Click="ThirdButton_Click"/>
                     </StackPanel>
                 </hc:SplitButton.DropDownContent>
             </hc:SplitButton>
             <!--<Button Content="字体大小" Grid.Column="1" HorizontalAlignment="Left" Margin="82.333,78,0,-0.333" VerticalAlignment="Top" Width="93" Height="41" FontSize="15" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF6F5F5" Click="Button_Click_2"/>-->
 
-            <hc:SplitButton Style="{StaticResource SplitButtonPrimary}" Grid.Column="1" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372">
+            <hc:SplitButton Style="{StaticResource SplitButtonPrimary}" Grid.Column="1" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372" Width="173" Height="31">
                 <hc:SplitButton.DropDownContent>
                     <StackPanel>
                         <MenuItem Header="字体变大" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command1" Click="bigger_Click"/>
@@ -175,22 +176,21 @@
                     <hc:Poptip  Content="按ESC退出全屏" PlacementType="TopLeft"/>
                 </hc:Poptip.Instance>
             </Button>-->
-            <ToggleButton hc:Poptip.HitMode="None" hc:Poptip.IsOpen="{Binding IsChecked,RelativeSource={RelativeSource Self}}" hc:Poptip.Content="按ESC退出全屏" hc:Poptip.Placement="RightTop"
-                          x:Name="fullbtn" Style="{StaticResource ToggleButtonPrimary}" RenderTransformOrigin="0.312,0.372" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" VerticalAlignment="Top" Width="174" Height="29" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown"/>
-           
+            <Button x:Name="fullbtn" Style="{StaticResource ButtonPrimary}" RenderTransformOrigin="0.312,0.372" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667"  Width="173" Height="31" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown"/>
 
-            <Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="80.333,40,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>
-            <Button x:Name="smaller" Content="-" Grid.Column="1" HorizontalAlignment="Left" Margin="130.333,40,0,0" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="0.315,0.407" Background="#FFA46464" Foreground="#FFFEFDFD" Height="34" FontSize="15" Width="35" Click="smaller_Click"/>
-            <Image Grid.Column="0" Source="img\read.png" HorizontalAlignment="Left" Height="39" Margin="112,30,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="1.883,0.564"/>
-            <Image x:Name="fontimg" Visibility="Visible"  Grid.Column="1" Source="img\font.png" HorizontalAlignment="Left" Height="39" Margin="108.333,30,0,0" VerticalAlignment="Top" Width="39"/>
-            <Image Grid.Column="2" Source="img\write.png" HorizontalAlignment="Left" Height="39" Margin="109.667,30,0,0" VerticalAlignment="Top" Width="37"/>
-            <Image Grid.Column="3" Source="img\fullscreen.png" HorizontalAlignment="Left" Height="39" Margin="106.667,30,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.714,0.658"/>
+
+            <!--<Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="80.333,40,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>
+            <Button x:Name="smaller" Content="-" Grid.Column="1" HorizontalAlignment="Left" Margin="130.333,40,0,0" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="0.315,0.407" Background="#FFA46464" Foreground="#FFFEFDFD" Height="34" FontSize="15" Width="35" Click="smaller_Click"/>-->
+            <Image Grid.Column="0" Source="img\read.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="1.883,0.564"/>
+            <Image x:Name="fontimg" Visibility="Visible"  Grid.Column="1" Source="img\font.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="39"/>
+            <Image Grid.Column="2" Source="img\write.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="37"/>
+            <Image Grid.Column="3" Source="img\fullscreen.png" HorizontalAlignment="Stretch" Height="39" Margin="104,30,104,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.714,0.658"/>
 
         </Grid>
         <Grid x:Name="Grid1" Grid.Row="1" Background="#FFFFFF">
 
 
-            <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,29,42.333,-0.333"  VerticalAlignment="Top" Height="564" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Content="test" Grid.ColumnSpan="2"/>
+            <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,29,42.333,-14.333"  VerticalAlignment="Top" Height="578" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Content="test"/>
             <hc:ColorPicker x:Name="ColorPicker" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged1" Canceled="Canceled"/>
             <hc:ColorPicker x:Name="ColorPicker1" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged2" Canceled="Canceled2"/>
         </Grid>

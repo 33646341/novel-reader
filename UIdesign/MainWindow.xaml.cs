@@ -137,6 +137,7 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            //toinfopage(sender);
             Fiction emp = (sender as ListViewItem).Content as Fiction;
             toinfopage(emp);
 

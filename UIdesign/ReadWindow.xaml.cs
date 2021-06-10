@@ -68,6 +68,12 @@ namespace UIdesign
                 ColorPicker1.Visibility = System.Windows.Visibility.Hidden;
 
         }
+        private void ThirdButton_Click(object sender, RoutedEventArgs e)
+        {
+                ColorPicker.Visibility = System.Windows.Visibility.Hidden;
+                ColorPicker1.Visibility = System.Windows.Visibility.Hidden;
+
+        }
 
 
         int l = 0;
@@ -100,17 +106,20 @@ namespace UIdesign
                 this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             }
      
-            label1.Height = 513;
+            label1.Height = 578;
         }
 
         private void bigger_Click(object sender, RoutedEventArgs e)
         {
-            label1.FontSize++;
+            label1.FontSize= label1.FontSize+3;
         }
 
         private void smaller_Click(object sender, RoutedEventArgs e)
         {
-            label1.FontSize--;
+            if (label1.FontSize > 3)
+                label1.FontSize = label1.FontSize - 3;
+            else
+                MessageBox.Show("字体已经不能缩小！");
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
