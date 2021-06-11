@@ -119,12 +119,12 @@ namespace Novel_Spider
                                 chapter_sum.RemoveAt(0);
                                 //MethodInvoker mi = new MethodInvoker(() =>
                                //{
-                                    download_progress = 100;
+                                   // download_progress = 100;
 
                                     //listBox1.Items.RemoveAt(0);
 
-                                    if(chapter_sum.Count != 0)
-                                        download_progress = 0;
+                                    //if(chapter_sum.Count != 0)
+                                        //download_progress = 0;
                                 //});
                                 //this.BeginInvoke(mi);
                             }
@@ -177,12 +177,12 @@ namespace Novel_Spider
                                 chapter_num.RemoveAt(0);
                                 chapter_sum.RemoveAt(0);
                              
-                                    download_progress = 100;
+                                    //download_progress = 100;
 
-                                    listBox1.Items.RemoveAt(0);
+                                    //listBox1.Items.RemoveAt(0);
 
-                                    if (chapter_sum.Count != 0)
-                                        progressBar1.Value = 0;
+                                    //if (chapter_sum.Count != 0)
+                                        //progressBar1.Value = 0;
                                 //this.BeginInvoke(mi);
                             }
                         }
