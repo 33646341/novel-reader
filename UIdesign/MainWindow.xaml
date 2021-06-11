@@ -19,6 +19,8 @@
         </Style>
         <local:Student x:Key="stu"/>
         <local:Fiction x:Key="fic"/>
+        <local:ProgressBarvalue x:Key="Bar"/>
+        
     </Window.Resources>
     <Grid x:Name="Total_grid">
         <Grid.RowDefinitions>
@@ -64,7 +66,7 @@
                             </GridView>
                         </ListView.View>
                         <ListView.ContextMenu >
-                            <ContextMenu >
+                            <ContextMenu Visibility="{Binding Conmenu}">
                                 <MenuItem Header="查看详情" Click="InfoPage"/>
                                 <MenuItem Header="添加书架" Click="BookShelf"/>
                                 <MenuItem Header="下载本书" Click="DownLoadBook"/>
@@ -73,7 +75,7 @@
                     </ListView>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="Dwn_item" Header="下载" IsSelected="True" FontSize="24" Width="255">
+            <TabItem Header="下载" IsSelected="True" FontSize="24" Width="255">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="113*"/>
@@ -81,24 +83,24 @@
                     <TabControl Margin="0,0,-0.2,0">
                         <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="24" Width="200">
                             <StackPanel>
-                                <Button Content="123456" Click="Dwning_btn_click" VerticalAlignment="Top" Margin="422,8,507.6,0"/>
-                                <ListView Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="427" Margin="0,0,-0.4,0">
+                                <ListView Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="427" Margin="0,0,-0.4,0" 
+                                          ItemsSource="{Binding Source={StaticResource Bar}}">
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="小说名" Width="200">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Grid>
-                                                            <TextBlock VerticalAlignment="Center" Text="2020"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding  Path=Name}"/>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <GridViewColumn Header="进度" Width="700" >
                                                 <GridViewColumn.CellTemplate >
-                                                    <DataTemplate x:Name="cmbTemplate">
+                                                    <DataTemplate >
                                                         <Grid>
-                                                            <ProgressBar x:Name="pb_import2" Width="700" Maximum="100" />
+                                                            <ProgressBar Name="prs"  Value="{Binding Path=Barvalue}" Width="700" Maximum="100" Height="40"/>
 
                                                         </Grid>
                                                     </DataTemplate>
@@ -179,7 +181,5 @@
         </TabControl>
         <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="BlueViolet" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />
         <TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
-        <TextBlock x:Name="txtJD" Text=" " Grid.Column="1"></TextBlock>
-        <Border Margin="3,0.667,0,-2.333" Grid.Row="4" Grid.ColumnSpan="4" Background="#FF326CF3"/>
     </Grid>
 </Window>
