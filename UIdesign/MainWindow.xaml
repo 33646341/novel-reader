@@ -60,8 +60,11 @@
                           "{Binding Path=col_fiction_name}" Header="小说名称" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="author_name" DisplayMemberBinding=
                           "{Binding Path=col_fiction_author}" Header="作者" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="fiction_type" DisplayMemberBinding=
+                          "{Binding Path=col_fiction_type}" Header="类型" Width="200"></GridViewColumn>
 
                             </GridView>
+
                         </ListView.View>
                         <ListView.ContextMenu >
                             <ContextMenu >

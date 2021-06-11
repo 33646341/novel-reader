@@ -10,7 +10,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using OnlineSearchAndRead;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace UIdesign
 {
@@ -20,32 +22,58 @@ namespace UIdesign
    
     public partial class Window1 : Window
     {
-       
-        List<topic> topiclist = new List<topic>()
-            {
-            new topic(){number = 1,name="第一章名",content="内容1" },
-            new topic() { number = 2, name = "第二章名", content = "内容2" },
-            new topic() { number = 3, name = "第三章名", content = "内容3" },
-            new topic() { number = 4, name = "第四章名", content = "内容4" },
-            new topic() { number = 5, name = "第五章名", content = "内容5" }
-            };
-        
-        public Window1(/*string introduction,*/string fiction_id,string fiction_name,string author_name, string url)
+
+        ObservableCollection<Chapterlist> alllist = new ObservableCollection<Chapterlist>();
+        public Window1(List<chapter_list> l1, fiction_info a)
         {
             InitializeComponent();
-            Fiction_name.Text = fiction_name;
-            //Author_name.Text = Convert.ToString(author_name);
-            Total_number.Text = $"小说|完结|字";
-            this.detaillist.ItemsSource = topiclist;
-            //this.introduction.Text = introduction;
+            Fiction_name.Text = a.col_fiction_name;
+            Author_name.Text = a.col_fiction_author+"|"+a.col_fiction_type;
+            Total_number.Text = $"小说|"+a.col_fiction_stata+"|"+a.col_click_count+"点击";
+            
+            this.detaillist.ItemsSource = alllist;
+            this.introduction.Text = a.col_fiction_introduction;
+            //this.surfaceimg.Source = new BitmapImage(new Uri(a.col_url_poster));
+            for (int i = 0; i < l1.Count; i++)
+            {
+                int l = 0;
+                string chapter_name="";
+                string chapter_number="";
+                for(;l< l1[i].col_chapter_name.Length; l++)
+                {
+                    if (l1[i].col_chapter_name[l] == '章') break;
+                    if(l1[i].col_chapter_name[l] != '章'&&l== l1[i].col_chapter_name.Length-1)
+                    {
+                        chapter_name = "断更";
+                    }
+                }
+                if (l < l1[i].col_chapter_name.Length)
+                {
+                    chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
+                    chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
+                }
+                String[] sArray = l1[i].col_chapter_name.Split(' ');
+                var chapterlist1 = new Chapterlist()
+                {
+                    
+                    number = chapter_number,
+                    name = chapter_name,
+                    content = l1[i].col_chapter_content
+                };
+                Dispatcher.Invoke(delegate ()
+                {
+                    alllist.Add(chapterlist1);
+                });
+            }
+            
         }
         
 
         #region 立即阅读
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var firstint = topiclist.First();
-            var listsize = topiclist.Count;
+            var firstint = alllist.First();
+            var listsize = alllist.Count;
             MessageBox.Show(listsize.ToString());
             int propotion = 1;
             ReadWindow readWindow1 = new ReadWindow(firstint.number,firstint.name,firstint.content,propotion);
@@ -57,10 +85,11 @@ namespace UIdesign
         #region 双击item阅读
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            topic emp = detaillist.SelectedItem as topic;
-            var listsize = topiclist.Count;
+            Chapterlist emp = detaillist.SelectedItem as Chapterlist;
+            var listsize = alllist.Count;
             Console.WriteLine(listsize);
-            int propotion = (emp.number - 1) *100 / listsize;
+            //int index = this.detaillist.Items.IndexOf(emp);
+            int propotion =  /*index*100 / listsize;*/80;
             ReadWindow readWindow1 = new ReadWindow(emp.number,emp.name,emp.content,propotion);
             readWindow1.Show();
         }
@@ -94,9 +123,9 @@ namespace UIdesign
 
 
     #region 数据源
-    public class topic
+    public class Chapterlist
     {
-        public int number { get; set; }
+        public string number { get; set; }
         public string name { get; set; }
         public string content { get; set; }
     }

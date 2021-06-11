@@ -101,7 +101,9 @@ namespace UIdesign
                             col_fiction_id = _fic_info[i].col_fiction_id,
                             col_fiction_name = _fic_info[i].col_fiction_name,
                             col_fiction_author = _fic_info[i].col_fiction_author,
-                            col_fiction_url = _fic_info[i].col_url_homepage
+                            col_fiction_type = _fic_info[i].col_fiction_type,
+                            col_fiction_url = _fic_info[i].col_url_homepage,
+                            col_fiction_poster = _fic_info[i].col_url_poster,
                         };
                         //MessageBox.Show(_fic_info[i].col_url_homepage);
                         //Thread.Sleep(200);
@@ -155,13 +157,13 @@ namespace UIdesign
             {
                 Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.col_fiction_url);
                 List<chapter_list> lis = result.Item2;
-                //MessageBox.Show(lis[0].col_chapter_content);
+                MessageBox.Show(lis[1].col_chapter_content);
                 fiction_info li = result.Item1;
                 //MessageBox.Show(li.col_fiction_introduction);
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(/*li.col_fiction_introduction,*/emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(lis,li);   //Login为窗口名，把要跳转的新窗口实例化
                     login1.Show();
                 });
             }).Start();
@@ -379,6 +381,8 @@ namespace UIdesign
         public string col_fiction_name { get; set; }
         public string col_fiction_author { get; set; }
         public string col_fiction_url { get; set; }
+        public string col_fiction_type { get; set; }
+        public string col_fiction_poster { get; set; }
 
     }
     public class MyData : INotifyPropertyChanged
