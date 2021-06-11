@@ -28,6 +28,16 @@ namespace UIdesign
     {
         #region 加载圈相关
         public event PropertyChangedEventHandler PropertyChanged;
+        private Visibility menustat = Visibility.Visible;
+        public Visibility Conmenu
+        {
+            get { return menustat; }
+            set
+            {
+                menustat = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(Conmenu)));
+            }
+        }
         private Visibility showProgress = Visibility.Collapsed;
         public Visibility ShowProgress
         {
@@ -139,9 +149,7 @@ namespace UIdesign
         {
             Fiction emp = (sender as ListViewItem).Content as Fiction;
             toinfopage(emp);
-
-            //Window1 login1 = new Window1(emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author,emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
-            //login1.Show();
+           
         }   //打开新窗口
         private void toinfopage(Fiction emp)
         {
@@ -238,7 +246,10 @@ namespace UIdesign
         }
         public void DownLoadBook(object sender, RoutedEventArgs e)
         {
-
+            
+            object sen = this.Lv_HomePage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Down_Load(sender, e, emp);
         }
 
         #endregion
@@ -281,29 +292,31 @@ namespace UIdesign
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
         Novel_Spider.Form1 form = new Novel_Spider.Form1();
-        private void Dwning_btn_click(object sender, RoutedEventArgs e)
+        
+        private void Down_Load(object sender, RoutedEventArgs e,Fiction fic)
         {
-
-            form.url = "https://www.biquzhh.com/29719_29719087/";
+            Conmenu = Visibility.Collapsed;
+            //form.url = "https://www.biquzhh.com/29719_29719087/";
+            form.url = fic.col_fiction_url;
             form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
             form.button1_Click(sender, e);//下载按钮，开始下载
                                           // form.button2_Click(sender, e);//暂停按钮
                                           // MessageBox.Show($"{form.download_progress}");
                                           //MessageBox.Show(form.book[0]);
-            ObservableCollection<BarValue> progress = new ObservableCollection<BarValue>()
+            ObservableCollection<ProgressBarvalue> progress = new ObservableCollection<ProgressBarvalue>()
             {
-                new BarValue() { name = "0", barvalue = form.barvalue},
+                new ProgressBarvalue(fic.col_fiction_name,form.barvalue)
             };
-            LV_DwnPage.ItemsSource = progress;//刷新数据源
+            this.LV_DwnPage.ItemsSource = progress;//刷新数据源
 
             new Thread(() =>
             {
                 while (form.barvalue < 100)
                 {
-                    MessageBox.Show($"{form.barvalue}");
-                    progress[0].barvalue = form.barvalue;
-                    LV_DwnPage.ItemsSource = null;//刷新数据源
-                    LV_DwnPage.ItemsSource = progress;//刷新数据源
+                    //MessageBox.Show($"{form.barvalue}");
+                    progress[0].Barvalue = form.barvalue;
+                    //LV_DwnPage.ItemsSource = null;//刷新数据源
+                    //LV_DwnPage.ItemsSource = progress;//刷新数据源
                     Thread.Sleep(100);
                 }
             }).Start();
@@ -331,7 +344,7 @@ namespace UIdesign
         public string Name { get; set; }
         public int Age { get; set; }
     }
-    public class BarValue : INotifyPropertyChanged
+    public class BarValue0 : INotifyPropertyChanged
     {
         private double Barvalue;
 
@@ -354,6 +367,48 @@ namespace UIdesign
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
+        }
+    }
+    public class ProgressBarvalue : INotifyPropertyChanged
+    {
+        private string myname;
+        private double barvalue;
+
+        public ProgressBarvalue()
+        {
+        }
+
+        public ProgressBarvalue(string na,double va)
+        {
+            myname = na;
+            barvalue = va;
+        }
+        public string Name
+        {
+            get { return myname; }
+            set
+            {
+                myname = value;
+                OnPropertyChanged(Name);
+            }
+        }
+
+        public double Barvalue
+        {
+            get { return barvalue; }
+            set
+            {
+                barvalue = value;
+                OnPropertyChanged(nameof(Barvalue));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
     public class Fiction
