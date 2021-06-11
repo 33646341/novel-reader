@@ -133,6 +133,8 @@ namespace Novel_Spider
                     }
                     if (tag == true)
                     {//
+
+                        download_progress = 100;
                         MethodInvoker mi = new MethodInvoker(() =>
                         {
                             download_progress = 100;
