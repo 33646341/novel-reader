@@ -71,6 +71,7 @@
                           "{Binding Path=Author}" Header="作者" Width="200"></GridViewColumn>
 
                             </GridView>
+
                         </ListView.View>
                         <ListView.ContextMenu >
                             <ContextMenu Visibility="{Binding Conmenu}">
