@@ -13,7 +13,7 @@
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Height" Value="15"/>
-            <Setter Property="Background" Value="#FF5FAE91"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="Padding" Value="5,0"/>
             <Setter Property="Template">
@@ -122,59 +122,77 @@
 
 
 
-        <Grid x:Name="Grid0" Background="#FF5A5858" Grid.Row="0">
+        <Grid x:Name="Grid0" Background="#FF326CF3" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="7*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="上一章" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="79" Foreground="#FFFBFBFB" Background="#FF5A5858" BorderBrush="#FF5A5858" FontSize="15" Height="35" Margin="10,10,0,0"/>
-            <Button Content="下一章" Grid.Column="2" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF1EFEF" FontSize="15" Height="35" Margin="22.667,10,0,0" Click="Button_Click_3"/>
+            <Button  Content="上一章" Style="{StaticResource ButtonSuccess}" hc:IconElement.Geometry="{StaticResource LeftGeometry}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="114" Foreground="#FFFBFBFB" BorderBrush="#FF5A5858" FontSize="15" Height="35" Margin="10,10,0,0"/>
+            <Button  Content="下一章" Style="{StaticResource ButtonSuccess}" hc:IconElement.Geometry="{StaticResource RightGeometry}" Grid.Column="2" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="122" BorderBrush="#FF5A5858" Foreground="#FFF1EFEF" FontSize="15" Height="35" Margin="22.333,10,0,0" Click="Button_Click_3"/>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2
                                       *"/>
                     <ColumnDefinition Width="7*"/>
                 </Grid.ColumnDefinitions>
-                <ProgressBar Value="89" x:Name="ProgressBar1" HorizontalAlignment="Left" Height="24" Margin="98,17,0,0" VerticalAlignment="Top" Width="532" Grid.ColumnSpan="2" Visibility="Visible" Background="#FF47C798"/>
-                <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="35" Margin="10,11,0,13.333" TextWrapping="Wrap" Text="阅读进度" VerticalAlignment="center" Width="80" Background="#FF5A5858" BorderBrush="#FF5A5858" CaretBrush="#FFF5F2F2" Foreground="#FFF6F5F5" FontSize="15"/>
+                <ProgressBar  Style="{DynamicResource ProgressBarPrimaryStripe}" x:Name="ProgressBar1" HorizontalAlignment="Left" Height="24" Margin="98,17,0,0" VerticalAlignment="Top" Width="532" Grid.ColumnSpan="2" Visibility="Visible" Background="#FFFFFF"/>
+                <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="35" Margin="10,11,0,13.333" TextWrapping="Wrap" Text="阅读进度" VerticalAlignment="center" Width="80" BorderBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="#FFF6F5F5" FontSize="15" Background="{x:Null}" SelectionBrush="{x:Null}"/>
 
             </Grid>
         </Grid>
-        <Grid x:Name="Grid2" Grid.Row="2" Background="#FF5A5858">
+        <Grid x:Name="Grid2" Grid.Row="2" Background="#FFFFFF">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Content="阅读模式" Grid.Column="0" HorizontalAlignment="Left" Margin="82,76,0,1.667" VerticalAlignment="Stretch" Width="95" FontSize="15" Height="Auto" Foreground="#FFFCF9F9" Background="#FF5A5858" BorderBrush="#FF5A5858" Click="Button_Click" RenderTransformOrigin="0.639,1.626"/>
-            <Button Content="字体大小" Grid.Column="1" HorizontalAlignment="Left" Margin="82.333,78,0,-0.333" VerticalAlignment="Top" Width="93" Height="41" FontSize="15" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF6F5F5" Click="Button_Click_2"/>
-            <Button x:Name="addnote" Content="添加笔记" Grid.Column="2" HorizontalAlignment="Left" Margin="84.667,78,0,-0.333" VerticalAlignment="Top" Width="95" Height="41" FontSize="15" Foreground="#FFFBF8F8" Background="#FF5A5858" BorderBrush="#FF5A5858" RenderTransformOrigin="1.074,1.062"/>
-            <Button x:Name="fullbtn" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Left" Margin="80.667,78,0,-0.333" VerticalAlignment="Top" Width="90" Height="41" FontSize="15" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown"/>
-            <Popup Name="pop3" AllowsTransparency="True" StaysOpen="True" PopupAnimation="Slide" IsOpen="False" PlacementTarget="{Binding ElementName=fullbtn}" Placement="Right" OpacityMask="Black" PreviewKeyDown="Grid_PreviewKeyDown">
-                <Label Width="128" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFFBFAFA" >
-                    <StackPanel Orientation="Horizontal" Width="144">
-                        <Label Content="(按Esc退出全屏)" Width="120" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="#FFFCFBFB"/>
+            <hc:SplitButton Style="{StaticResource SplitButtonSuccess}" Grid.Column="0" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372" Width="173" Height="31">
+                <hc:SplitButton.DropDownContent>
+                    <StackPanel>
+                        <MenuItem Header="改变背景颜色" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command1" Click="Button_Click"/>
+                        <MenuItem Header="改变字体颜色" hc:IconElement.Geometry="{StaticResource SubGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command2" Click="SecondButton_Click"/>
+                        <MenuItem Header="关闭所有取色器" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command3" Click="ThirdButton_Click"/>
                     </StackPanel>
-                </Label>
-            </Popup>
+                </hc:SplitButton.DropDownContent>
+            </hc:SplitButton>
+            <!--<Button Content="字体大小" Grid.Column="1" HorizontalAlignment="Left" Margin="82.333,78,0,-0.333" VerticalAlignment="Top" Width="93" Height="41" FontSize="15" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF6F5F5" Click="Button_Click_2"/>-->
 
-            <Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="80.333,40,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>
-            <Button x:Name="smaller" Content="-" Grid.Column="1" HorizontalAlignment="Left" Margin="130.333,40,0,0" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="0.315,0.407" Background="#FFA46464" Foreground="#FFFEFDFD" Height="34" FontSize="15" Width="35" Click="smaller_Click"/>
-            <Image Grid.Column="0" Source="img\read.png" HorizontalAlignment="Left" Height="39" Margin="112,30,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="1.883,0.564"/>
-            <Image x:Name="fontimg" Visibility="Visible"  Grid.Column="1" Source="img\font.png" HorizontalAlignment="Left" Height="39" Margin="108.333,30,0,0" VerticalAlignment="Top" Width="39"/>
-            <Image Grid.Column="2" Source="img\write.png" HorizontalAlignment="Left" Height="39" Margin="109.667,30,0,0" VerticalAlignment="Top" Width="37"/>
-            <Image Grid.Column="3" Source="img\fullscreen.png" HorizontalAlignment="Left" Height="39" Margin="106.667,30,0,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.714,0.658"/>
+            <hc:SplitButton Style="{StaticResource SplitButtonPrimary}" Grid.Column="1" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372" Width="173" Height="31">
+                <hc:SplitButton.DropDownContent>
+                    <StackPanel>
+                        <MenuItem Header="字体变大" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command1" Click="bigger_Click"/>
+                        <MenuItem Header="字体变小" hc:IconElement.Geometry="{StaticResource SubGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command2" Click="smaller_Click"/>
+                    </StackPanel>
+                </hc:SplitButton.DropDownContent>
+            </hc:SplitButton>
+
+
+
+            <Button x:Name="addnote" Style="{StaticResource ButtonPrimary}" Content="添加笔记" Grid.Column="2" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" RenderTransformOrigin="0.312,0.372"  Width="173" Height="31" FontSize="12" Foreground="#FFFBF8F8" Background="#FF2286F3" BorderBrush="#FF5A5858"/>
+            <!--<Button x:Name="fullbtn" Style="{StaticResource ButtonPrimary}" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" VerticalAlignment="Top" Width="174" Height="29" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown">
+                <hc:Poptip.Instance>
+                    <hc:Poptip  Content="按ESC退出全屏" PlacementType="TopLeft"/>
+                </hc:Poptip.Instance>
+            </Button>-->
+            <Button x:Name="fullbtn" Style="{StaticResource ButtonPrimary}" RenderTransformOrigin="0.312,0.372" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667"  Width="173" Height="31" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown"/>
+
+
+            <!--<Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="80.333,40,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>
+            <Button x:Name="smaller" Content="-" Grid.Column="1" HorizontalAlignment="Left" Margin="130.333,40,0,0" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="0.315,0.407" Background="#FFA46464" Foreground="#FFFEFDFD" Height="34" FontSize="15" Width="35" Click="smaller_Click"/>-->
+            <Image Grid.Column="0" Source="img\read.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="1.883,0.564"/>
+            <Image x:Name="fontimg" Visibility="Visible"  Grid.Column="1" Source="img\font.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="39"/>
+            <Image Grid.Column="2" Source="img\write.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="37"/>
+            <Image Grid.Column="3" Source="img\fullscreen.png" HorizontalAlignment="Stretch" Height="39" Margin="104,30,104,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.714,0.658"/>
 
         </Grid>
-        <Grid x:Name="Grid1" Grid.Row="1" Background="#FFF3F1EC">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="238*"/>
-                <ColumnDefinition Width="93*"/>
-            </Grid.ColumnDefinitions>
+        <Grid x:Name="Grid1" Grid.Row="1" Background="#FFFFFF">
 
-            <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,29,42.333,0"  VerticalAlignment="Top" Height="513" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Content="test" Grid.ColumnSpan="2"/>
+
+            <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,29,42.333,-14.333"  VerticalAlignment="Top" Height="578" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Content="test"/>
+            <hc:ColorPicker x:Name="ColorPicker" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged1" Canceled="Canceled"/>
+            <hc:ColorPicker x:Name="ColorPicker1" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged2" Canceled="Canceled2"/>
         </Grid>
     </Grid>
 </Window>

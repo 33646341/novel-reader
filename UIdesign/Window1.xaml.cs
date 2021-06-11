@@ -17,24 +17,27 @@ namespace UIdesign
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
+   
     public partial class Window1 : Window
     {
+       
         List<topic> topiclist = new List<topic>()
             {
-                new topic(){number = 1,name="第一章名",content="内容1" },
+            new topic(){number = 1,name="第一章名",content="内容1" },
             new topic() { number = 2, name = "第二章名", content = "内容2" },
             new topic() { number = 3, name = "第三章名", content = "内容3" },
             new topic() { number = 4, name = "第四章名", content = "内容4" },
             new topic() { number = 5, name = "第五章名", content = "内容5" }
             };
         
-        public Window1(string fiction_name,string author_name, string total_number,string url)
+        public Window1(/*string introduction,*/string fiction_id,string fiction_name,string author_name, string url)
         {
             InitializeComponent();
             Fiction_name.Text = fiction_name;
             //Author_name.Text = Convert.ToString(author_name);
             Total_number.Text = $"小说|完结|字";
             this.detaillist.ItemsSource = topiclist;
+            //this.introduction.Text = introduction;
         }
         
 

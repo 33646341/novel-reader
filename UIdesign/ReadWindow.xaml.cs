@@ -25,53 +25,56 @@ namespace UIdesign
             label1.Content = content;
             ProgressBar1.Value = propotion;
         }
-        char i = '0';
+        private void SelectedColorChanged1(object sender, RoutedEventArgs e)
+        {
+            string color = ColorPicker.SelectedBrush.ToString();
+            var color1 = (Color)ColorConverter.ConvertFromString(color);
+            System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+            label1.Background = BColor;
+        }
+        private void SelectedColorChanged2(object sender, RoutedEventArgs e)
+        {
+            string color = ColorPicker1.SelectedBrush.ToString();
+            var color1 = (Color)ColorConverter.ConvertFromString(color);
+            System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+            label1.Foreground = BColor;
+        }
+        private void Canceled(object sender, EventArgs e)
+        {
+            var color1 = (Color)ColorConverter.ConvertFromString("#FFF3F1EC");
+            System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+            label1.Background = BColor;
+        }
+        private void Canceled2(object sender, EventArgs e)
+        {
+            var color1 = (Color)ColorConverter.ConvertFromString("#000000");
+            System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+            label1.Foreground = BColor;
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (i == '0') i = '1';
-            else if (i == '1') i = '2';
-            else if (i == '2') i = '3';
-            else if (i == '3') i = '0';
-            switch (i)
-            {
-                case '0':
-                    {
-                        var color = (Color)ColorConverter.ConvertFromString("#FFF3F1EC");
-                        var color1 = (Color)ColorConverter.ConvertFromString("#000000");
-                        System.Windows.Media.Brush BColor = new SolidColorBrush(color);
-                        System.Windows.Media.Brush CColor = new SolidColorBrush(color1);
-                        label1.Background = BColor;
-                        label1.Foreground = CColor;
-                    }
-                    break;
-                case '1':
-                    {
-                        var color = (Color)ColorConverter.ConvertFromString("#FF3D3A3D");
-                        var color1 = (Color)ColorConverter.ConvertFromString("#FFFFFF");
-                        System.Windows.Media.Brush BColor = new SolidColorBrush(color);
-                        System.Windows.Media.Brush CColor = new SolidColorBrush(color1);
-                        label1.Background = BColor;
-                        label1.Foreground = CColor;
-                    }
-                    break;
-                case '2':
-                    {
-
-                        var color = (Color)ColorConverter.ConvertFromString("#4ea397");
-                        System.Windows.Media.Brush BColor = new SolidColorBrush(color);
-                        label1.Background = BColor;
-                    };
-                    break;
-                case '3':
-                    {
-                        var color = (Color)ColorConverter.ConvertFromString("#e6c6cf");
-                        System.Windows.Media.Brush BColor = new SolidColorBrush(color);
-                        label1.Background = BColor;
-                    };
-                    break;
-            }
+            if (ColorPicker.Visibility == System.Windows.Visibility.Hidden)
+                ColorPicker.Visibility = System.Windows.Visibility.Visible;
+            else
+                ColorPicker.Visibility = System.Windows.Visibility.Hidden;
 
         }
+
+        private void SecondButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ColorPicker1.Visibility == System.Windows.Visibility.Hidden)
+                ColorPicker1.Visibility = System.Windows.Visibility.Visible;
+            else
+                ColorPicker1.Visibility = System.Windows.Visibility.Hidden;
+
+        }
+        private void ThirdButton_Click(object sender, RoutedEventArgs e)
+        {
+                ColorPicker.Visibility = System.Windows.Visibility.Hidden;
+                ColorPicker1.Visibility = System.Windows.Visibility.Hidden;
+
+        }
+
 
         int l = 0;
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -91,7 +94,7 @@ namespace UIdesign
             this.Topmost = true;
             this.WindowStyle = System.Windows.WindowStyle.None;
             this.WindowState = System.Windows.WindowState.Maximized;
-            pop3.IsOpen = true;
+         
             label1.Height = 800;
             //MessageBox.Show("Esc退出全屏");
         }
@@ -102,37 +105,21 @@ namespace UIdesign
                 this.WindowState = System.Windows.WindowState.Normal;
                 this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             }
-            pop3.Visibility = System.Windows.Visibility.Hidden;
-            label1.Height = 513;
-        }
-
-        Boolean isfont = false;
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            if (!isfont)
-            {
-                bigger.Visibility = System.Windows.Visibility.Visible;
-                smaller.Visibility = System.Windows.Visibility.Visible;
-                fontimg.Visibility = System.Windows.Visibility.Hidden;
-            }
-            else
-            {
-                bigger.Visibility = System.Windows.Visibility.Hidden;
-                smaller.Visibility = System.Windows.Visibility.Hidden;
-                fontimg.Visibility = System.Windows.Visibility.Visible;
-
-            }
-            isfont = !isfont;
+     
+            label1.Height = 578;
         }
 
         private void bigger_Click(object sender, RoutedEventArgs e)
         {
-            label1.FontSize++;
+            label1.FontSize= label1.FontSize+3;
         }
 
         private void smaller_Click(object sender, RoutedEventArgs e)
         {
-            label1.FontSize--;
+            if (label1.FontSize > 3)
+                label1.FontSize = label1.FontSize - 3;
+            else
+                MessageBox.Show("字体已经不能缩小！");
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)

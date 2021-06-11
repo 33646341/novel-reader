@@ -6,8 +6,12 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="UIdesign.Window1"
         mc:Ignorable="d"
-        Title="Window1" Height="800" Width="1000">
+        Title="Window1" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <DataTemplate x:Key="checkBoxTemplate">
+            <CheckBox x:Name="checkbox"
+                    IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Path=IsSelected}" />
+        </DataTemplate>
 
         <Style x:Key="headerListView" TargetType="{x:Type GridViewColumnHeader}">
 
@@ -25,7 +29,7 @@
 
             <Setter Property="Height" Value="60"/>
 
-            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontSize" Value="18"/>
 
             <Setter Property="Template">
 
@@ -119,7 +123,7 @@
 
                             <Trigger Property="Role" Value="Floating">
 
-                                <Setter Property="Background" Value="#FFAA00"/>
+                                <Setter Property="Background" Value="#FF326CF3"/>
 
                             </Trigger>
 
@@ -151,7 +155,7 @@
             <Setter Property="Background" Value="transparent"/>
             <Setter Property="Foreground" Value="#555"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="SelectionMode" Value="Single"/>
+            <!--<Setter Property="SelectionMode" Value="Single"/>-->
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
@@ -182,10 +186,10 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                <Setter Property="Background" Value="#FFFAEEC0"/>
+                                <Setter Property="Background" Value="#FFD0DEFC"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#FFF6BB18"/>
+                                <Setter Property="Background" Value="#FF326CF3"/>
                                 <Setter Property="BorderBrush" Value="#FFFFFF"/>
                                 <Setter Property="BorderThickness" Value="1"/>
                                 <Setter Property="FontSize" Value="22"/>
@@ -200,6 +204,18 @@
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
+        <hc:Drawer Name="DrawerLeft" Dock="Left" ShowMode="Push">
+            <Border Background="#FFFFFFFF" Width="300" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource BorderBrush}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="introduction" Background="#FFFFFF" FontSize="12"  Margin="30,10,30,10" Text="Header" Style="{StaticResource TextBlockTitle}" HorizontalAlignment="Left" />
+                    <Button Command="hc:ControlCommands.Close" Grid.Row="0" HorizontalAlignment="Right" Foreground="#FF326CF3" Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{StaticResource DeleteFillCircleGeometry}"/>
+                </Grid>
+            </Border>
+        </hc:Drawer>
         <Grid Margin="0,0,0,0.4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="4*"/>
@@ -230,13 +246,28 @@
                 </Border>
                 <Grid Grid.Column="0" Margin="0,0,0,0" RenderTransformOrigin="0.6,0.681">
                     <Border Background="#FFFFFF" Margin="60,30,0,40" CornerRadius="15">
-                        <Image Source="img/emp.jpg" Height="170" Margin="0,0,0,0" />
+                        <Image Source="img/emp.jpg" Height="170" Margin="0,0,0,0" >
+                            <hc:Magnifier.Instance>
+                                <hc:Magnifier Scale="6" HorizontalOffset="-16" VerticalOffset="-16"/>
+                            </hc:Magnifier.Instance>
+                        </Image>
                     </Border>
                 </Grid>
                 <!--Image Height="175" Width="125" Source="OIP (1).jpg" Grid.Column="0"/-->
-                <Border  CornerRadius="15" Background="{DynamicResource PrimaryBrush}" Effect="{StaticResource EffectShadow5}" Margin="62.333,43,65.333,47.667" Grid.Column="1" >
-                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                <Border  CornerRadius="15" Effect="{StaticResource EffectShadow5}" Margin="62.333,43,65.333,47.667" Grid.Column="1" >
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                            <GradientStop Color="{DynamicResource PrimaryColor}" Offset="0"/>
+                            <GradientStop Color="#FF326CF3" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <ToggleButton hc:IconElement.Geometry="{StaticResource StarGeometry}" Padding="10" IsChecked="{Binding IsOpen,ElementName=DrawerLeft}" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Margin="568,97,35.333,23" Foreground="#FFF59F03"/>
+
                 </Border>
+                <Viewbox Margin="43.333,706,503.333,-502.333" Grid.Column="1">
+                    <hc:FlipClock Panel.ZIndex="10000" Margin="0,0,0,0"  Grid.Column="1"  Background="#FFFF6363"/>
+                </Viewbox>
+
                 <Grid Grid.ColumnSpan="2" Margin="286,0,-0.667,0.667" Height="256" VerticalAlignment="Bottom" >
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -246,16 +277,31 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                  
 
-                    <hc:TextBox x:Name="Fiction_name" Panel.ZIndex="10006" Canvas.Left="327" TextWrapping="Wrap" Text="XXXXXX" Canvas.Top="40" FontSize="25" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFA3A1A1" Foreground="#FFFFFF" Margin="0,0.667,100,0.667" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
-                    <hc:TextBox x:Name="Author_name" Panel.ZIndex="10006" Height="46" Canvas.Left="327" TextWrapping="Wrap" Text="XXXX | XXX" Canvas.Top="116" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFF35E5E" FontSize="22" Foreground="#FFFFFF" Grid.Row="1" Margin="0,50.667,99,6" Grid.RowSpan="2" TextChanged="TextBox_TextChanged_1"/>
-                    <hc:TextBox x:Name="Total_number" Panel.ZIndex="10006" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 | XX字" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FFFFFF" Grid.Row="4" Margin="0,5,505,3.333" />
+
+                    <hc:TextBox x:Name="Fiction_name" Panel.ZIndex="106" Canvas.Left="327" TextWrapping="Wrap" Text="XXXXXX" Canvas.Top="40" FontSize="25" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFA3A1A1" Foreground="#FFFFFF" Margin="0,0.667,100,0.667" Grid.Row="1" TextChanged="TextBox_TextChanged"/>
+                    <hc:TextBox x:Name="Author_name" Panel.ZIndex="106" Height="46" Canvas.Left="327" TextWrapping="Wrap" Text="XXXX | XXX" Canvas.Top="116" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FFF35E5E" FontSize="22" Foreground="#FFFFFF" Grid.Row="1" Margin="0,50.667,99,6" Grid.RowSpan="2" TextChanged="TextBox_TextChanged_1"/>
+                    <hc:TextBox x:Name="Total_number" Panel.ZIndex="106" Height="43" Canvas.Left="327" TextWrapping="Wrap" Text="小说 | 完结 | XX字" Canvas.Top="162"  Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="#FF7C7878" FontSize="20" Foreground="#FFFFFF" Grid.Row="4" Margin="0,5,505,3.333" />
 
                 </Grid>
             </Grid>
 
             <Grid Margin="0,239,0.4,0.4" Grid.RowSpan="2">
+                <!--<DataGrid HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding DataList}" hc:DataGridAttach.ShowRowNumber="True">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="60" CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding ImgPath}" Width="32" Height="32" Stretch="Uniform"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="text1"/>
+                        <DataGridCheckBoxColumn Width="100" CanUserResize="False" Binding="{Binding IsSelected}" Header="checkbox1"/>
+                        <DataGridComboBoxColumn  Width="100" CanUserResize="False" SelectedValueBinding="{Binding Type}" Header="combobox1"/>
+                        <DataGridTextColumn Binding="{Binding Remark}" Header="text2"/>
+                    </DataGrid.Columns>
+                </DataGrid>-->
                 <ScrollViewer>
                     <ListView x:Name="detaillist" 
                               Background="#FFFFFF" 
@@ -269,34 +315,22 @@
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black"
                                       ColumnHeaderContainerStyle="{StaticResource headerListView}">
                                 <GridViewColumn x:Name="number" DisplayMemberBinding=
-                          "{Binding number}"   Header="章节数" Width="200" ></GridViewColumn>
+                          "{Binding number}"   Header="章节数" Width="80" ></GridViewColumn>
                                 <GridViewColumn x:Name="name" DisplayMemberBinding=
                           "{Binding name}" Header="章节名" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="content" DisplayMemberBinding=
-                          "{Binding content}" Header="本章内容" Width="550"></GridViewColumn>
+                          "{Binding content}" Header="本章内容" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="progress" Header="阅读进度" Width="200">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ProgressBar  Style="{DynamicResource ProgressBarPrimaryStripe}" Value="50"  HorizontalAlignment="Left" Margin="0" Height="18" VerticalAlignment="Top" Width="150" FontSize="10" Visibility="Visible" Background="#FFFFFF"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn x:Name="download"  CellTemplate="{StaticResource checkBoxTemplate}" Header="是否下载" Width="200"></GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
-
-                    <!--<DataGrid x:Name="topiclist" IsReadOnly="True" AutoGenerateColumns="True">
-                    
-                -->
-                    <!--<DataGrid.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform AngleX="-0.507"/>
-                            <RotateTransform/>
-                            <TranslateTransform X="-0.991"/>
-                        </TransformGroup>
-                    </DataGrid.RenderTransform>-->
-
-                    <!--<DataGrid.Columns>
-                        <DataGridTextColumn Header="章节数" Width="*" Binding="{Binding number}"/>
-                        <DataGridTextColumn Header="章节名称" Width="*" Binding="{Binding name}"/>
-                        <DataGridTextColumn Header="简介" Width="5*" Binding="{Binding content}"/>
-                    </DataGrid.Columns>-->
-                    <!--
-                </DataGrid>-->
                 </ScrollViewer>
             </Grid>
 
@@ -308,11 +342,11 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content=" 立即阅读" HorizontalAlignment="Stretch"  Height="50" hc:IconElement.Geometry="{StaticResource EyeOpenGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonSuccess}" FontSize="16" Click="Button_Click_1" Margin="30,8,41.6,8"/>
+                <Button Content=" 立即阅读" HorizontalAlignment="Stretch"  Height="50" Padding="15" hc:IconElement.Geometry="{StaticResource EyeOpenGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonSuccess}" FontSize="16" Click="Button_Click_1" Margin="30,8,41.6,8"/>
 
-                <Button Content=" 全部下载" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource DownloadGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="2" Click="Button_Click_2" Margin="30,8,41.6,8"/>
+                <Button Content=" 点击下载" HorizontalAlignment="Stretch"   Height="50" Padding="15" hc:IconElement.Geometry="{StaticResource DownloadGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="2" Click="Button_Click_2" Margin="30,8,41.6,8"/>
 
-                <Button Content=" 加入书架" HorizontalAlignment="Stretch"   Height="50" hc:IconElement.Geometry="{StaticResource AllGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="3" Click="Button_Click" Margin="30,8,41.6,8"/>
+                <Button Content=" 加入书架" HorizontalAlignment="Stretch"   Height="50" Padding="15" hc:IconElement.Geometry="{StaticResource AllGeometry}" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}"  FontSize="16" Grid.Column="3" Click="Button_Click" Margin="30,8,41.6,8"/>
             </Grid>
         </Grid>
     </DockPanel>
