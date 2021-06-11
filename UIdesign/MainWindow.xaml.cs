@@ -19,6 +19,8 @@ using System.ComponentModel;
 using System.Threading;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using HtmlAgilityPack;
+
 namespace UIdesign
 {
     /// <summary>
@@ -125,6 +127,13 @@ namespace UIdesign
                         });
                     }
                     ShowProgress = Visibility.Collapsed;
+                    
+                    //加载一个空的小说详情页网站，提高再次访问时速度
+                    HtmlWeb _web_Main = new HtmlWeb();
+                    _web_Main.OverrideEncoding = Encoding.GetEncoding("gb2312");
+                    HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
+                    _doc_Main = _web_Main.Load("https://www.biquzhh.com/13_13134/");
+                    
                     //textstat(sender, "就绪");
                 }
                 else
