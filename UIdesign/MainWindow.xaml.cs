@@ -102,7 +102,7 @@ namespace UIdesign
             
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
             ShowProgress = Visibility.Visible;
-            textstat(sender, "加载中");
+            //textstat(sender, "加载中");
             new Thread(() =>
             {
                 
@@ -145,14 +145,14 @@ namespace UIdesign
                 
             }).Start();
         }
-        public void textstat(object sender,string stat)
-        {
-            var fe = (FrameworkElement)sender;
-            BindingOperations.ClearBinding(search_stat, TextBlock.TextProperty);
-            var myDataObject = new MyData(stat);
-            var myBinding = new Binding("MyDataProperty") { Source = myDataObject };
-            search_stat.SetBinding(TextBlock.TextProperty, myBinding);
-        }
+        //public void textstat(object sender,string stat)
+        //{
+        //    var fe = (FrameworkElement)sender;
+        //    BindingOperations.ClearBinding(search_stat, TextBlock.TextProperty);
+        //    var myDataObject = new MyData(stat);
+        //    var myBinding = new Binding("MyDataProperty") { Source = myDataObject };
+        //    search_stat.SetBinding(TextBlock.TextProperty, myBinding);
+        //}
         #endregion
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
@@ -269,7 +269,24 @@ namespace UIdesign
         }
         public void BookShelf(object sender, RoutedEventArgs e)
         {
+            object sen = this.Lv_HomePage.SelectedItems[0];
+            ProgressBarvalue emp = sen as ProgressBarvalue;
+            Add_Bksf(sender, e, emp);
+        }
+        ObservableCollection<ProgressBarvalue> boksf = new ObservableCollection<ProgressBarvalue>();
+        private void Add_Bksf(object sender, RoutedEventArgs e, ProgressBarvalue fic)
+        {
+            Boksf_lv.ItemsSource = boksf;
+            new Thread(() =>//前端添加下载项，无限制
+            {
+                ProgressBarvalue bok = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url);
+                
+                Dispatcher.Invoke(delegate ()
+                {
+                    boksf.Add(bok);
+                });
 
+            }).Start();
         }
         public void DownLoadBook(object sender, RoutedEventArgs e)
         {
@@ -282,38 +299,7 @@ namespace UIdesign
         #endregion
         #endregion
         #region 书架页
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-            List<Student> stuList = new List<Student>()
-            {
-                new Student() { Id = 0, Name = "Tim", Age = 29 },
-                new Student() { Id = 1, Name = "Tom", Age = 28 },
-                new Student() { Id = 2, Name = "Kyle", Age = 27 },
-                new Student() { Id = 3, Name = "Tony", Age = 24 },
-                new Student() { Id = 4, Name = "Vina", Age = 26 },
-                new Student() { Id = 5, Name = "Mike", Age = 22 },
-            };
-            this.Boksf_lv.ItemsSource = stuList;//数据源
-
-            new Thread(() =>
-            {
-                for (int i = 10000; i < 10020; i++)
-                {
-                    var fiction_i = new Student() { Id = 5, Name = "Mike", Age = 22 };
-                    fiction_i.Id = i;
-                    Thread.Sleep(200);
-
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        stuList.Add(fiction_i);
-                        Boksf_lv.ItemsSource = null;
-                        Boksf_lv.ItemsSource = stuList;//刷新数据源
-                    });
-                }
-                ShowProgress = Visibility.Collapsed;
-            }).Start();
-        }
+        
 
         #endregion
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
@@ -321,8 +307,10 @@ namespace UIdesign
         Novel_Spider.Form1 form = new Novel_Spider.Form1();
         ObservableCollection<ProgressBarvalue> progress = new ObservableCollection<ProgressBarvalue>();
         ObservableCollection<ProgressBarvalue> loaded = new ObservableCollection<ProgressBarvalue>();
+        bool is_prepared = false;
         private void Down_Load(object sender, RoutedEventArgs e,ProgressBarvalue fic)
         {
+         
             LV_DwnPage.ItemsSource = progress;//绑定数据源
             LV_loadedPage.ItemsSource = loaded;
             form.url = fic.Url;
@@ -330,7 +318,7 @@ namespace UIdesign
             new Thread(() =>//后端添加到下载队列
             {
                 form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
-                
+                is_prepared = true;
             }).Start();
             new Thread(() =>//前端添加下载项，无限制
             {
@@ -350,16 +338,29 @@ namespace UIdesign
         }
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
+
             new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
             {
-                form.button1_Click(sender, e);
+            if (is_prepared == true)
+                {
+                    is_prepared = false;
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        Dwn_start.IsEnabled = false;
+                        Dwn_stop.IsEnabled = true;
+                    });
+                    form.button1_Click(sender, e);
+                }
+                
+
+
             }).Start();
 
             new Thread(() =>//前端下载进度显示，显示第一条
             {
-                MessageBox.Show($"{form.barvalue}");
+                //MessageBox.Show($"{form.barvalue}");
 
-                while (form.barvalue >-1)
+                while (form.barvalue <100)
                 {
                     MessageBox.Show($"{form.barvalue}");
                     progress[0].Barvalue = form.barvalue;
@@ -367,25 +368,28 @@ namespace UIdesign
                 }
                 Dispatcher.Invoke(delegate ()
                 {
+                    //MessageBox.Show($"{form.barvalue}");
                     loaded.Add(progress[0]);
+                    //Thread.Sleep(2000);
                     progress.Remove(progress[0]);
-
                     /// 放置数据库代码progress[0]，其中的四个属性
 
                 });
             }).Start();
         }
-        #endregion
-
-        #region 设置页
-
-        #endregion
-
-
         private void Dwn_stop_Click(object sender, RoutedEventArgs e)
         {
+            Dwn_stop.IsEnabled = false;
             form.button2_Click(sender, e);
+            Dwn_start.IsEnabled = true;
         }
+        #endregion
+        #region 设置页 设置存放路径
+
+        #endregion
+
+
+
     }
     #region 数据源
     public class Student
