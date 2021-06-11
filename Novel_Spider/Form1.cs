@@ -77,15 +77,28 @@ namespace Novel_Spider
                     {
                         if (tag == false)
                             break;
+
                         Chapter this_chapter = new Chapter();
+
                         lock (chapters)
                         {
                             this_chapter = chapters.Dequeue();
                         }
+
+                        string[] except_char = {@"\","/",":","*","?","\"","<",">","|"};
+
                         string Aref_Name = this_chapter.Aref_Name; //获取章节地址
+
                         string file_name = this_chapter.file_name;//获取章节名
+
+                        for(int i = 0 ;i < except_char.Length;i++)
+                        {
+                            file_name = file_name.Replace(except_char[i], "");
+                        }
+
                         if(path.Count!=0)
-                        Write_Novel(path[0] + "/" + file_name + ".txt", file_name, Aref_Name);
+                            Write_Novel(path[0] + "/" + file_name + ".txt", file_name, Aref_Name);
+
                         if (chapter_num.Count != 0 && chapter_sum.Count != 0)
                         {
                             chapter_num[0]++;
@@ -105,6 +118,8 @@ namespace Novel_Spider
                                 chapter_sum.RemoveAt(0);
                                 MethodInvoker mi = new MethodInvoker(() =>
                                 {
+                                    download_progress = 100;
+
                                     listBox1.Items.RemoveAt(0);
 
                                     if(chapter_sum.Count != 0)
@@ -119,6 +134,7 @@ namespace Novel_Spider
                     {
                         MethodInvoker mi = new MethodInvoker(() =>
                         {
+                            download_progress = 100;
                             progressBar1.Value = 100;
                             MessageBox.Show("确定");
                             this.Close();
@@ -161,7 +177,10 @@ namespace Novel_Spider
                                 chapter_sum.RemoveAt(0);
                                 MethodInvoker mi = new MethodInvoker(() =>
                                 {
+                                    download_progress = 100;
+
                                     listBox1.Items.RemoveAt(0);
+
                                     if (chapter_sum.Count != 0)
                                         progressBar1.Value = 0;
                                 });
@@ -296,6 +315,8 @@ namespace Novel_Spider
 
             string Picture_Url;
 
+            string[] except_char = { @"\", "/", ":", "*", "?", "\"", "<", ">", "|" };
+
             bool OLD = book.Contains(url);
 
             if (!OLD)
@@ -307,6 +328,11 @@ namespace Novel_Spider
                 html = HttpGet(book[index]);
 
                 Novel_Name = Regex.Match(html, @"(?<=<h1>)([\S\s]*?)(?=</h1>)").Value;
+
+                for (int i = 0; i < except_char.Length; i++)
+                {
+                    Novel_Name = Novel_Name.Replace(except_char[i], "");
+                }
 
                 Picture_Url = Regex.Match(html, "<meta property=\"og:image\" content=\"https://.*?/>").Value.Replace("<meta property=\"og:image\" content=\"", "").Replace("\"/>", "");
 
@@ -351,7 +377,14 @@ namespace Novel_Spider
                     foreach (Match NextMatch in Matches)
                     {
                         Chapter this_chapter = new Chapter();
+
                         this_chapter.file_name = Regex.Match(NextMatch.Value, "(?<=\">)([\\S\\s]*?)(?=</a>)").Value; //获取章节名
+
+                        for (int i = 0; i < except_char.Length; i++)
+                        {
+                            this_chapter.file_name = this_chapter.file_name.Replace(except_char[i], "");
+                        }
+
                         this_chapter.Aref_Name = Regex.Match(NextMatch.Value, "(?<=<a href =\")([\\S\\s]*?)(?=\">)").Value; //获取章节地址
 
                         // 数据库开始
