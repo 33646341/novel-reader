@@ -217,6 +217,15 @@ namespace OnlineSearchAndRead
                     //获取最后更新时间
                     _tfi_ret.col_update_time = DateTime.Parse(_hnc_update_time[0].Attributes["content"].Value);
 
+                    HtmlNodeCollection _hnc_fiction_type = _doc_Main.DocumentNode.SelectNodes("//meta[starts-with(@property,'og:novel:category')]");
+                    //获取小说类型
+                    _tfi_ret.col_fiction_type = DateTime.Parse(_hnc_fiction_type[0].Attributes["content"].Value);
+
+                    HtmlNodeCollection _hnc_fiction_stata = _doc_Main.DocumentNode.SelectNodes("//meta[starts-with(@property,'og:novel:status')]");
+                    //获取小说状态
+                    _tfi_ret.col_fiction_stata = DateTime.Parse(_hnc_fiction_stata[0].Attributes["content"].Value);
+
+
                     //获取最后更新章节及链接
                     HtmlNodeCollection _hnc_Chapter = _doc_Main.DocumentNode.SelectNodes("//meta[starts-with(@property,'og:novel:latest_chapter_name')]");
                     _tfi_ret.col_update_chapter = _hnc_Chapter[0].Attributes["content"].Value;
