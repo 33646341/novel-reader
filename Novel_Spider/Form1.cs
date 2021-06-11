@@ -30,7 +30,7 @@ namespace Novel_Spider
         public double download_progress;
         //double download_progress2;
 
-        string novel_name;
+        public string novel_name;
 
         public List<int> chapter_num = new List<int>();
         //double chapter_num2 = 0;
@@ -112,7 +112,7 @@ namespace Novel_Spider
 
                             if (chapter_sum[0] - 1 == chapter_num[0])
                             {
-                                //insertDownloadRecord(path[0] + "/" + file_name + ".txt", Aref_Name, )
+                                insertDownloadRecord(novel_name, path[0] + "/" + file_name + ".txt", Aref_Name);
                                 path.RemoveAt(0);
                                 book.RemoveAt(0);
                                 chapter_num.RemoveAt(0);
