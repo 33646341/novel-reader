@@ -28,8 +28,8 @@ namespace UIdesign
         {
             InitializeComponent();
             Fiction_name.Text = a.col_fiction_name;
-            Author_name.Text = a.col_fiction_author+"|"+a.col_fiction_type;
-            Total_number.Text = $"小说|"+a.col_fiction_stata+"|"+a.col_click_count+"点击";
+            Author_name.Text = a.col_fiction_author+" | "+a.col_fiction_type;
+            Total_number.Text = $"小说| "+a.col_fiction_stata;
             
             this.detaillist.ItemsSource = alllist;
             this.introduction.Text = a.col_fiction_introduction;
