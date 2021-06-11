@@ -25,11 +25,13 @@ namespace UIdesign
             get_chapter_content g = new get_chapter_content();
             InitializeComponent();
             string url1 = "https://www.biquzhh.com" + url;
+            //TabItem1.Header = number + " " + name;
+            var p = this.Resources["FlowDocumentDemo"] as FlowDocument;
+            Paragraph paragraph1 = new Paragraph(new Run("11"));
+            p.Blocks.Add(paragraph1);
             label1.Content = g.Get_Chapter_Content(url1);
             ProgressBar1.Value = propotion;
             textblock1.Text = number + " " + name;
-            
-
         }
         private void SelectedColorChanged1(object sender, RoutedEventArgs e)
         {
@@ -100,7 +102,6 @@ namespace UIdesign
             this.Topmost = true;
             this.WindowStyle = System.Windows.WindowStyle.None;
             this.WindowState = System.Windows.WindowState.Maximized;
-         
             label1.Height = 800;
             //MessageBox.Show("Esc退出全屏");
         }

@@ -9,6 +9,13 @@
         Title="ReadWindow" Height="800" Width="1000">
 
     <Window.Resources>
+        <FlowDocument x:Key="FlowDocumentDemo" x:Shared="False" ColumnWidth="400" IsOptimalParagraphEnabled="True" IsHyphenationEnabled="True">
+            <Section FontSize="12">
+                <Paragraph x:Name="Paragraph1">
+                    balablabla
+                </Paragraph>
+            </Section>
+        </FlowDocument>
         <Style TargetType="{x:Type ProgressBar}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -190,11 +197,23 @@
         <Grid x:Name="Grid1" Grid.Row="1" Background="#FFFFFF" RenderTransformOrigin="0.27,0.183">
 
             <ScrollViewer>
-                <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,73,42.333,-14.333"  VerticalAlignment="Top" Height="534" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC"/>
+                <TabItem x:Name="TabItem1"    Height="471" RenderTransformOrigin="0.5,0.5" Width="955">
+                    <TabItem.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="0.92"/>
+                            <RotateTransform/>
+                            <TranslateTransform X="3.984"/>
+                        </TransformGroup>
+                    </TabItem.RenderTransform>
+                    <FlowDocumentReader Document="{DynamicResource FlowDocumentDemo}" Width="640" Height="400" Margin="32"/>
+                </TabItem>
+
             </ScrollViewer>
+            <Label x:Name="label1" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Height="4127" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Visibility="Collapsed"/>
             <hc:ColorPicker x:Name="ColorPicker" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged1" Canceled="Canceled"/>
-                <hc:ColorPicker x:Name="ColorPicker1" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged2" Canceled="Canceled2"/>
-                <TextBlock x:Name="textblock1" HorizontalAlignment="Left" Margin="49,18,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" FontSize="20" Height="57" Width="900"/>
-            </Grid>
+            <hc:ColorPicker x:Name="ColorPicker1" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged2" Canceled="Canceled2"/>
+            <TextBlock x:Name="textblock1" HorizontalAlignment="Left" Margin="49,18,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" FontSize="20" Height="57" Width="900"/>
+        </Grid>
     </Grid>
 </Window>
