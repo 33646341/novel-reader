@@ -32,7 +32,7 @@
         </Grid.ColumnDefinitions>
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="5">
 
-            <TabItem x:Name="Homepg_item" Header="首页" IsSelected="True" FontSize="24" Width="255" >
+            <TabItem Header="首页" IsSelected="True" FontSize="24" Width="255" >
                 <DockPanel>
                     <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade">
                         <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
@@ -54,7 +54,7 @@
 
                     <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
                     <hc:TransitioningContentControl x:Name="searchPanel2" TransitionMode="Top2BottomWithFade">
-                        <DataGrid x:Name="Lv_HomePage" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Bar}" hc:DataGridAttach.ShowRowNumber="True">
+                        <DataGrid x:Name="Lv_HomePage" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource Bar}}" hc:DataGridAttach.ShowRowNumber="True">
                             <DataGrid.Columns>
                                 <!--<DataGridTemplateColumn Width="60" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
