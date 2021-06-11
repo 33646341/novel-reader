@@ -331,8 +331,6 @@
                           "{Binding number}"   Header="章节数" Width="180" ></GridViewColumn>
                                 <GridViewColumn x:Name="name" DisplayMemberBinding=
                           "{Binding name}" Header="章节名" Width="200"></GridViewColumn>
-                                <GridViewColumn x:Name="content" DisplayMemberBinding=
-                          "{Binding content}" Header="本章内容" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="progress" Header="阅读进度" Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
