@@ -81,8 +81,8 @@ namespace OnlineSearchAndRead
                         script.Remove();
                 }
                 _s_ret = _hnc_Chapter_Content[0].InnerHtml.Trim()
-                    .Replace("<br />", "\r\n\r\n")
-                    .Replace("<br>", "\r\n\r\n")
+                    .Replace("<br />", "\r\n")
+                    .Replace("<br>", "\r\n")
                     .Replace("&nbsp", "")
                     .Replace("<!-", "")
                     .Replace("->", "")
@@ -104,16 +104,6 @@ namespace OnlineSearchAndRead
                     .Replace("天才一秒记住本站地址：www.biquzhh.com。笔趣阁手机版阅读网址：m.biquzhh.com", "")
                     .Replace(";", "");
                 
-                //_doc_Main.DocumentNode.Attributes["div"].Remove();
-                // .Replace("</div>", "")
-                //.Replace("nbsp;", " ");
-
-                /*
-                .Replace("nbsp;", "")
-                .Replace("&amp;", "")
-                .Replace("<script>chaptererror();</script>", "");*/
-
-                //_s_ret = _2_BLL.Cls_Oprt_String._s_Merge_Space(_s_ret, "\r\n    ");
 
                 return _s_ret;
             }
