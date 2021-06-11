@@ -104,10 +104,10 @@ namespace Novel_Spider
                             chapter_num[0]++;
 
                             download_progress = 1.0 * chapter_num[0] / chapter_sum[0] * 100;
-                           // MethodInvoker m = new MethodInvoker(() =>
-                            //{
-                               // progressBar1.Value = Convert.ToInt32(download_progress);
-                            //});
+                           MethodInvoker m = new MethodInvoker(() =>
+                            {
+                                progressBar1.Value = Convert.ToInt32(download_progress);
+                            });
                             //this.BeginInvoke(m);
 
                             if (chapter_sum[0] - 1 == chapter_num[0])
@@ -117,15 +117,15 @@ namespace Novel_Spider
                                 book.RemoveAt(0);
                                 chapter_num.RemoveAt(0);
                                 chapter_sum.RemoveAt(0);
-                                //MethodInvoker mi = new MethodInvoker(() =>
-                               //{
+                                MethodInvoker mi = new MethodInvoker(() =>
+                               {
                                    // download_progress = 100;
 
                                     //listBox1.Items.RemoveAt(0);
 
                                     //if(chapter_sum.Count != 0)
                                         //download_progress = 0;
-                                //});
+                                });
                                 //this.BeginInvoke(mi);
                             }
                         }
@@ -133,13 +133,13 @@ namespace Novel_Spider
                     }
                     if (tag == true)
                     {//
-                        //MethodInvoker mi = new MethodInvoker(() =>
-                        //{
+                        MethodInvoker mi = new MethodInvoker(() =>
+                        {
                             download_progress = 100;
                             //progressBar1.Value = 100;
                             //MessageBox.Show("确定");
                             //this.Close();
-                       // });
+                        });
                         //this.BeginInvoke(mi);
                     }
                 });
@@ -164,10 +164,10 @@ namespace Novel_Spider
                             chapter_num[0]++;
 
                             download_progress = 1.0 * chapter_num[0] / chapter_sum[0] * 100;
-                           // MethodInvoker m = new MethodInvoker(() =>
-                           // {
+                           MethodInvoker m = new MethodInvoker(() =>
+                           {
                                // progressBar1.Value = Convert.ToInt32(download_progress);
-                            //});
+                            });
                             //this.BeginInvoke(m);
 
                             if (chapter_sum[0] == chapter_num[0])
@@ -176,13 +176,17 @@ namespace Novel_Spider
                                 book.RemoveAt(0);
                                 chapter_num.RemoveAt(0);
                                 chapter_sum.RemoveAt(0);
-                             
+
+                                MethodInvoker mi = new MethodInvoker(() =>
+                                {
                                     //download_progress = 100;
 
                                     //listBox1.Items.RemoveAt(0);
 
                                     //if (chapter_sum.Count != 0)
-                                        //progressBar1.Value = 0;
+                                    //progressBar1.Value = 0;
+                                });
+
                                 //this.BeginInvoke(mi);
                             }
                         }
