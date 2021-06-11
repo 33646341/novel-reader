@@ -21,7 +21,7 @@ namespace Novel_Spider
 
         //double sum = 0;
 
-        Queue<Chapter> chapters = new Queue<Chapter>();
+        public Queue<Chapter> chapters = new Queue<Chapter>();
 
         public List<string> book = new List<string>();
 

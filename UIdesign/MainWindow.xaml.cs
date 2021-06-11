@@ -358,6 +358,9 @@ namespace UIdesign
                     {
                         loaded.Add(progress[0]);
                         progress.Remove(progress[0]);
+
+                        /// 放置数据库代码progress[0]，其中的四个属性
+
                     });
             }).Start();
         }

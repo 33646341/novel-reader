@@ -19,7 +19,7 @@
         </Style>
         <local:Student x:Key="stu"/>
         <local:ProgressBarvalue x:Key="Bar"/>
-        
+
     </Window.Resources>
     <Grid x:Name="Total_grid">
         <Grid.RowDefinitions>
@@ -59,7 +59,7 @@
                               ItemsSource="{Binding Source={StaticResource Bar}}"
                               ItemContainerStyle="{StaticResource ListItemstyle}"
                               GridViewColumnHeader.Click="Sort_Click"
-                              Grid.Row="2" Height="618" Margin="0,0,-0.667,0" RenderTransformOrigin="0.5,0.489"
+                              Grid.Row="2" Height="594" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
                               >
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
@@ -77,7 +77,7 @@
                             <ContextMenu Visibility="{Binding Conmenu}">
                                 <MenuItem Header="查看详情" Click="InfoPage"/>
                                 <MenuItem Header="添加书架" Click="BookShelf"/>
-                                <MenuItem Header="下载本书" Click="DownLoadBook"/>
+                                <MenuItem Header="添加下载" Click="DownLoadBook"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                     </ListView>
@@ -91,7 +91,7 @@
                     <TabControl Margin="0,0,-0.2,0">
                         <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="24" Width="200">
                             <StackPanel>
-                                <ListView Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="427" Margin="0,0,-0.4,0" 
+                                <ListView Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
                                           ItemsSource="{Binding Source={StaticResource Bar}}">
                                     <ListView.View>
                                         <GridView>
@@ -111,16 +111,6 @@
                                                             <ProgressBar Name="prs"  Value="{Binding Path=Barvalue}" Width="700" Maximum="100" Height="40"/>
 
                                                         </Grid>
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-                                            <GridViewColumn Header=" " Width="100">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <WrapPanel>
-                                                            <Button x:Name="dwn_ctrl" Content="暂停/开始" Style="{StaticResource Dwn_ctl_Btn}" Width="50"></Button>
-                                                            <Button x:Name="dwn_del" Content="删除" Style="{StaticResource Dwn_del_Btn}" Width="50"></Button>
-                                                        </WrapPanel>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
@@ -157,7 +147,7 @@
                                     </ListView.ContextMenu>
                                 </ListView>
                             </StackPanel>
-                            </TabItem>
+                        </TabItem>
                         <TabItem Header="下载设置" IsSelected="True" FontSize="24" Width="200">
                             <Button Content="123456" Margin="537,0,255.8,0">
                             </Button>
@@ -211,6 +201,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Button  x:Name="Dwn_start" Content="开始下载" Grid.Row="4"  FontSize="30" Grid.Column="0" Grid.ColumnSpan="1" Margin="0,0.2,0.4,0.4" Width="278" Height="61" Click="Dwn_start_Click"></Button>
         <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="BlueViolet" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />
         <TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
     </Grid>
