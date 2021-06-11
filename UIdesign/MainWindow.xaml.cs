@@ -326,67 +326,66 @@ namespace UIdesign
             LV_DwnPage.ItemsSource = progress;//绑定数据源
             LV_loadedPage.ItemsSource = loaded;
             form.url = fic.Url;
-            
+            form.novel_name = fic.Name;
             new Thread(() =>//后端添加到下载队列
             {
                 form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
                 
             }).Start();
-            new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
-            {
-                if (progress == null)
-                {
-                    form.button1_Click(sender, e);
-                }
-        }).Start();
             new Thread(() =>//前端添加下载项，无限制
             {
+                ProgressBarvalue fiction=new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url);
+                if (progress != null)
+                {
 
-                ProgressBarvalue fiction = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url); ;
+                    fiction.Barvalue = 0;
+                }
                 Dispatcher.Invoke(delegate ()
                 {
                     progress.Add(fiction);
                     
                 });
-                //while (form.barvalue < 100)
-                //{
-                //    progress[0].Barvalue = form.barvalue;
-                //    Thread.Sleep(100);
-                //}
-                
-            }).Start();
-            new Thread(() =>//前端下载进度显示，显示第一条
-            {
-                    while (progress[0].Barvalue < 100)
-                    {
-                        progress[0].Barvalue += 50;
-                        Thread.Sleep(5000);
-                    }
 
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        loaded.Add(progress[0]);
-                        progress.Remove(progress[0]);
-
-                        /// 放置数据库代码progress[0]，其中的四个属性
-
-                    });
             }).Start();
         }
-        //执行这个方法
-        private void Dwn_ctl_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
-            form.button2_Click(sender, e);
-            // MessageBox.Show("Stop!");
-        }   //打开新窗口
-        private void Dwn_del_DoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            MessageBox.Show("Delete!");
-        }   //打开新窗口
-        #endregion
-        #region 设置页
+            new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
+            {
+                form.button1_Click(sender, e);
+            }).Start();
+
+            new Thread(() =>//前端下载进度显示，显示第一条
+            {
+                MessageBox.Show($"{form.barvalue}");
+
+                while (form.barvalue >-1)
+                {
+                    MessageBox.Show($"{form.barvalue}");
+                    progress[0].Barvalue = form.barvalue;
+                    Thread.Sleep(100);
+                }
+                Dispatcher.Invoke(delegate ()
+                {
+                    loaded.Add(progress[0]);
+                    progress.Remove(progress[0]);
+
+                    /// 放置数据库代码progress[0]，其中的四个属性
+
+                });
+            }).Start();
+        }
         #endregion
 
+        #region 设置页
+
+        #endregion
+
+
+        private void Dwn_stop_Click(object sender, RoutedEventArgs e)
+        {
+            form.button2_Click(sender, e);
+        }
     }
     #region 数据源
     public class Student
