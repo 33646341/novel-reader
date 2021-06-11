@@ -55,6 +55,8 @@ namespace UIdesign
             #region
             DataContext = this;
             #endregion
+            
+            
         }
         #region 控件函数定义
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -79,14 +81,14 @@ namespace UIdesign
         {
 
         }
-
-        private void txtJD_TextChanged(object sender, TextChangedEventArgs e)
+        private void LV_loadedPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
         #endregion
         #region 首页
         #region 搜索按钮
+        ObservableCollection<ProgressBarvalue> _ltfi_Search = new ObservableCollection<ProgressBarvalue>();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
            
@@ -95,7 +97,7 @@ namespace UIdesign
             form.querytext = kw;
             List<fiction_info> _fic_info;
             // 不使用List类型，可实现自动刷新而不必切换源
-            ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();
+            
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
             ShowProgress = Visibility.Visible;
             textstat(sender, "加载中");
@@ -107,12 +109,12 @@ namespace UIdesign
                 {
                     for (int i = 0; i < _fic_info.Count; i++)
                     {
-                        var fiction_i = new Fiction()
+                        var fiction_i = new ProgressBarvalue()
                         {
-                            col_fiction_id = _fic_info[i].col_fiction_id,
-                            col_fiction_name = _fic_info[i].col_fiction_name,
-                            col_fiction_author = _fic_info[i].col_fiction_author,
-                            col_fiction_url = _fic_info[i].col_url_homepage
+                            Id = _fic_info[i].col_fiction_id,
+                            Name = _fic_info[i].col_fiction_name,
+                            Author = _fic_info[i].col_fiction_author,
+                            Url = _fic_info[i].col_url_homepage
                         };
                         //MessageBox.Show(_fic_info[i].col_url_homepage);
                         //Thread.Sleep(200);
@@ -136,7 +138,7 @@ namespace UIdesign
         }
         public void textstat(object sender,string stat)
         {
-            //var fe = (FrameworkElement)sender;
+            var fe = (FrameworkElement)sender;
             BindingOperations.ClearBinding(search_stat, TextBlock.TextProperty);
             var myDataObject = new MyData(stat);
             var myBinding = new Binding("MyDataProperty") { Source = myDataObject };
@@ -147,11 +149,11 @@ namespace UIdesign
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //toinfopage(sender);
-            Fiction emp = (sender as ListViewItem).Content as Fiction;
+            ProgressBarvalue emp = (sender as ListViewItem).Content as ProgressBarvalue;
             toinfopage(emp);
            
         }   //打开新窗口
-        private void toinfopage(Fiction emp)
+        private void toinfopage(ProgressBarvalue emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
             get_homepage_content content = new get_homepage_content();
@@ -160,7 +162,7 @@ namespace UIdesign
             ShowProgress = Visibility.Visible;
             new Thread(() =>
             {
-                Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.col_fiction_url);
+                Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.Url);
                 List<chapter_list> lis = result.Item2;
                 //MessageBox.Show(lis[0].col_chapter_content);
                 fiction_info li = result.Item1;
@@ -168,7 +170,7 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(/*li.col_fiction_introduction,*/emp.col_fiction_id, emp.col_fiction_name, emp.col_fiction_author, emp.col_fiction_url);   //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(/*li.col_fiction_introduction,*/emp.Id, emp.Name, emp.Author, emp.Url);   //Login为窗口名，把要跳转的新窗口实例化
                     login1.Show();
                 });
             }).Start();
@@ -253,7 +255,7 @@ namespace UIdesign
         public void InfoPage(object sender, RoutedEventArgs e)
         {
             object sen= this.Lv_HomePage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
+            ProgressBarvalue emp = sen as ProgressBarvalue;
             toinfopage(emp);
         }
         public void BookShelf(object sender, RoutedEventArgs e)
@@ -264,7 +266,7 @@ namespace UIdesign
         {
             
             object sen = this.Lv_HomePage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
+            ProgressBarvalue emp = sen as ProgressBarvalue;
             Down_Load(sender, e, emp);
         }
 
@@ -308,32 +310,47 @@ namespace UIdesign
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
         Novel_Spider.Form1 form = new Novel_Spider.Form1();
-        
-        private void Down_Load(object sender, RoutedEventArgs e,Fiction fic)
+        ObservableCollection<ProgressBarvalue> progress = new ObservableCollection<ProgressBarvalue>();
+        ObservableCollection<ProgressBarvalue> loaded = new ObservableCollection<ProgressBarvalue>();
+        private void Down_Load(object sender, RoutedEventArgs e,ProgressBarvalue fic)
         {
-            //form.url = "https://www.biquzhh.com/29719_29719087/";
-            form.url = fic.col_fiction_url;
+            LV_DwnPage.ItemsSource = progress;//绑定数据源
+            LV_loadedPage.ItemsSource = loaded;
+            form.url = fic.Url;
+            
             new Thread(() =>
             {
                 form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
                 form.button1_Click(sender, e);//下载按钮，开始下载
-                
             }).Start();
-            ObservableCollection<ProgressBarvalue> progress = new ObservableCollection<ProgressBarvalue>()
+        
+            new Thread(() =>//添加下载项
             {
-                new ProgressBarvalue(fic.col_fiction_name,form.barvalue)
-            };
-            this.LV_DwnPage.ItemsSource = progress;//刷新数据源
-            new Thread(() =>
-            {
-                while (form.barvalue < 100)
-                { 
-                    progress[0].Barvalue = form.barvalue;
-                    Thread.Sleep(100);
+
+                ProgressBarvalue fiction = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url); ;
+                Dispatcher.Invoke(delegate ()
+                {
+                    progress.Add(fiction);
+                    
+                });
+                //while (form.barvalue < 100)
+                //{
+                //    progress[0].Barvalue = form.barvalue;
+                //    Thread.Sleep(100);
+                //}
+                while (progress[0].Barvalue < 100)
+                {
+                    progress[0].Barvalue += 50;
+                    Thread.Sleep(5000);
                 }
 
+                Dispatcher.Invoke(delegate ()
+                    {
+                        loaded.Add(progress[0]);
+                        progress.Remove(progress[0]);
+                        
+                    });
             }).Start();
-
         }
         //执行这个方法
         private void Dwn_ctl_DoubleClick(object sender, MouseButtonEventArgs e)
@@ -358,51 +375,56 @@ namespace UIdesign
         public string Name { get; set; }
         public int Age { get; set; }
     }
-    public class BarValue0 : INotifyPropertyChanged
-    {
-        private double Barvalue;
-
-        public double barvalue
-        {
-            get { return Barvalue; }
-            set
-            {
-                Barvalue = value;
-                NotifyPropertyChanged(nameof(barvalue));
-            }
-        }
-
-        public string name { get; set; }
-        //public double barvalue { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-    }
     public class ProgressBarvalue : INotifyPropertyChanged
     {
-        private string myname;
+        private string fic_name;
         private double barvalue;
-
+        private string fic_author;
+        private string fic_url;
+        private string id;
         public ProgressBarvalue()
         {
         }
-
-        public ProgressBarvalue(string na,double va)
+        public string Author
         {
-            myname = na;
+            get { return fic_author; }
+            set
+            {
+                fic_author = value;
+                OnPropertyChanged(Author);
+            }
+        }
+        public string Id
+        {
+            get { return id; }
+            set
+            {
+                id = value;
+                OnPropertyChanged(Id);
+            }
+        }
+        public string Url
+        {
+            get { return fic_url; }
+            set
+            {
+                fic_url = value;
+                OnPropertyChanged(Url);
+            }
+        }
+        public ProgressBarvalue(string na,double va,string author,string url)
+        {
+            fic_name = na;
             barvalue = va;
+            fic_author = author;
+            fic_url = url;
         }
         public string Name
         {
-            get { return myname; }
+            get { return fic_name; }
             set
             {
-                myname = value;
+                fic_name = value;
                 OnPropertyChanged(Name);
             }
         }
@@ -425,14 +447,14 @@ namespace UIdesign
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
-    public class Fiction
-    {
-        public string col_fiction_id { get; set; }
-        public string col_fiction_name { get; set; }
-        public string col_fiction_author { get; set; }
-        public string col_fiction_url { get; set; }
+    //public class Fiction
+    //{
+    //    public string col_fiction_id { get; set; }
+    //    public string col_fiction_name { get; set; }
+    //    public string col_fiction_author { get; set; }
+    //    public string col_fiction_url { get; set; }
 
-    }
+    //}
     public class MyData : INotifyPropertyChanged
     {
         private string _myDataProperty;
