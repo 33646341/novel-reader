@@ -18,7 +18,6 @@
             <EventSetter Event="MouseDoubleClick" Handler="Dwn_del_DoubleClick"/>
         </Style>
         <local:Student x:Key="stu"/>
-        <local:Fiction x:Key="fic"/>
         <local:ProgressBarvalue x:Key="Bar"/>
         
     </Window.Resources>
@@ -57,7 +56,7 @@
                     <ListView x:Name="Lv_HomePage" 
                               Background="#FFF1ECEC" 
                               SelectionChanged="ListView_SelectionChanged" 
-                              ItemsSource="{Binding Source={StaticResource fic}}"
+                              ItemsSource="{Binding Source={StaticResource Bar}}"
                               ItemContainerStyle="{StaticResource ListItemstyle}"
                               GridViewColumnHeader.Click="Sort_Click"
                               Grid.Row="2" Height="618" Margin="0,0,-0.667,0" RenderTransformOrigin="0.5,0.489"
@@ -65,13 +64,14 @@
                         <ListView.View >
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
                                 <GridViewColumn x:Name="fiction_id" DisplayMemberBinding=
-                          "{Binding Path=col_fiction_id}"  Header="序号" Width="180"></GridViewColumn>
+                          "{Binding Path=Id}"  Header="序号" Width="180"></GridViewColumn>
                                 <GridViewColumn x:Name="fiction_name" DisplayMemberBinding=
-                          "{Binding Path=col_fiction_name}" Header="小说名称" Width="200"></GridViewColumn>
+                          "{Binding Path=Name}" Header="小说名称" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="author_name" DisplayMemberBinding=
-                          "{Binding Path=col_fiction_author}" Header="作者" Width="200"></GridViewColumn>
+                          "{Binding Path=Author}" Header="作者" Width="200"></GridViewColumn>
 
                             </GridView>
+
                         </ListView.View>
                         <ListView.ContextMenu >
                             <ContextMenu Visibility="{Binding Conmenu}">
@@ -131,9 +131,33 @@
 
                         </TabItem>
                         <TabItem Header="已下载" IsSelected="True" FontSize="24" Width="200">
-                            <Button Content="123456">
-                            </Button>
-                        </TabItem>
+                            <StackPanel>
+                                <ListView x:Name="LV_loadedPage" 
+                              Background="#FFF1ECEC" 
+                              SelectionChanged="LV_loadedPage_SelectionChanged" 
+                              ItemsSource="{Binding Source={StaticResource Bar}}"
+                              ItemContainerStyle="{StaticResource ListItemstyle}"
+                              GridViewColumnHeader.Click="Sort_Click"
+                              Grid.Row="2" Height="618" Margin="0,0,-0.667,0" RenderTransformOrigin="0.5,0.489"
+                              >
+                                    <ListView.View >
+                                        <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
+                                            <GridViewColumn x:Name="fic_name" DisplayMemberBinding=
+                          "{Binding Path=Name}" Header="小说名称" Width="200"></GridViewColumn>
+                                            <GridViewColumn x:Name="au_name" DisplayMemberBinding=
+                          "{Binding Path=Author}" Header="作者" Width="200"></GridViewColumn>
+
+                                        </GridView>
+                                    </ListView.View>
+                                    <ListView.ContextMenu >
+                                        <ContextMenu Visibility="{Binding Conmenu}">
+                                            <MenuItem Header="查看详情" Click="InfoPage"/>
+                                            <MenuItem Header="添加书架" Click="BookShelf"/>
+                                        </ContextMenu>
+                                    </ListView.ContextMenu>
+                                </ListView>
+                            </StackPanel>
+                            </TabItem>
                         <TabItem Header="下载设置" IsSelected="True" FontSize="24" Width="200">
                             <Button Content="123456" Margin="537,0,255.8,0">
                             </Button>

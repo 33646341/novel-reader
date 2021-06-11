@@ -200,19 +200,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <local:topic x:Key="t"/>
+        <local:Chapterlist x:Key="t"/>
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
         <hc:Drawer Name="DrawerLeft" Dock="Left" ShowMode="Push">
             <Border Background="#FFFFFFFF" Width="300" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource BorderBrush}">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <TextBlock x:Name="introduction" Background="#FFFFFF" FontSize="12"  Margin="30,10,30,10" Text="Header" Style="{StaticResource TextBlockTitle}" HorizontalAlignment="Left" />
-                    <Button Command="hc:ControlCommands.Close" Grid.Row="0" HorizontalAlignment="Right" Foreground="#FF326CF3" Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{StaticResource DeleteFillCircleGeometry}"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="introduction"   Grid.Column="0" TextWrapping="Wrap" Width="200" Background="#FFFFFF" FontSize="15" Foreground="#FF326CF3"  Margin="10,10,10,10" Text="Header" Style="{StaticResource TextBlockTitle}" HorizontalAlignment="Left" />
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="10*"/>
+                        </Grid.RowDefinitions>
+                        <Button Command="hc:ControlCommands.Close" Grid.Row="0" HorizontalAlignment="Right" Foreground="#FF326CF3" Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{StaticResource DeleteFillCircleGeometry}"/>
+                    </Grid>
+
                 </Grid>
             </Border>
         </hc:Drawer>
@@ -240,13 +247,19 @@
                     </LinearGradientBrush>
                 </Grid.OpacityMask>
                 <Border HorizontalAlignment="Stretch"  Style="{StaticResource BorderRegion}"  Margin="0,0,32,32">
-                    <Border CornerRadius="15" Background="{DynamicResource PrimaryBrush}" Effect="{StaticResource EffectShadow5}" Margin="-4.333,-5.333,-817.667,-18.667">
+                    <Border CornerRadius="15" Effect="{StaticResource EffectShadow5}" Margin="-4.333,-5.333,-817.667,-18.667">
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                                <GradientStop Color="{DynamicResource PrimaryColor}" Offset="0"/>
+                                <GradientStop Color="{DynamicResource DarkPrimaryColor}" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
                         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
                     </Border>
                 </Border>
                 <Grid Grid.Column="0" Margin="0,0,0,0" RenderTransformOrigin="0.6,0.681">
                     <Border Background="#FFFFFF" Margin="60,30,0,40" CornerRadius="15">
-                        <Image Source="img/emp.jpg" Height="170" Margin="0,0,0,0" >
+                        <Image x:Name="surfaceimg" Source="img/emp.jpg" Height="170" Margin="0,0,0,0" >
                             <hc:Magnifier.Instance>
                                 <hc:Magnifier Scale="6" HorizontalOffset="-16" VerticalOffset="-16"/>
                             </hc:Magnifier.Instance>
@@ -304,9 +317,9 @@
                 </DataGrid>-->
                 <ScrollViewer>
                     <ListView x:Name="detaillist" 
-                              Background="#FFFFFF" 
-                              ItemsSource="{Binding DataList}"
+                              Background="#FFFFFF"
                               Style="{StaticResource Listviewstyle}"
+                              ItemsSource="{Binding Source={StaticResource t}}"
                               Margin="20"
                               FontSize="20"
                               Grid.Row="2" Height="431" RenderTransformOrigin="0.5,0.489" SelectionChanged="detaillist_SelectionChanged" BorderBrush="#FF0977EF"
@@ -315,7 +328,7 @@
                             <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black"
                                       ColumnHeaderContainerStyle="{StaticResource headerListView}">
                                 <GridViewColumn x:Name="number" DisplayMemberBinding=
-                          "{Binding number}"   Header="章节数" Width="80" ></GridViewColumn>
+                          "{Binding number}"   Header="章节数" Width="180" ></GridViewColumn>
                                 <GridViewColumn x:Name="name" DisplayMemberBinding=
                           "{Binding name}" Header="章节名" Width="200"></GridViewColumn>
                                 <GridViewColumn x:Name="content" DisplayMemberBinding=

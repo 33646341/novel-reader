@@ -19,7 +19,7 @@ namespace UIdesign
     /// </summary>
     public partial class ReadWindow : Window
     {
-        public ReadWindow(int number,string name,string content,int propotion)
+        public ReadWindow(string number,string name,string content,int propotion)
         {
             InitializeComponent();
             label1.Content = content;
