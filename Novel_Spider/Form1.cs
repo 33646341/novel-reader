@@ -194,9 +194,19 @@ namespace Novel_Spider
             
         }
 
-        private void insertDownloadRecord(string name, string url ,string path)
+        private void insertDownloadRecord(string Novel_Name, string url ,string path)
         {
-            throw new NotImplementedException();
+            // 放置数据库代码progress[0]，其中的四个属性
+            // 数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(Novel_Name) == 0)
+            {
+                novelDAL.addNovel(Novel_Name, url);
+            }
+            var Novel_id = novelDAL.exsitsNovel(Novel_Name);
+            Console.WriteLine(Novel_id);
+            novelDAL.updateNovel(Novel_id, "downloadPath", path);
+            //数据库结束
         }
 
         public void button2_Click(object sender, EventArgs e)
