@@ -21,7 +21,7 @@ namespace Novel_Spider
 
         //double sum = 0;
 
-        Queue<Chapter> chapters = new Queue<Chapter>();
+        public Queue<Chapter> chapters = new Queue<Chapter>();
 
         public List<string> book = new List<string>();
 
@@ -30,7 +30,7 @@ namespace Novel_Spider
         public double download_progress;
         //double download_progress2;
 
-        //string novel_name;
+        public string novel_name;
 
         public List<int> chapter_num = new List<int>();
         //double chapter_num2 = 0;
@@ -104,41 +104,42 @@ namespace Novel_Spider
                             chapter_num[0]++;
 
                             download_progress = 1.0 * chapter_num[0] / chapter_sum[0] * 100;
-                            MethodInvoker m = new MethodInvoker(() =>
-                            {
-                                progressBar1.Value = Convert.ToInt32(download_progress);
-                            });
+                           // MethodInvoker m = new MethodInvoker(() =>
+                            //{
+                               // progressBar1.Value = Convert.ToInt32(download_progress);
+                            //});
                             //this.BeginInvoke(m);
 
                             if (chapter_sum[0] - 1 == chapter_num[0])
                             {
+                                insertDownloadRecord(novel_name, path[0] + "/" + file_name + ".txt", Aref_Name);
                                 path.RemoveAt(0);
                                 book.RemoveAt(0);
                                 chapter_num.RemoveAt(0);
                                 chapter_sum.RemoveAt(0);
-                                MethodInvoker mi = new MethodInvoker(() =>
-                                {
+                                //MethodInvoker mi = new MethodInvoker(() =>
+                               //{
                                     download_progress = 100;
 
-                                    listBox1.Items.RemoveAt(0);
+                                    //listBox1.Items.RemoveAt(0);
 
                                     if(chapter_sum.Count != 0)
-                                        progressBar1.Value = 0;
-                                });
+                                        download_progress = 0;
+                                //});
                                 //this.BeginInvoke(mi);
                             }
                         }
               
                     }
                     if (tag == true)
-                    {
-                        MethodInvoker mi = new MethodInvoker(() =>
-                        {
+                    {//
+                        //MethodInvoker mi = new MethodInvoker(() =>
+                        //{
                             download_progress = 100;
-                            progressBar1.Value = 100;
-                            MessageBox.Show("确定");
-                            this.Close();
-                        });
+                            //progressBar1.Value = 100;
+                            //MessageBox.Show("确定");
+                            //this.Close();
+                       // });
                         //this.BeginInvoke(mi);
                     }
                 });
@@ -163,10 +164,10 @@ namespace Novel_Spider
                             chapter_num[0]++;
 
                             download_progress = 1.0 * chapter_num[0] / chapter_sum[0] * 100;
-                            MethodInvoker m = new MethodInvoker(() =>
-                            {
-                                progressBar1.Value = Convert.ToInt32(download_progress);
-                            });
+                           // MethodInvoker m = new MethodInvoker(() =>
+                           // {
+                               // progressBar1.Value = Convert.ToInt32(download_progress);
+                            //});
                             //this.BeginInvoke(m);
 
                             if (chapter_sum[0] == chapter_num[0])
@@ -175,15 +176,13 @@ namespace Novel_Spider
                                 book.RemoveAt(0);
                                 chapter_num.RemoveAt(0);
                                 chapter_sum.RemoveAt(0);
-                                MethodInvoker mi = new MethodInvoker(() =>
-                                {
+                             
                                     download_progress = 100;
 
                                     listBox1.Items.RemoveAt(0);
 
                                     if (chapter_sum.Count != 0)
                                         progressBar1.Value = 0;
-                                });
                                 //this.BeginInvoke(mi);
                             }
                         }
@@ -194,6 +193,12 @@ namespace Novel_Spider
             task2.Start();
             
         }
+
+        private void insertDownloadRecord(string name, string url ,string path)
+        {
+            throw new NotImplementedException();
+        }
+
         public void button2_Click(object sender, EventArgs e)
         {
             tag = false;

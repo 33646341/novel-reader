@@ -173,13 +173,13 @@ namespace UIdesign
             {
                 Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.Url);
                 List<chapter_list> lis = result.Item2;
-                //MessageBox.Show(lis[0].col_chapter_content);
+                MessageBox.Show(lis[1].col_chapter_content);
                 fiction_info li = result.Item1;
                 //MessageBox.Show(li.col_fiction_introduction);
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(/*li.col_fiction_introduction,*/emp.Id, emp.Name, emp.Author, emp.Url);   //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(lis,li);   //Login为窗口名，把要跳转的新窗口实例化
                     login1.Show();
                 });
             }).Start();
@@ -367,6 +367,9 @@ namespace UIdesign
                     {
                         loaded.Add(progress[0]);
                         progress.Remove(progress[0]);
+
+                        /// 放置数据库代码progress[0]，其中的四个属性
+
                     });
             }).Start();
         }
