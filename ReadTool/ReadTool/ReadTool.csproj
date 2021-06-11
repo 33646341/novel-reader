@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="chapter_comment.cs" />
     <Compile Include="this_chapter_list.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
