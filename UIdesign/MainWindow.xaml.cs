@@ -318,13 +318,19 @@ namespace UIdesign
             LV_loadedPage.ItemsSource = loaded;
             form.url = fic.Url;
             
-            new Thread(() =>
+            new Thread(() =>//后端添加到下载队列
             {
                 form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
-                form.button1_Click(sender, e);//下载按钮，开始下载
+                
             }).Start();
-        
-            new Thread(() =>//添加下载项
+            new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
+            {
+                if (progress == null)
+                {
+                    form.button1_Click(sender, e);
+                }
+        }).Start();
+            new Thread(() =>//前端添加下载项，无限制
             {
 
                 ProgressBarvalue fiction = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url); ;
@@ -338,17 +344,20 @@ namespace UIdesign
                 //    progress[0].Barvalue = form.barvalue;
                 //    Thread.Sleep(100);
                 //}
-                while (progress[0].Barvalue < 100)
-                {
-                    progress[0].Barvalue += 50;
-                    Thread.Sleep(5000);
-                }
+                
+            }).Start();
+            new Thread(() =>//前端下载进度显示，显示第一条
+            {
+                    while (progress[0].Barvalue < 100)
+                    {
+                        progress[0].Barvalue += 50;
+                        Thread.Sleep(5000);
+                    }
 
-                Dispatcher.Invoke(delegate ()
+                    Dispatcher.Invoke(delegate ()
                     {
                         loaded.Add(progress[0]);
                         progress.Remove(progress[0]);
-                        
                     });
             }).Start();
         }
