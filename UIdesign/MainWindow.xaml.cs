@@ -98,9 +98,10 @@ namespace UIdesign
             ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
             ShowProgress = Visibility.Visible;
-            //textstat(sender, "加载中");
+            textstat(sender, "加载中");
             new Thread(() =>
             {
+                
                 _fic_info = form.Search_Result();
                 if (_fic_info != null)
                 {
@@ -122,23 +123,21 @@ namespace UIdesign
                         });
                     }
                     ShowProgress = Visibility.Collapsed;
+                    //textstat(sender, "就绪");
                 }
                 else
                 {
                     ShowProgress = Visibility.Collapsed;
-                    MessageBox.Show("Fault");
+                    //textstat(sender, "无结果！");
                 }
 
                 
             }).Start();
-            //textstat(sender, "就绪");
-
         }
         public void textstat(object sender,string stat)
         {
-            var fe = (FrameworkElement)sender;
+            //var fe = (FrameworkElement)sender;
             BindingOperations.ClearBinding(search_stat, TextBlock.TextProperty);
-            //make a new source
             var myDataObject = new MyData(stat);
             var myBinding = new Binding("MyDataProperty") { Source = myDataObject };
             search_stat.SetBinding(TextBlock.TextProperty, myBinding);
@@ -274,6 +273,7 @@ namespace UIdesign
         #region 书架页
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+
             List<Student> stuList = new List<Student>()
             {
                 new Student() { Id = 0, Name = "Tim", Age = 29 },
@@ -305,37 +305,33 @@ namespace UIdesign
         }
 
         #endregion
-
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
         Novel_Spider.Form1 form = new Novel_Spider.Form1();
         
         private void Down_Load(object sender, RoutedEventArgs e,Fiction fic)
         {
-            Conmenu = Visibility.Collapsed;
             //form.url = "https://www.biquzhh.com/29719_29719087/";
             form.url = fic.col_fiction_url;
-            form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
-            form.button1_Click(sender, e);//下载按钮，开始下载
-                                          // form.button2_Click(sender, e);//暂停按钮
-                                          // MessageBox.Show($"{form.download_progress}");
-                                          //MessageBox.Show(form.book[0]);
+            new Thread(() =>
+            {
+                form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
+                form.button1_Click(sender, e);//下载按钮，开始下载
+                
+            }).Start();
             ObservableCollection<ProgressBarvalue> progress = new ObservableCollection<ProgressBarvalue>()
             {
                 new ProgressBarvalue(fic.col_fiction_name,form.barvalue)
             };
             this.LV_DwnPage.ItemsSource = progress;//刷新数据源
-
             new Thread(() =>
             {
                 while (form.barvalue < 100)
-                {
-                    //MessageBox.Show($"{form.barvalue}");
+                { 
                     progress[0].Barvalue = form.barvalue;
-                    //LV_DwnPage.ItemsSource = null;//刷新数据源
-                    //LV_DwnPage.ItemsSource = progress;//刷新数据源
                     Thread.Sleep(100);
                 }
+
             }).Start();
 
         }
@@ -350,7 +346,8 @@ namespace UIdesign
             MessageBox.Show("Delete!");
         }   //打开新窗口
         #endregion
-
+        #region 设置页
+        #endregion
 
     }
     #region 数据源
