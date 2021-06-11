@@ -187,12 +187,14 @@
             <Image Grid.Column="3" Source="img\fullscreen.png" HorizontalAlignment="Stretch" Height="39" Margin="104,30,104,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.714,0.658"/>
 
         </Grid>
-        <Grid x:Name="Grid1" Grid.Row="1" Background="#FFFFFF">
+        <Grid x:Name="Grid1" Grid.Row="1" Background="#FFFFFF" RenderTransformOrigin="0.27,0.183">
 
-
-            <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,29,42.333,-14.333"  VerticalAlignment="Top" Height="578" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Content="test"/>
+            <ScrollViewer>
+                <Label x:Name="label1" HorizontalAlignment="Stretch" Margin="44,73,42.333,-14.333"  VerticalAlignment="Top" Height="534" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC"/>
+            </ScrollViewer>
             <hc:ColorPicker x:Name="ColorPicker" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged1" Canceled="Canceled"/>
-            <hc:ColorPicker x:Name="ColorPicker1" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged2" Canceled="Canceled2"/>
-        </Grid>
+                <hc:ColorPicker x:Name="ColorPicker1" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged2" Canceled="Canceled2"/>
+                <TextBlock x:Name="textblock1" HorizontalAlignment="Left" Margin="49,18,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" FontSize="20" Height="57" Width="900"/>
+            </Grid>
     </Grid>
 </Window>

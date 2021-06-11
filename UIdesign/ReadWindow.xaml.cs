@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using OnlineSearchAndRead;
 
 namespace UIdesign
 {
@@ -19,11 +20,16 @@ namespace UIdesign
     /// </summary>
     public partial class ReadWindow : Window
     {
-        public ReadWindow(string number,string name,string content,int propotion)
+        public ReadWindow(string url,string number,string name,string content,int propotion)
         {
+            get_chapter_content g = new get_chapter_content();
             InitializeComponent();
-            label1.Content = content;
+            string url1 = "https://www.biquzhh.com" + url;
+            label1.Content = g.Get_Chapter_Content(url1);
             ProgressBar1.Value = propotion;
+            textblock1.Text = number + " " + name;
+            
+
         }
         private void SelectedColorChanged1(object sender, RoutedEventArgs e)
         {

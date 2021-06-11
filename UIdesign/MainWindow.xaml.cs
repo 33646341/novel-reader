@@ -164,7 +164,7 @@ namespace UIdesign
             {
                 Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.Url);
                 List<chapter_list> lis = result.Item2;
-                MessageBox.Show(lis[1].col_chapter_content);
+                //MessageBox.Show(lis[1].col_chapter_content);
                 fiction_info li = result.Item1;
                 //MessageBox.Show(li.col_fiction_introduction);
                 ShowProgress = Visibility.Collapsed;
