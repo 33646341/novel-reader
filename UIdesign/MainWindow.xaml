@@ -42,7 +42,15 @@
                 <StackPanel >
                     <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
                         <Label Content="C#R" VerticalAlignment="Bottom" Width="126" Height="72"/>
-                        <TextBox x:Name="keySearch" Width="816" Text="唐家三少"  VerticalAlignment="Bottom" Height="73" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged"/>
+                        <TextBox x:Name="keySearch" Width="816" FontStyle="Italic" VerticalAlignment="Bottom" Height="73" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged">
+                            <TextBox.Resources>
+                                <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
+                                    <VisualBrush.Visual>
+                                        <TextBlock FontStyle="Italic" Text="请输入关键词" />
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </TextBox.Resources>
+                        </TextBox>
                         <Button x:Name="searchBtn" Style="{StaticResource ButtonPrimary}" Width="156" Content="搜索" Height="72" FontSize="20" Click="Button_Click"/>
                     </WrapPanel>
                     <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->

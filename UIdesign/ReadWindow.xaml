@@ -136,7 +136,7 @@
                                       *"/>
                     <ColumnDefinition Width="7*"/>
                 </Grid.ColumnDefinitions>
-                <ProgressBar  Style="{DynamicResource ProgressBarPrimaryStripe}" x:Name="ProgressBar1" HorizontalAlignment="Left" Height="24" Margin="98,17,0,0" VerticalAlignment="Top" Width="532" Grid.ColumnSpan="2" Visibility="Visible" Background="#FFFFFF"/>
+                <ProgressBar  Style="{DynamicResource ProgressBarSuccess}" x:Name="ProgressBar1" HorizontalAlignment="Left" Height="24" Margin="98,17,0,0" VerticalAlignment="Top" Width="532" Grid.ColumnSpan="2" Visibility="Visible" Background="#FFFFFF"/>
                 <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="35" Margin="10,11,0,13.333" TextWrapping="Wrap" Text="阅读进度" VerticalAlignment="center" Width="80" BorderBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="#FFF6F5F5" FontSize="15" Background="{x:Null}" SelectionBrush="{x:Null}"/>
 
             </Grid>
