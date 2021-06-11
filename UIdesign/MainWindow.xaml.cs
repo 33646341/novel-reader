@@ -20,6 +20,7 @@ using System.Threading;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using HtmlAgilityPack;
+using System.Windows.Media.Animation;
 
 namespace UIdesign
 {
@@ -57,8 +58,8 @@ namespace UIdesign
             #region
             DataContext = this;
             #endregion
-            
-            
+
+
         }
         #region 控件函数定义
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -93,22 +94,37 @@ namespace UIdesign
         ObservableCollection<ProgressBarvalue> _ltfi_Search = new ObservableCollection<ProgressBarvalue>();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-           
+
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
             List<fiction_info> _fic_info;
             // 不使用List类型，可实现自动刷新而不必切换源
-            
+
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
             ShowProgress = Visibility.Visible;
             //textstat(sender, "加载中");
             new Thread(() =>
             {
-                
+
                 _fic_info = form.Search_Result();
                 if (_fic_info != null)
                 {
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        _ltfi_Search.Clear();
+                        searchPanel.Visibility = Visibility.Collapsed;
+                        searchPanel2.Visibility = Visibility.Collapsed;
+                        DockPanel.SetDock(searchPanel, Dock.Top);
+                        searchPanel.Visibility = Visibility.Visible;
+                        searchPanel2.Visibility = Visibility.Visible;
+                    });
+                    //Thread.Sleep(2000);
+                    //Dispatcher.Invoke(delegate ()
+                    //{
+
+                    //});
+
                     for (int i = 0; i < _fic_info.Count; i++)
                     {
                         var fiction_i = new ProgressBarvalue()
@@ -127,13 +143,13 @@ namespace UIdesign
                         });
                     }
                     ShowProgress = Visibility.Collapsed;
-                    
+
                     //加载一个空的小说详情页网站，提高再次访问时速度
                     HtmlWeb _web_Main = new HtmlWeb();
                     _web_Main.OverrideEncoding = Encoding.GetEncoding("gb2312");
                     HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
                     _doc_Main = _web_Main.Load("https://www.biquzhh.com/13_13134/");
-                    
+
                     //textstat(sender, "就绪");
                 }
                 else
@@ -142,7 +158,7 @@ namespace UIdesign
                     //textstat(sender, "无结果！");
                 }
 
-                
+
             }).Start();
         }
         //public void textstat(object sender,string stat)
@@ -160,7 +176,7 @@ namespace UIdesign
             //toinfopage(sender);
             ProgressBarvalue emp = (sender as ListViewItem).Content as ProgressBarvalue;
             toinfopage(emp);
-           
+
         }   //打开新窗口
         private void toinfopage(ProgressBarvalue emp)
         {
@@ -179,7 +195,7 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis,li);   //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(lis, li);   //Login为窗口名，把要跳转的新窗口实例化
                     login1.Show();
                 });
             }).Start();
@@ -263,7 +279,7 @@ namespace UIdesign
         #region 右键功能
         public void InfoPage(object sender, RoutedEventArgs e)
         {
-            object sen= this.Lv_HomePage.SelectedItems[0];
+            object sen = this.Lv_HomePage.SelectedItems[0];
             ProgressBarvalue emp = sen as ProgressBarvalue;
             toinfopage(emp);
         }
@@ -280,7 +296,7 @@ namespace UIdesign
             new Thread(() =>//前端添加下载项，无限制
             {
                 ProgressBarvalue bok = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url);
-                
+
                 Dispatcher.Invoke(delegate ()
                 {
                     boksf.Add(bok);
@@ -290,7 +306,7 @@ namespace UIdesign
         }
         public void DownLoadBook(object sender, RoutedEventArgs e)
         {
-            
+
             object sen = this.Lv_HomePage.SelectedItems[0];
             ProgressBarvalue emp = sen as ProgressBarvalue;
             Down_Load(sender, e, emp);
@@ -299,7 +315,7 @@ namespace UIdesign
         #endregion
         #endregion
         #region 书架页
-        
+
 
         #endregion
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
@@ -308,9 +324,9 @@ namespace UIdesign
         ObservableCollection<ProgressBarvalue> progress = new ObservableCollection<ProgressBarvalue>();
         ObservableCollection<ProgressBarvalue> loaded = new ObservableCollection<ProgressBarvalue>();
         bool is_prepared = false;
-        private void Down_Load(object sender, RoutedEventArgs e,ProgressBarvalue fic)
+        private void Down_Load(object sender, RoutedEventArgs e, ProgressBarvalue fic)
         {
-         
+
             LV_DwnPage.ItemsSource = progress;//绑定数据源
             LV_loadedPage.ItemsSource = loaded;
             form.url = fic.Url;
@@ -322,7 +338,7 @@ namespace UIdesign
             }).Start();
             new Thread(() =>//前端添加下载项，无限制
             {
-                ProgressBarvalue fiction=new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url);
+                ProgressBarvalue fiction = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url);
                 if (progress != null)
                 {
 
@@ -331,7 +347,7 @@ namespace UIdesign
                 Dispatcher.Invoke(delegate ()
                 {
                     progress.Add(fiction);
-                    
+
                 });
 
             }).Start();
@@ -341,7 +357,7 @@ namespace UIdesign
 
             new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
             {
-            if (is_prepared == true)
+                if (is_prepared == true)
                 {
                     is_prepared = false;
                     Dispatcher.Invoke(delegate ()
@@ -351,7 +367,7 @@ namespace UIdesign
                     });
                     form.button1_Click(sender, e);
                 }
-                
+
 
 
             }).Start();
@@ -360,7 +376,7 @@ namespace UIdesign
             {
                 //MessageBox.Show($"{form.barvalue}");
 
-                while (form.barvalue <100)
+                while (form.barvalue < 100)
                 {
                     MessageBox.Show($"{form.barvalue}");
                     progress[0].Barvalue = form.barvalue;
@@ -436,7 +452,7 @@ namespace UIdesign
                 OnPropertyChanged(Url);
             }
         }
-        public ProgressBarvalue(string na,double va,string author,string url)
+        public ProgressBarvalue(string na, double va, string author, string url)
         {
             fic_name = na;
             barvalue = va;

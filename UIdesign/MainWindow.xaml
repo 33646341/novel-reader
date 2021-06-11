@@ -33,22 +33,50 @@
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="5">
 
             <TabItem x:Name="Homepg_item" Header="首页" IsSelected="True" FontSize="24" Width="255" >
-                <StackPanel >
-                    <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
-                        <Label Content="C#R" VerticalAlignment="Bottom" Width="126" Height="72"/>
-                        <TextBox x:Name="keySearch" Width="816" FontStyle="Italic" VerticalAlignment="Bottom" Height="73" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged">
-                            <TextBox.Resources>
-                                <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
-                                    <VisualBrush.Visual>
-                                        <TextBlock FontStyle="Italic" Text="请输入关键词" />
-                                    </VisualBrush.Visual>
-                                </VisualBrush>
-                            </TextBox.Resources>
-                        </TextBox>
-                        <Button x:Name="searchBtn" Style="{StaticResource ButtonPrimary}" Width="156" Content="搜索" Height="72" FontSize="20" Click="Button_Click"/>
-                    </WrapPanel>
+                <DockPanel>
+                    <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade">
+                        <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
+                            <Label Content="小说" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53"/>
+                            <TextBox x:Name="keySearch" Margin="10" Width="800" VerticalAlignment="Center" Height="53" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged">
+                                <TextBox.Resources>
+                                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="Uniform" AlignmentX="Left" >
+                                        <VisualBrush.Visual>
+                                            <TextBlock FontStyle="Italic" Text="请输入关键词" />
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </TextBox.Resources>
+                            </TextBox>
+                            <Button x:Name="searchBtn" Margin="0,10" Style="{StaticResource ButtonPrimary}" Width="150" Content="搜索" Height="52" FontSize="20" Click="Button_Click"/>
+
+                        </WrapPanel>
+                    </hc:TransitioningContentControl>
+
+
                     <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
-                    <ListView x:Name="Lv_HomePage" 
+                    <hc:TransitioningContentControl x:Name="searchPanel2" TransitionMode="Top2BottomWithFade">
+                        <DataGrid x:Name="Lv_HomePage" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Bar}" hc:DataGridAttach.ShowRowNumber="True">
+                            <DataGrid.Columns>
+                                <!--<DataGridTemplateColumn Width="60" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding ImgPath}" Width="32" Height="32" Stretch="Uniform"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                                <DataGridTextColumn Binding="{Binding Name}" Width="500" Header="小说名称" IsReadOnly="True"/>
+                                <DataGridTextColumn Binding="{Binding Author}" Header="作者" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                            <DataGrid.ContextMenu >
+                                <ContextMenu Visibility="{Binding Conmenu}">
+                                    <MenuItem Header="查看详情" Click="InfoPage"/>
+                                    <MenuItem Header="添加书架" Click="BookShelf"/>
+                                    <MenuItem Header="添加下载" Click="DownLoadBook"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                        </DataGrid>
+                    </hc:TransitioningContentControl>
+
+                    <!--<ListView x:Name="Lv_HomePage" 
                               Background="#FFF1ECEC" 
                               SelectionChanged="ListView_SelectionChanged" 
                               ItemsSource="{Binding Source={StaticResource Bar}}"
@@ -75,8 +103,8 @@
                                 <MenuItem Header="添加下载" Click="DownLoadBook"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
-                    </ListView>
-                </StackPanel>
+                    </ListView>-->
+                </DockPanel>
             </TabItem>
             <TabItem Header="下载" IsSelected="True" FontSize="24" Width="255">
                 <Grid>
@@ -143,7 +171,7 @@
                                 </ListView>
                             </StackPanel>
                         </TabItem>
-                        
+
                     </TabControl>
                 </Grid>
             </TabItem>
@@ -192,7 +220,7 @@
         </TabControl>
         <Button  x:Name="Dwn_start" Content="开始下载" Grid.Row="4"  FontSize="30" Grid.Column="0"  Width="278" Height="61" Click="Dwn_start_Click"></Button>
         <Button  x:Name="Dwn_stop" Content="停止下载" Grid.Row="4"  FontSize="30" Grid.Column="1"   Width="278" Height="61" Click="Dwn_stop_Click"></Button>
-        <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="BlueViolet" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />
+        <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="{StaticResource PrimaryBrush}" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />
         <!--TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></-->
     </Grid>
 </Window>
