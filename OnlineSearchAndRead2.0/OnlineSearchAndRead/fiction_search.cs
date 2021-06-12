@@ -13,15 +13,16 @@ namespace OnlineSearchAndRead
     {
         string _url_Search = "https://so.biqusoso.com/s.php?ie=utf-8&siteid=zanghaihuatxt.com&q=";//https://sou.xanbhx.com/search?siteid=qula&q=
         string _str_KeyWord = "";
-        public fiction_search() {
+        public fiction_search()
+        {
 
             // 本地调试开始
             var localServerResult = NovelManager.Settings.ReadSetting("tempNovelsWeb", out string localServer);
             if (!localServerResult)
             {
                 NovelManager.Settings.AddUpdateAppSettings("tempNovelsWeb", "https://static.avosapps.us/novels.htm?");
-                NovelManager.Settings.AddUpdateAppSettings("tempNovelsWeb", "..\..\..\HTMLCache\novels.htm");
-                
+                NovelManager.Settings.AddUpdateAppSettings("tempNovelsWeb", @"..\..\..\HTMLCache\novels.htm");
+
                 NovelManager.Settings.ReadSetting("tempNovelsWeb", out localServer);
             }
             if (localServer != "")
@@ -54,7 +55,7 @@ namespace OnlineSearchAndRead
             try
             {
                 HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
-                _doc_Main.Load(_url_Search);
+                _doc_Main.Load(_url_Search,Encoding.UTF8);
 
                 //_doc_Main = _web_Main.Load(_url_Search + _str_KeyWord);
                 //判断是否有数据
@@ -94,7 +95,7 @@ namespace OnlineSearchAndRead
                         _tfi.col_update_chapter = _hnc_Update_Chapter_URL[0].InnerText;
                         _tfi.col_update_chapter_url = _hnc_Update_Chapter_URL[0].Attributes["href"].Value;
                         //后面会用到链接，点击获得得到对应的文章
-                        
+
                     }
                     //获取小说作者
                     HtmlNodeCollection _hnc_Fiction_Author = _doc_One.DocumentNode.SelectNodes("//span[starts-with(@class,'s4')]");
@@ -122,12 +123,12 @@ namespace OnlineSearchAndRead
                     }
                     _tfi.col_fiction_source = "笔趣阁";
 
-                    if(_tfi.col_fiction_stata !="连载"&& _tfi.col_fiction_stata != "完成")
+                    if (_tfi.col_fiction_stata != "连载" && _tfi.col_fiction_stata != "完成")
                         _ltfi_ret.Add(_tfi);
                 }
                 return _ltfi_ret;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 System.Windows.Forms.MessageBox.Show(e.Message);
                 return null;
@@ -145,7 +146,7 @@ namespace OnlineSearchAndRead
         }
 
 
-      
+
     }
 
 }
