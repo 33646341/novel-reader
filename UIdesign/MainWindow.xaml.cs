@@ -21,13 +21,17 @@ using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using HtmlAgilityPack;
 using System.Windows.Media.Animation;
+using HandyControl.Data;
+using HandyControl.Themes;
+using HandyControl.Tools;
+using HandyControl.Controls;
 
 namespace UIdesign
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : System.Windows.Window, INotifyPropertyChanged
     {
         #region 加载圈相关
         public event PropertyChangedEventHandler PropertyChanged;
@@ -173,11 +177,15 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //toinfopage(sender);
-            ProgressBarvalue emp = (sender as ListViewItem).Content as ProgressBarvalue;
+            object Item = Lv_HomePage.SelectedItems[0];
+            ProgressBarvalue emp = Item as ProgressBarvalue;
             toinfopage(emp);
 
-        }   //打开新窗口
+            ////toinfopage(sender);
+            //ProgressBarvalue emp = (sender as ListViewItem)?.Content as ProgressBarvalue;
+            //toinfopage(emp);
+        }   
+        //打开新窗口
         private void toinfopage(ProgressBarvalue emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
@@ -187,6 +195,19 @@ namespace UIdesign
             ShowProgress = Visibility.Visible;
             new Thread(() =>
             {
+                // 本地调试开始
+                var localServerResult = Settings.ReadSetting("tempChaptersWeb", out string localServer);
+                if (!localServerResult)
+                {
+                    Settings.AddUpdateAppSettings("tempChaptersWeb", "https://static.avosapps.us/chapters.htm");
+                    Settings.ReadSetting("tempChaptersWeb", out localServer);
+                }
+                if (localServer != "")
+                {
+                    //////////////////////////////emp.Url = localServer;
+                }
+                // 本地调试结束
+
                 Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.Url);
                 List<chapter_list> lis = result.Item2;
                 //MessageBox.Show(lis[1].col_chapter_content);
@@ -378,7 +399,7 @@ namespace UIdesign
 
                 while (form.barvalue < 100)
                 {
-                    MessageBox.Show($"{form.barvalue}");
+                    //MessageBox.Show($"{form.barvalue}");
                     progress[0].Barvalue = form.barvalue;
                     Thread.Sleep(100);
                 }
@@ -406,7 +427,43 @@ namespace UIdesign
 
 
 
+
+
+        // 2021.6.12 新增
+        /// <summary>
+        /// 切换主题
+        /// </summary>
+        /// <param name="skin"></param>
+        public void UpdateSkin(SkinType skin)
+        {
+            SharedResourceDictionary.SharedDictionaries.Clear();
+            Resources.MergedDictionaries.Add(ResourceHelper.GetSkin(skin));
+            Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("pack://application:,,,/HandyControl;component/Themes/Theme.xaml")
+            });
+            this?.OnApplyTemplate();
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            var theme = (sender as RadioButton)?.Content.ToString();
+            Growl.InfoGlobal(theme);
+            switch (theme)
+            {
+                case "天蓝主题":
+                    UpdateSkin(SkinType.Default);
+                    break;
+                case "紫色主题":
+                    UpdateSkin(SkinType.Violet);
+                    break;
+            }
+        }
     }
+
+
+
+
     #region 数据源
     public class Student
     {

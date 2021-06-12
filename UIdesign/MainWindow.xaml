@@ -34,7 +34,7 @@
 
             <TabItem Header="首页" IsSelected="True" FontSize="24" Width="255" >
                 <DockPanel>
-                    <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade">
+                    <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade" Width="1110">
                         <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
                             <Label Content="小说" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53"/>
                             <TextBox x:Name="keySearch" Margin="10" Width="800" VerticalAlignment="Center" Height="53" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged">
@@ -54,8 +54,9 @@
 
                     <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
                     <hc:TransitioningContentControl x:Name="searchPanel2" TransitionMode="Top2BottomWithFade">
-                        <DataGrid x:Name="Lv_HomePage" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource Bar}}" hc:DataGridAttach.ShowRowNumber="True">
+                        <DataGrid x:Name="Lv_HomePage" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource Bar}}" hc:DataGridAttach.ShowRowNumber="True" MouseDoubleClick="SListView_ItemDoubleClick">
                             <DataGrid.Columns>
+                                
                                 <!--<DataGridTemplateColumn Width="60" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -66,7 +67,7 @@
                                 <DataGridTextColumn Binding="{Binding Name}" Width="500" Header="小说名称" IsReadOnly="True"/>
                                 <DataGridTextColumn Binding="{Binding Author}" Header="作者" IsReadOnly="True"/>
                             </DataGrid.Columns>
-                            <DataGrid.ContextMenu >
+                            <DataGrid.ContextMenu>
                                 <ContextMenu Visibility="{Binding Conmenu}">
                                     <MenuItem Header="查看详情" Click="InfoPage"/>
                                     <MenuItem Header="添加书架" Click="BookShelf"/>
@@ -209,6 +210,16 @@
                 <Grid>
                     <Grid Height="200"  VerticalAlignment="Top" Margin="0,0,-0.4,0">
                         <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="0,0,659,159" />
+                        <UniformGrid Margin="22,0,0,0" Rows="1" Columns="8">
+                            <!--<hc:Interaction.Triggers>
+                                <hc:EventTrigger EventName="Checked">
+                                    <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
+                                </hc:EventTrigger>
+                            </hc:Interaction.Triggers>-->
+                            <RadioButton Checked="RadioButton_Checked" Margin="10,0,0,0" BorderThickness="1" hc:IconElement.Geometry="{StaticResource CalendarGeometry}" Style="{StaticResource RadioButtonIcon}" Content="天蓝主题"/>
+                            <RadioButton Checked="RadioButton_Checked" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="紫色主题"/>
+                        </UniformGrid>
+
                     </Grid>
                     <Grid HorizontalAlignment="Left" Height="156" Margin="0,205,-0.4,0" VerticalAlignment="Top" Width="794">
                         <Label Content="下载设置" Width="136" Height="44" FontSize="18" Margin="0,0,658,106"></Label>
@@ -220,7 +231,8 @@
         </TabControl>
         <Button  x:Name="Dwn_start" Content="开始下载" Grid.Row="4"  FontSize="30" Grid.Column="0"  Width="278" Height="61" Click="Dwn_start_Click"></Button>
         <Button  x:Name="Dwn_stop" Content="停止下载" Grid.Row="4"  FontSize="30" Grid.Column="1"   Width="278" Height="61" Click="Dwn_stop_Click"></Button>
-        <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="{StaticResource PrimaryBrush}" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />
+        
+        <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="{DynamicResource PrimaryBrush}" Grid.Row="3" Grid.ColumnSpan="4" Width="50" Height="50" RenderTransformOrigin="0.452,3.676" />
         <!--TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></-->
     </Grid>
 </Window>

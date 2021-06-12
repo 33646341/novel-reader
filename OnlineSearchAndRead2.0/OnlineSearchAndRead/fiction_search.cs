@@ -11,9 +11,27 @@ namespace OnlineSearchAndRead
 {
     public class fiction_search
     {
-        const string _url_Search = "https://so.biqusoso.com/s.php?ie=utf-8&siteid=zanghaihuatxt.com&q=";//https://sou.xanbhx.com/search?siteid=qula&q=
+        string _url_Search = "https://so.biqusoso.com/s.php?ie=utf-8&siteid=zanghaihuatxt.com&q=";//https://sou.xanbhx.com/search?siteid=qula&q=
         string _str_KeyWord = "";
-        public fiction_search() { }
+        public fiction_search() {
+
+            // 本地调试开始
+            var localServerResult = NovelManager.Settings.ReadSetting("tempNovelsWeb", out string localServer);
+            if (!localServerResult)
+            {
+                NovelManager.Settings.AddUpdateAppSettings("tempNovelsWeb", "https://static.avosapps.us/novels.htm?");
+                NovelManager.Settings.AddUpdateAppSettings("tempNovelsWeb", "..\..\..\HTMLCache\novels.htm");
+                
+                NovelManager.Settings.ReadSetting("tempNovelsWeb", out localServer);
+            }
+            if (localServer != "")
+            {
+                _url_Search = localServer;
+            }
+            // 本地调试结束
+
+
+        }
         public fiction_search(string _keyword)
         {
             _str_KeyWord = _keyword;
@@ -36,7 +54,9 @@ namespace OnlineSearchAndRead
             try
             {
                 HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
-                _doc_Main = _web_Main.Load(_url_Search + _str_KeyWord);
+                _doc_Main.Load(_url_Search);
+
+                //_doc_Main = _web_Main.Load(_url_Search + _str_KeyWord);
                 //判断是否有数据
                 if (_doc_Main.Text == "")
                     return null;
@@ -107,8 +127,9 @@ namespace OnlineSearchAndRead
                 }
                 return _ltfi_ret;
             }
-            catch
+            catch(Exception e)
             {
+                System.Windows.Forms.MessageBox.Show(e.Message);
                 return null;
             }
         }
