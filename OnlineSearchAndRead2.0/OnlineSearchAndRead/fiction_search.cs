@@ -55,9 +55,16 @@ namespace OnlineSearchAndRead
             try
             {
                 HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
-                _doc_Main.Load(_url_Search,Encoding.UTF8);
+                if (_url_Search.Contains("http"))
+                {
+                    _doc_Main = _web_Main.Load(_url_Search + _str_KeyWord);
+                }
+                else
+                {
+                    _doc_Main.Load(_url_Search, Encoding.UTF8);
+                }
 
-                //_doc_Main = _web_Main.Load(_url_Search + _str_KeyWord);
+
                 //判断是否有数据
                 if (_doc_Main.Text == "")
                     return null;
