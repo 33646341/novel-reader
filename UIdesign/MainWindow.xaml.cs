@@ -152,7 +152,7 @@ namespace UIdesign
                     HtmlWeb _web_Main = new HtmlWeb();
                     _web_Main.OverrideEncoding = Encoding.GetEncoding("gb2312");
                     HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
-                    _doc_Main = _web_Main.Load("https://www.biquzhh.com/13_13134/");
+                    //_doc_Main = _web_Main.Load("https://www.biquzhh.com/13_13134/");
 
                     //textstat(sender, "就绪");
                 }
