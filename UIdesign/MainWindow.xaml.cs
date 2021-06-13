@@ -177,14 +177,9 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            object Item = Lv_HomePage.SelectedItems[0];
-            ProgressBarvalue emp = Item as ProgressBarvalue;
-            toinfopage(emp);
-
-            ////toinfopage(sender);
-            //ProgressBarvalue emp = (sender as ListViewItem)?.Content as ProgressBarvalue;
-            //toinfopage(emp);
+            if (Lv_HomePage.SelectedItem is ProgressBarvalue emp) toinfopage(emp);
         }   
+
         //打开新窗口
         private void toinfopage(ProgressBarvalue emp)
         {
