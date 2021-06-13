@@ -62,9 +62,16 @@ namespace UIdesign
             #region
             DataContext = this;
             #endregion
-
+            DemoModel = new PropertyGridModel
+            {
+                Account_num = "000001",
+                Theme = Gender.天蓝色,
+                Reader_ID = "2019305232130",
+                
+            };
 
         }
+        
         #region 控件函数定义
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -73,9 +80,6 @@ namespace UIdesign
         private void textBoxId_TextChanged(object sender, TextChangedEventArgs e)
         {
 
-        }
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
         }
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -92,10 +96,17 @@ namespace UIdesign
         {
 
         }
+        private void content_key(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                this.Button_Click(sender, e);
+            }
+        }
         #endregion
         #region 首页
         #region 搜索按钮
-        ObservableCollection<ProgressBarvalue> _ltfi_Search = new ObservableCollection<ProgressBarvalue>();
+        ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
@@ -131,7 +142,7 @@ namespace UIdesign
 
                     for (int i = 0; i < _fic_info.Count; i++)
                     {
-                        var fiction_i = new ProgressBarvalue()
+                        var fiction_i = new Fiction()
                         {
                             Id = _fic_info[i].col_fiction_id,
                             Name = _fic_info[i].col_fiction_name,
@@ -177,11 +188,11 @@ namespace UIdesign
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (Lv_HomePage.SelectedItem is ProgressBarvalue emp) toinfopage(emp);
+            if (Lv_HomePage.SelectedItem is Fiction emp) toinfopage(emp);
         }   
 
         //打开新窗口
-        private void toinfopage(ProgressBarvalue emp)
+        private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
             get_homepage_content content = new get_homepage_content();
@@ -296,22 +307,22 @@ namespace UIdesign
         public void InfoPage(object sender, RoutedEventArgs e)
         {
             object sen = this.Lv_HomePage.SelectedItems[0];
-            ProgressBarvalue emp = sen as ProgressBarvalue;
+            Fiction emp = sen as Fiction;
             toinfopage(emp);
         }
         public void BookShelf(object sender, RoutedEventArgs e)
         {
             object sen = this.Lv_HomePage.SelectedItems[0];
-            ProgressBarvalue emp = sen as ProgressBarvalue;
+            Fiction emp = sen as Fiction;
             Add_Bksf(sender, e, emp);
         }
-        ObservableCollection<ProgressBarvalue> boksf = new ObservableCollection<ProgressBarvalue>();
-        private void Add_Bksf(object sender, RoutedEventArgs e, ProgressBarvalue fic)
+        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();
+        private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
             Boksf_lv.ItemsSource = boksf;
             new Thread(() =>//前端添加下载项，无限制
             {
-                ProgressBarvalue bok = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url);
+                Fiction bok = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
 
                 Dispatcher.Invoke(delegate ()
                 {
@@ -324,7 +335,7 @@ namespace UIdesign
         {
 
             object sen = this.Lv_HomePage.SelectedItems[0];
-            ProgressBarvalue emp = sen as ProgressBarvalue;
+            Fiction emp = sen as Fiction;
             Down_Load(sender, e, emp);
         }
 
@@ -337,10 +348,10 @@ namespace UIdesign
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
         Novel_Spider.Form1 form = new Novel_Spider.Form1();
-        ObservableCollection<ProgressBarvalue> progress = new ObservableCollection<ProgressBarvalue>();
-        ObservableCollection<ProgressBarvalue> loaded = new ObservableCollection<ProgressBarvalue>();
+        ObservableCollection<Fiction> progress = new ObservableCollection<Fiction>();
+        ObservableCollection<Fiction> loaded = new ObservableCollection<Fiction>();
         bool is_prepared = false;
-        private void Down_Load(object sender, RoutedEventArgs e, ProgressBarvalue fic)
+        private void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
         {
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
@@ -354,7 +365,7 @@ namespace UIdesign
             }).Start();
             new Thread(() =>//前端添加下载项，无限制
             {
-                ProgressBarvalue fiction = new ProgressBarvalue(fic.Name, form.barvalue, fic.Author, fic.Url);
+                Fiction fiction = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
                 if (progress != null)
                 {
 
@@ -415,6 +426,12 @@ namespace UIdesign
             form.button2_Click(sender, e);
             Dwn_start.IsEnabled = true;
         }
+
+        private void ItemClick(object sender, MouseButtonEventArgs e)
+        {
+            //Dwn_start.Visibility = Visibility.Visible;
+            //Dwn_stop.Visibility = Visibility.Visible;
+        }
         #endregion
         #region 设置页 设置存放路径
 
@@ -454,27 +471,49 @@ namespace UIdesign
                     break;
             }
         }
+        #region  设置模式
+        public class PropertyGridModel
+        {
+            [Category("Category1")]
+            public string Account_num { get; set; }
+
+            [Category("Category2")]
+            public int Integer { get; set; }
+
+            [Category("Category2")]
+            public string Reader_ID { get; set; }
+
+            [Category("Category1")]
+            public Gender Theme { get; set; }
+
+            public ImageSource DownLoadPath { get; set; }
+        }
+        public static readonly DependencyProperty DemoModelProperty = DependencyProperty.Register(
+            "DemoModel", typeof(PropertyGridModel), typeof(MainWindow), new PropertyMetadata(default(PropertyGridModel)));
+        public PropertyGridModel DemoModel
+        {
+            get => (PropertyGridModel)GetValue(DemoModelProperty);
+            set => SetValue(DemoModelProperty, value);
+        }
+
+        #endregion
+
+        
     }
 
 
 
 
     #region 数据源
-    public class Student
-    {
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Age { get; set; }
-    }
-    public class ProgressBarvalue : INotifyPropertyChanged
+    public class Fiction : INotifyPropertyChanged
     {
         private string fic_name;
         private double barvalue;
         private string fic_author;
         private string fic_url;
         private string id;
-        public ProgressBarvalue()
+        public Fiction()
         {
         }
         public string Author
@@ -504,7 +543,7 @@ namespace UIdesign
                 OnPropertyChanged(Url);
             }
         }
-        public ProgressBarvalue(string na, double va, string author, string url)
+        public Fiction(string na, double va, string author, string url)
         {
             fic_name = na;
             barvalue = va;
@@ -539,44 +578,11 @@ namespace UIdesign
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
-    //public class Fiction
-    //{
-    //    public string col_fiction_id { get; set; }
-    //    public string col_fiction_name { get; set; }
-    //    public string col_fiction_author { get; set; }
-    //    public string col_fiction_url { get; set; }
-
-    //}
-    public class MyData : INotifyPropertyChanged
+    
+    public enum Gender
     {
-        private string _myDataProperty;
-
-        public MyData()
-        {
-        }
-
-        public MyData(string txt)
-        {
-            _myDataProperty = txt;
-        }
-
-        public string MyDataProperty
-        {
-            get { return _myDataProperty; }
-            set
-            {
-                _myDataProperty = value;
-                OnPropertyChanged("MyDataProperty");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string info)
-        {
-            var handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
+        天蓝色,
+        浅紫色
     }
     #endregion
 
