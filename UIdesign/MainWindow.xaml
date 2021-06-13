@@ -32,7 +32,13 @@
         </Grid.ColumnDefinitions>
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="5">
 
-            <TabItem Header="首页" IsSelected="True" FontSize="24" Width="255" >
+            <TabItem IsSelected="True" FontSize="24" Width="255" >
+                <TabItem.Header>
+                    <WrapPanel>
+                        <Image Source="img\read.png" Width="24" Height="24"/>
+                        <TextBlock Text=" 首页"></TextBlock>
+                    </WrapPanel>
+                </TabItem.Header>
                 <DockPanel>
                     <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade" Width="1110">
                         <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
@@ -206,7 +212,13 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="设置" IsSelected="True" FontSize="24"  Width="255">
+            <TabItem IsSelected="True" FontSize="24"  Width="255">
+                <TabItem.Header>
+                    <WrapPanel>
+                        <Image Source="img\font.png" Width="24" Height="24"/>
+                        <TextBlock Text=" 设置"></TextBlock>
+                    </WrapPanel>
+                </TabItem.Header>
                 <Grid>
                     <Grid Height="200"  VerticalAlignment="Top" Margin="0,0,-0.4,0">
                         <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="0,0,659,159" />
