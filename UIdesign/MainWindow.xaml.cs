@@ -67,11 +67,28 @@ namespace UIdesign
                 账户名 = "000001",
                 主题 = Gender.天蓝色,
                 读者号 = "2019305232130",
-                
+
             };
 
+            LV_loadedPage.ItemsSource = loaded;
+
+            // 数据库开始
+            NovelDAL novelDAL = new NovelDAL();
+            foreach (var obj in novelDAL.getDownloadedNovels())
+            {
+                Fiction fiction = new Fiction()
+                {
+                    Id = obj[0].ToString(),
+                    Name = obj[1].ToString(),
+                    Author = obj[2].ToString(),
+                    Url = obj[3].ToString()
+                };
+                loaded.Add(fiction);
+            }
+            // 数据库结束
+
         }
-        
+
         #region 控件函数定义
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -189,7 +206,7 @@ namespace UIdesign
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (Lv_HomePage.SelectedItem is Fiction emp) toinfopage(emp);
-        }   
+        }
 
         //打开新窗口
         private void toinfopage(Fiction emp)
@@ -355,7 +372,6 @@ namespace UIdesign
         {
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
-            LV_loadedPage.ItemsSource = loaded;
             form.url = fic.Url;
             form.novel_name = fic.Name;
             new Thread(() =>//后端添加到下载队列
@@ -498,7 +514,7 @@ namespace UIdesign
 
         #endregion
 
-        
+
     }
 
 
@@ -578,7 +594,7 @@ namespace UIdesign
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
-    
+
     public enum Gender
     {
         天蓝色,

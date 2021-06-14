@@ -22,7 +22,7 @@ namespace NovelManager
             }
         }
 
-        private string dbName = @"..\..\..\..\ndb";
+        private string dbName = @"..\..\..\ndb";
         //private string dbName = @"D:\Richard\C#project\Test\ndb";
 
         public static void Main()
@@ -44,10 +44,20 @@ namespace NovelManager
             Console.ReadLine();
         }
 
+        public IEnumerable<SqliteDataReader> getDownloadedNovels()
+        {
+            return ExecuteReader($@"
+                SELECT `nid`,`name`,`author`,`url`
+                FROM novel
+                WHERE downloadPath is not NULL
+                order by nid
+            ");
+        }
+
         public IEnumerable<SqliteDataReader> getChapters(int nid)
         {
             return ExecuteReader($@"
-                SELECT `cno`,`cname`,`downloadPath`
+                SELECT cno,cname,downloadPath
                 FROM chapter
                 WHERE nid = {nid}
                 order by cno
