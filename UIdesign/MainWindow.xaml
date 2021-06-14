@@ -35,11 +35,11 @@
         </Grid.ColumnDefinitions>
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="5">
 
-            <TabItem IsSelected="True" FontSize="24" Width="255" >
+            <TabItem IsSelected="True" FontSize="20" Width="255" >
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\read.png" Width="24" Height="24"/>
-                        <TextBlock Text=" 首页"></TextBlock>
+                        <TextBlock FontSize="24" Text=" 首页"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <DockPanel>
@@ -87,20 +87,26 @@
                     </hc:TransitioningContentControl>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="下载" IsSelected="True" FontSize="24" Width="255" >
+            <TabItem IsSelected="True" Width="255" >
+                <TabItem.Header>
+                    <WrapPanel>
+                        <Image Source="img\read.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="24" Text=" 下载"></TextBlock>
+                    </WrapPanel>
+                </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="355*"/>
                         <ColumnDefinition Width="758*"/>
                     </Grid.ColumnDefinitions>
                     <TabControl Margin="0,0,9.6,-0.4" Grid.ColumnSpan="2">
-                        <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="24" Width="200">
+                        <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
                             <StackPanel>
                                 <ListView x:Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
                                           ItemsSource="{Binding Source={StaticResource Fic}}">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="小说名" Width="200">
+                                            <GridViewColumn Header="小说名" Width="300">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Grid>
@@ -125,7 +131,7 @@
                             </StackPanel>
 
                         </TabItem>
-                        <TabItem Header="已下载" IsSelected="True" FontSize="24" Width="200">
+                        <TabItem Header="已下载" IsSelected="True" FontSize="20" Width="200">
                             <StackPanel>
                                 <ListView x:Name="LV_loadedPage" 
                               Background="#FFF1ECEC" 
@@ -155,8 +161,8 @@
                         </TabItem>
 
                     </TabControl>
-                    <Button  x:Name="Dwn_stop" Content="停止下载"  FontSize="24" Grid.Column="1"  Height="43" Width="200" Click="Dwn_stop_Click" Margin="548.8,-1,9.6,623.6"/>
-                    <Button  x:Name="Dwn_start" Content="开始下载" FontSize="24" Grid.Column="1" Height="42" Width="200"  Click="Dwn_start_Click" Margin="348.8,0,209.6,623.6"/>
+                    <Button  x:Name="Dwn_stop" Content="停止下载" FontSize="20" Grid.Column="1"  Height="45" Width="200" Click="Dwn_stop_Click" Margin="548.8,-30,9.6,585"/>
+                    <Button  x:Name="Dwn_start" Content="开始下载" FontSize="20" Grid.Column="1" Height="45" Width="200"  Click="Dwn_start_Click" Margin="348.8,-30,209.6,585"/>
                 </Grid>
             </TabItem>
             <TabItem Header="书架" IsSelected="True" FontSize="24"  Width="255">
@@ -189,11 +195,11 @@
 
                 </Grid>
             </TabItem>
-            <TabItem IsSelected="True" FontSize="24"  Width="255">
+            <TabItem FontSize="18" IsSelected="True" Width="255">
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\font.png" Width="24" Height="24"/>
-                        <TextBlock Text=" 设置"></TextBlock>
+                        <TextBlock FontSize="24" Text=" 设置"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid>

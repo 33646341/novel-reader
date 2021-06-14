@@ -64,9 +64,9 @@ namespace UIdesign
             #endregion
             DemoModel = new PropertyGridModel
             {
-                Account_num = "000001",
-                Theme = Gender.天蓝色,
-                Reader_ID = "2019305232130",
+                账户名 = "000001",
+                主题 = Gender.天蓝色,
+                读者号 = "2019305232130",
                 
             };
 
@@ -475,16 +475,16 @@ namespace UIdesign
         public class PropertyGridModel
         {
             [Category("Category1")]
-            public string Account_num { get; set; }
-
-            [Category("Category2")]
-            public int Integer { get; set; }
-
-            [Category("Category2")]
-            public string Reader_ID { get; set; }
+            public string 账户名 { get; set; }
 
             [Category("Category1")]
-            public Gender Theme { get; set; }
+            public Gender 主题 { get; set; }
+
+            [Category("Category2")]
+            public int 数字 { get; set; }
+
+            [Category("Category2")]
+            public string 读者号 { get; set; }
 
             public ImageSource DownLoadPath { get; set; }
         }
