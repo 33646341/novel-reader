@@ -226,7 +226,7 @@ namespace Novel_Spider
         }
 
 
-        public void download_add(string url)
+        public void download_add(string url,string defined_path)
         {
             string html;
 
@@ -253,7 +253,7 @@ namespace Novel_Spider
                     Novel_Name = Novel_Name.Replace(except_char[i], "");
                 }
 
-                path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
+                path.Add(defined_path + "/Novel/" + Novel_Name);
 
 
                 Picture_Url = Regex.Match(html, "<meta property=\"og:image\" content=\"https://.*?/>").Value.Replace("<meta property=\"og:image\" content=\"", "").Replace("\"/>", "");
@@ -319,7 +319,7 @@ namespace Novel_Spider
 
                 chapter_num.Add(0);
 
-                download_picture(Picture_Url, Novel_Name);
+                download_picture(Picture_Url, Novel_Name,defined_path);
 
                 is_down = true;
             }
@@ -421,14 +421,14 @@ namespace Novel_Spider
             return html;
         }
 
-        public void download_picture(string Picture_url, string Novel_Name)
+        public void download_picture(string Picture_url, string Novel_Name,string defined_path)
             {
-                if (!Directory.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel_Picture"))
+                if (!Directory.Exists(defined_path + "/Novel_Picture"))
                 {
-                    Directory.CreateDirectory(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel_Picture");
+                    Directory.CreateDirectory(defined_path + "/Novel_Picture");
                 }
 
-                string fileName = System.AppDomain.CurrentDomain.BaseDirectory + "/Novel_Picture/" + Novel_Name + ".jpg";
+                string fileName = defined_path + "/Novel_Picture/" + Novel_Name + ".jpg";
 
                 //数据库开始
                 var novelDAL = new NovelManager.NovelDAL();
