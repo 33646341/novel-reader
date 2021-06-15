@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.IO.Compression;
+using System.Threading;
 using NovelManager;
 //using System.Data.SQLite;
 
@@ -357,6 +358,9 @@ namespace Novel_Spider
                     Novel_Name = Novel_Name.Replace(except_char[i], "");
                 }
 
+                    path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
+               
+
                 Picture_Url = Regex.Match(html, "<meta property=\"og:image\" content=\"https://.*?/>").Value.Replace("<meta property=\"og:image\" content=\"", "").Replace("\"/>", "");
 
                 // 数据库开始
@@ -371,9 +375,7 @@ namespace Novel_Spider
 
                 //novel_name1 = Novel_Name;//获取书名
 
-                path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
 
-                
                 if (!Directory.Exists(path[index]))
                 {
                     Directory.CreateDirectory(path[index]);
