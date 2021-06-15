@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UIdesign"
+        xmlns:data="clr-namespace:UIdesign"
+        xmlns:vm="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1120" WindowStartupLocation="CenterScreen"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
-
     <Window.Resources>
         <Style x:Key="ListItemstyle" TargetType="ListViewItem">
             <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
@@ -152,8 +153,9 @@
                                     </ListView.View>
                                     <ListView.ContextMenu >
                                         <ContextMenu Visibility="{Binding Conmenu}">
-                                            <MenuItem Header="查看详情" Click="InfoPage"/>
-                                            <MenuItem Header="添加书架" Click="BookShelf"/>
+                                            <MenuItem Header="查看详情" Click="Dwn_InfoPage"/>
+                                            <MenuItem Header="添加书架" Click="Dwn_BookShelf"/>
+                                            <MenuItem Header="删除本书" Click="Del_bk"/>
                                         </ContextMenu>
                                     </ListView.ContextMenu>
                                 </ListView>
@@ -167,32 +169,73 @@
             </TabItem>
             <TabItem Header="书架" IsSelected="True" FontSize="24"  Width="255">
                 <Grid x:Name="Boksf_grid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20"/>
-                    </Grid.RowDefinitions>
-                    <ListView x:Name="Boksf_lv" 
+                    <TabControl>
+                        <TabItem Header="Origion">
+                            <ListView x:Name="Boksf_lv" 
                               Background="#FFCEC4C4" 
                               SelectionChanged="Boksf_lv_SelectionChanged" 
                               Margin="0,43,-0.4,-660.2" RenderTransformOrigin="0.5,0.489"
                               ItemsSource="{Binding Source={StaticResource Fic}}"
                               >
-                        <ListView.View >
-                            <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
-                                <GridViewColumn x:Name="fict_name" DisplayMemberBinding=
+                                <ListView.View >
+                                    <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
+                                        <GridViewColumn x:Name="fict_name" DisplayMemberBinding=
                           "{Binding Path=Name}"  Header="小说名" Width="180"></GridViewColumn>
-                                <GridViewColumn x:Name="aut_name" DisplayMemberBinding=
+                                        <GridViewColumn x:Name="aut_name" DisplayMemberBinding=
                           "{Binding Path=Author}" Header="作者" Width="200"></GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                        <ListView.ContextMenu>
-                            <ContextMenu >
-                                <MenuItem Header="查看详情" Click="InfoPage"/>
-                                <MenuItem Header="移除书架" Click="BookShelf"/>
-                                <MenuItem Header="添加下载" Click="DownLoadBook"/>
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                    </ListView>
-
+                                    </GridView>
+                                </ListView.View>
+                                <ListView.ContextMenu>
+                                    <ContextMenu >
+                                        <MenuItem Header="查看详情" Click="Bok_InfoPage"/>
+                                        <MenuItem Header="移除书架" Click="RemoveBk"/>
+                                        <MenuItem Header="添加下载" Click="Bok_DownLoadBook"/>
+                                    </ContextMenu>
+                                </ListView.ContextMenu>
+                            </ListView>
+                        </TabItem>
+                        <TabItem Header="Test">
+                            <Grid>
+                                <Grid.Resources>
+                                    <vm:CardModel x:Key="Card"></vm:CardModel>
+                                </Grid.Resources>
+                                <Grid.DataContext>
+                                    <Binding Source="{StaticResource Card}"/>
+                                </Grid.DataContext>
+                                <ListBox x:Name="Boksf_lb" Margin="10,0,-0.4,0" BorderThickness="0" Style="{DynamicResource WrapPanelHorizontalListBox}" ItemsSource="{Binding Source={StaticResource Card}}" Height="612" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.406">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="data:CardModel">
+                                            <hc:Card Width="200" BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="8" Footer="{Binding Writer}">
+                                                <!--Card 的内容部分模板-->
+                                                <Border CornerRadius="4,4,0,0" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type hc:Card}}}">
+                                                    <Image  Source="{Binding Cover}" Stretch="Fill" Height="{Binding Path=Height,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Margin="0,0,0,0" >
+                                                        <hc:Magnifier.Instance>
+                                                            <hc:Magnifier Scale="6" HorizontalOffset="-16" VerticalOffset="-16"/>
+                                                        </hc:Magnifier.Instance>
+                                                    </Image>
+                                                </Border>
+                                                <!--Card 的尾部部分模板-->
+                                                <hc:Card.FooterTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Margin="10" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type Border}}}">
+                                                            <!--Card 的一级内容-->
+                                                            <TextBlock x:Name="Header" TextWrapping="NoWrap"  Style="{DynamicResource TextBlockLargeBold}" TextTrimming="CharacterEllipsis" 
+                                           Text="{Binding DataContext.Fiction,RelativeSource={RelativeSource AncestorType=hc:Card}}" 
+                                           HorizontalAlignment="Left"/>
+                                                            <!--Card 的二级内容-->
+                                                            <TextBlock TextWrapping="NoWrap" Style="{DynamicResource TextBlockDefault}" TextTrimming="CharacterEllipsis" 
+                                           Text="{Binding}" Margin="0,6,0,0"
+                                           HorizontalAlignment="Left"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </hc:Card.FooterTemplate>
+                                            </hc:Card>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
             <TabItem FontSize="18" IsSelected="True" Width="255">

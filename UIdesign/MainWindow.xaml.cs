@@ -123,10 +123,8 @@ namespace UIdesign
         #endregion
         #region 首页
         #region 搜索按钮
-        ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
@@ -164,7 +162,7 @@ namespace UIdesign
                             Id = _fic_info[i].col_fiction_id,
                             Name = _fic_info[i].col_fiction_name,
                             Author = _fic_info[i].col_fiction_author,
-                            Url = _fic_info[i].col_url_homepage
+                            Url = _fic_info[i].col_url_homepage,
                         };
                         //MessageBox.Show(_fic_info[i].col_url_homepage);
                         //Thread.Sleep(200);
@@ -320,7 +318,9 @@ namespace UIdesign
             dataView.Refresh();
         }
         #endregion
-        #region 右键功能
+        #endregion
+        #region 右键功能 查看详情，添加/移除/删除书架，添加/删除下载
+        #region 首页右键，查看详情，添加书架，添加下载
         public void InfoPage(object sender, RoutedEventArgs e)
         {
             object sen = this.Lv_HomePage.SelectedItems[0];
@@ -333,21 +333,6 @@ namespace UIdesign
             Fiction emp = sen as Fiction;
             Add_Bksf(sender, e, emp);
         }
-        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();
-        private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
-        {
-            Boksf_lv.ItemsSource = boksf;
-            new Thread(() =>//前端添加下载项，无限制
-            {
-                Fiction bok = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
-
-                Dispatcher.Invoke(delegate ()
-                {
-                    boksf.Add(bok);
-                });
-
-            }).Start();
-        }
         public void DownLoadBook(object sender, RoutedEventArgs e)
         {
 
@@ -355,18 +340,100 @@ namespace UIdesign
             Fiction emp = sen as Fiction;
             Down_Load(sender, e, emp);
         }
+        #endregion
+        #region 书架页右键 查看详情，移除书架，添加下载
+        public void Bok_InfoPage(object sender, RoutedEventArgs e)
+        {
+            object sen = this.Boksf_lv.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            toinfopage(emp);
+        }
+        public void RemoveBk(object sender, RoutedEventArgs e)
+        {
+            object sen = this.Boksf_lv.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Remove_Bksf(sender, e, emp);
+        }
+        public void Bok_DownLoadBook(object sender, RoutedEventArgs e)
+        {
+
+            object sen = this.Boksf_lv.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Down_Load(sender, e, emp);
+        }
 
         #endregion
+        #region 下载页右键 查看详情，添加书架，删除本书
+        public void Dwn_InfoPage(object sender, RoutedEventArgs e)
+        {
+            object sen = this.LV_loadedPage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            toinfopage(emp);
+        }
+        public void Del_bk(object sender, RoutedEventArgs e)
+        {
+            object sen = this.LV_loadedPage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Del_Loaded(sender, e, emp);
+        }
+        public void Dwn_BookShelf(object sender, RoutedEventArgs e)
+        {
+            object sen = this.LV_loadedPage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Add_Bksf(sender, e, emp);
+        }
         #endregion
-        #region 书架页
+        ObservableCollection<CardModel> boksf = new ObservableCollection<CardModel>();//书架页
+        ObservableCollection<Fiction> progress = new ObservableCollection<Fiction>();//正下载
+        ObservableCollection<Fiction> loaded = new ObservableCollection<Fiction>();//已下载
+        ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();//搜索页
+        private void Remove_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            //Boksf_lv.ItemsSource = boksf;
+            //new Thread(() =>//前端添加下载项，无限制
+            //{
+            //    Dispatcher.Invoke(delegate ()
+            //    {
+            //        boksf.Remove(fic);
+            //    });
 
+            //}).Start();
+        }
+        private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            get_homepage_content content = new get_homepage_content();
+            Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(fic.Url);
+            string urlposter = result.Item1.col_url_poster;
+            BitmapImage img = new BitmapImage(new Uri(urlposter));
+            CardModel bok = new CardModel() { Cover = img, Fiction = fic.Name, Writer = fic.Author };
+            
+            Boksf_lb.ItemsSource = boksf;
+            new Thread(() =>//前端添加下载项，无限制
+            {
+                Dispatcher.Invoke(delegate ()
+                {
+                    boksf.Add(bok);
+                });
 
-        #endregion
+            }).Start();
+        }
+        private void Del_Loaded(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            LV_loadedPage.ItemsSource = loaded;
+            new Thread(() =>//前端添加下载项，无限制
+            {
+                
+                Dispatcher.Invoke(delegate ()
+                {
+                    loaded.Remove(fic);
+                });
+
+            }).Start();
+        }
+        #endregion 
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
         Novel_Spider.Form1 form = new Novel_Spider.Form1();
-        ObservableCollection<Fiction> progress = new ObservableCollection<Fiction>();
-        ObservableCollection<Fiction> loaded = new ObservableCollection<Fiction>();
         bool is_prepared = false;
         private void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
         {
@@ -452,7 +519,6 @@ namespace UIdesign
         #region 设置页 设置存放路径
 
         #endregion
-
 
 
 
@@ -575,7 +641,6 @@ namespace UIdesign
                 OnPropertyChanged(Name);
             }
         }
-
         public double Barvalue
         {
             get { return barvalue; }
@@ -600,6 +665,54 @@ namespace UIdesign
         天蓝色,
         浅紫色
     }
+    public class CardModel
+    {
+        private string fiction;
+
+        private BitmapImage cover;
+        private string writer;
+        public string Writer
+        {
+            get { return writer; }
+            set
+            {
+                writer = value;
+                OnPropertyChanged(Writer);
+            }
+        }
+        
+        public BitmapImage Cover
+        {
+            get { return   cover; }
+            set
+            {
+                cover = value;
+                CoverPropertyChanged(nameof(Cover));
+            }
+        }
+        public string Fiction
+        {
+            get { return fiction; }
+            set
+            {
+                fiction = value;
+                OnPropertyChanged(Fiction);
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string info)
+        {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+        private void CoverPropertyChanged(string info)
+        {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+    }
+
+   
     #endregion
 
 }
