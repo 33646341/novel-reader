@@ -370,11 +370,8 @@ namespace Novel_Spider
                     novelDAL.addNovel(Novel_Name, book[index]);
                 }
                 var Novel_id = novelDAL.exsitsNovel(Novel_Name);
-                Console.WriteLine(Novel_id);
+                Console.WriteLine($"即将下载小说 nid={Novel_id}");
                 // 数据库结束
-
-                //novel_name1 = Novel_Name;//获取书名
-
 
                 if (!Directory.Exists(path[index]))
                 {

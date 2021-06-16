@@ -175,6 +175,38 @@ namespace UIdesign
                         {
                             _ltfi_Search.Add(fiction_i);
                         });
+
+                        // 预加载开始
+                        new Thread(() =>
+                        {
+                            get_homepage_content content = new get_homepage_content();
+                            Tuple<fiction_info, List<chapter_list>> result;
+                            // 先查快表
+                            if (!fictionResultCache.Keys.Contains(fiction_i))
+                            {
+                                result = content.TupleDetail(fiction_i.Url);
+                                fictionResultCache.Add(fiction_i, result); // 加入快表
+                                Console.WriteLine($"{fiction_i.Id} Done!");
+                                Dispatcher.Invoke(delegate ()
+                                {
+                                    if (fictionResultCache.Count < _fic_info.Count)
+                                    {
+
+                                        state.Content = $"{fictionResultCache.Count * 1.0 / _fic_info.Count}%";
+                                    }
+                                    else
+                                    {
+                                        state.Foreground = new SolidColorBrush(Colors.DarkGreen);
+                                        state.Content = $"完毕";
+                                    }
+
+
+                                });
+                            }
+                        }).Start();
+                        // 预加载结束
+
+
                     }
                     ShowProgress = Visibility.Collapsed;
 
@@ -211,6 +243,7 @@ namespace UIdesign
         }
 
         //打开新窗口
+        Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>> fictionResultCache = new Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>>();
         private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
@@ -233,7 +266,37 @@ namespace UIdesign
                 }
                 // 本地调试结束
 
-                Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.Url);
+
+                Tuple<fiction_info, List<chapter_list>> result;
+
+                //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
+                while (!fictionResultCache.Keys.Contains(emp))
+                {
+                    Thread.Sleep(100);
+                }
+                result = fictionResultCache[emp];
+                /*
+                // 先查快表
+                if (fictionResultCache.Keys.Contains(emp))
+                {
+                    result = fictionResultCache[emp];
+                }
+                else
+                {
+                    result = content.TupleDetail(emp.Url);
+                    try
+                    {
+                        fictionResultCache.Add(emp, result); // 加入快表
+
+                    }catch(Exception e)
+                    {
+                        HandyControl.Controls.MessageBox.Show(e.Message);
+                    }
+                }
+                // 查快表结束
+                */
+
+
                 List<chapter_list> lis = result.Item2;
                 //MessageBox.Show(lis[1].col_chapter_content);
                 fiction_info li = result.Item1;
@@ -414,7 +477,7 @@ namespace UIdesign
             CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author };
 
             Boksf_lb.ItemsSource = boksf;
-            
+
             boksf.Add(bok);
 
             new Thread(() =>
@@ -441,7 +504,7 @@ namespace UIdesign
             LV_loadedPage.ItemsSource = loaded;
             new Thread(() =>//前端添加下载项，无限制
             {
-                
+
                 Dispatcher.Invoke(delegate ()
                 {
                     loaded.Remove(fic);
@@ -465,41 +528,33 @@ namespace UIdesign
                 form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
                 is_prepared = true;
             }).Start();
-            new Thread(() =>//前端添加下载项，无限制
+
+            Fiction fiction = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
+            if (progress != null)
             {
-                Fiction fiction = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
-                if (progress != null)
-                {
+                fiction.Barvalue = 0;
+            }
 
-                    fiction.Barvalue = 0;
-                }
-                Dispatcher.Invoke(delegate ()
-                {
-                    progress.Add(fiction);
+            progress.Add(fiction);
 
-                });
 
-            }).Start();
+
         }
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
 
-            new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
+            if (is_prepared == true)
             {
-                if (is_prepared == true)
-                {
-                    is_prepared = false;
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        Dwn_start.IsEnabled = false;
-                        Dwn_stop.IsEnabled = true;
-                    });
-                    form.button1_Click(sender, e);
-                }
+                is_prepared = false;
+
+                Dwn_start.IsEnabled = false;
+                Dwn_stop.IsEnabled = true;
+
+                form.button1_Click(sender, e);
+            }
 
 
 
-            }).Start();
 
             new Thread(() =>//前端下载进度显示，显示第一条
             {
@@ -684,7 +739,7 @@ namespace UIdesign
         天蓝色,
         浅紫色
     }
-    public class CardModel: INotifyPropertyChanged
+    public class CardModel : INotifyPropertyChanged
     {
         private string fiction;
 
@@ -699,10 +754,10 @@ namespace UIdesign
                 OnPropertyChanged(Writer);
             }
         }
-        
+
         public BitmapImage Cover
         {
-            get { return   cover; }
+            get { return cover; }
             set
             {
                 cover = value;
@@ -731,7 +786,7 @@ namespace UIdesign
         }
     }
 
-   
+
     #endregion
 
 }

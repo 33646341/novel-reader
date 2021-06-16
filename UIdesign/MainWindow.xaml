@@ -46,7 +46,7 @@
                 <DockPanel>
                     <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade" Width="1110">
                         <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
-                            <Label Content="小说" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53"/>
+                            <Label x:Name="state" Content="小说" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53"/>
                             <TextBox x:Name="keySearch" Margin="10" Width="800" VerticalAlignment="Center" Height="53" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" KeyDown="content_key" >
                                 <TextBox.Resources>
                                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="Uniform" AlignmentX="Left" >
