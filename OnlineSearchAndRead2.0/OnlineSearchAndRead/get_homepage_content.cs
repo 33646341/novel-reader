@@ -162,7 +162,13 @@ namespace OnlineSearchAndRead
             try
             {
                 HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
-                _doc_Main = _web_Main.Load(_url_Homepage);
+                //http://www.zanghaihuatxt.com/book/goto/id/81642874
+                var URLid = _url_Homepage.Substring("http://www.zanghaihuatxt.com/book/goto/id/".Length);
+                var num_prefix = Regex.Match(URLid, @"(\d*)\d{3}").Groups[1].Value;
+                var wholeURL = "https://www.biquzhh.com/" + num_prefix + "_" + URLid + "/";
+                //System.Windows.Forms.MessageBox.Show(num_prefix + "_" + URLid);
+
+                _doc_Main = _web_Main.Load(wholeURL);
                 //判断是否有数据
                 if (_doc_Main.Text == "")
                     return null;
