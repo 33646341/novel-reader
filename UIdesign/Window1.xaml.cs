@@ -19,32 +19,32 @@ namespace UIdesign
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-   
+
     public partial class Window1 : Window
     {
 
         ObservableCollection<Chapterlist> alllist = new ObservableCollection<Chapterlist>();
-        string url="";
+        string url = "";
         public Window1(List<chapter_list> l1, fiction_info a)
         {
             InitializeComponent();
             Fiction_name.Text = a.col_fiction_name;
-            Author_name.Text = a.col_fiction_author+" | "+a.col_fiction_type;
-            Total_number.Text = $"小说 | "+a.col_fiction_stata;
+            Author_name.Text = a.col_fiction_author + " | " + a.col_fiction_type;
+            Total_number.Text = $"小说 | " + a.col_fiction_stata;
             this.detaillist.ItemsSource = alllist;
             this.introduction.Text = a.col_fiction_introduction;
             this.surfaceimg.Source = new BitmapImage(new Uri(a.col_url_poster));
-            
+
             for (int i = 0; i < l1.Count; i++)
             {
                 int l = 0;
-                string chapter_name="";
+                string chapter_name = "";
                 string chapter_number = "";
                 url = l1[i].col_chapter_url;
-                for (;l< l1[i].col_chapter_name.Length; l++)
+                for (; l < l1[i].col_chapter_name.Length; l++)
                 {
                     if (l1[i].col_chapter_name[l] == '章') break;
-                    if(l1[i].col_chapter_name[l] != '章'&&l== l1[i].col_chapter_name.Length-1)
+                    if (l1[i].col_chapter_name[l] != '章' && l == l1[i].col_chapter_name.Length - 1)
                     {
                         chapter_name = "断更";
                     }
@@ -54,22 +54,21 @@ namespace UIdesign
                     chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
                     chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
                 }
-                
+
                 var chapterlist1 = new Chapterlist()
                 {
-                    
+
                     number = chapter_number,
                     name = chapter_name,
                     content = l1[i].col_chapter_content
                 };
-                Dispatcher.Invoke(delegate ()
-                {
-                    alllist.Add(chapterlist1);
-                });
+
+                alllist.Add(chapterlist1);
+
             }
-            
+
         }
-        
+
 
         #region 立即阅读
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -78,7 +77,7 @@ namespace UIdesign
             var listsize = alllist.Count;
             MessageBox.Show(listsize.ToString());
             int propotion = 1;
-            ReadWindow readWindow1 = new ReadWindow(url,firstint.number,firstint.name,firstint.content,propotion);
+            ReadWindow readWindow1 = new ReadWindow(url, firstint.number, firstint.name, firstint.content, propotion);
             readWindow1.Show();
             this.Close();
         }
@@ -92,7 +91,7 @@ namespace UIdesign
             Console.WriteLine(listsize);
             //int index = this.detaillist.Items.IndexOf(emp);
             int propotion =  /*index*100 / listsize;*/80;
-            ReadWindow readWindow1 = new ReadWindow(url,emp.number,emp.name,emp.content,propotion);
+            ReadWindow readWindow1 = new ReadWindow(url, emp.number, emp.name, emp.content, propotion);
             readWindow1.Show();
         }
         #endregion

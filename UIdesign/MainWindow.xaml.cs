@@ -25,6 +25,8 @@ using HandyControl.Data;
 using HandyControl.Themes;
 using HandyControl.Tools;
 using HandyControl.Controls;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace UIdesign
 {
@@ -59,6 +61,8 @@ namespace UIdesign
         public MainWindow()
         {
             InitializeComponent();
+            keySearch.Focus();
+
             #region
             DataContext = this;
             #endregion
@@ -171,6 +175,38 @@ namespace UIdesign
                         {
                             _ltfi_Search.Add(fiction_i);
                         });
+
+                        // 预加载开始
+                        new Thread(() =>
+                        {
+                            get_homepage_content content = new get_homepage_content();
+                            Tuple<fiction_info, List<chapter_list>> result;
+                            // 先查快表
+                            if (!fictionResultCache.Keys.Contains(fiction_i))
+                            {
+                                result = content.TupleDetail(fiction_i.Url);
+                                fictionResultCache.Add(fiction_i, result); // 加入快表
+                                Console.WriteLine($"{fiction_i.Id} Done!");
+                                Dispatcher.Invoke(delegate ()
+                                {
+                                    if (fictionResultCache.Count < _fic_info.Count)
+                                    {
+
+                                        state.Content = $"{fictionResultCache.Count * 1.0 / _fic_info.Count}%";
+                                    }
+                                    else
+                                    {
+                                        state.Foreground = new SolidColorBrush(Colors.DarkGreen);
+                                        state.Content = $"完毕";
+                                    }
+
+
+                                });
+                            }
+                        }).Start();
+                        // 预加载结束
+
+
                     }
                     ShowProgress = Visibility.Collapsed;
 
@@ -207,6 +243,7 @@ namespace UIdesign
         }
 
         //打开新窗口
+        Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>> fictionResultCache = new Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>>();
         private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
@@ -229,7 +266,37 @@ namespace UIdesign
                 }
                 // 本地调试结束
 
-                Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(emp.Url);
+
+                Tuple<fiction_info, List<chapter_list>> result;
+
+                //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
+                while (!fictionResultCache.Keys.Contains(emp))
+                {
+                    Thread.Sleep(100);
+                }
+                result = fictionResultCache[emp];
+                /*
+                // 先查快表
+                if (fictionResultCache.Keys.Contains(emp))
+                {
+                    result = fictionResultCache[emp];
+                }
+                else
+                {
+                    result = content.TupleDetail(emp.Url);
+                    try
+                    {
+                        fictionResultCache.Add(emp, result); // 加入快表
+
+                    }catch(Exception e)
+                    {
+                        HandyControl.Controls.MessageBox.Show(e.Message);
+                    }
+                }
+                // 查快表结束
+                */
+
+
                 List<chapter_list> lis = result.Item2;
                 //MessageBox.Show(lis[1].col_chapter_content);
                 fiction_info li = result.Item1;
@@ -401,20 +468,35 @@ namespace UIdesign
         }
         private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
-            get_homepage_content content = new get_homepage_content();
-            Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(fic.Url);
-            string urlposter = result.Item1.col_url_poster;
-            BitmapImage img = new BitmapImage(new Uri(urlposter));
-            CardModel bok = new CardModel() { Cover = img, Fiction = fic.Name, Writer = fic.Author };
-            
-            Boksf_lb.ItemsSource = boksf;
-            new Thread(() =>//前端添加下载项，无限制
-            {
-                Dispatcher.Invoke(delegate ()
-                {
-                    boksf.Add(bok);
-                });
+            BitmapImage bi = new BitmapImage();
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            bi.BeginInit();
+            bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
+            bi.EndInit();
 
+            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author };
+
+            Boksf_lb.ItemsSource = boksf;
+
+            boksf.Add(bok);
+
+            new Thread(() =>
+            {
+                WebClient webClient = new WebClient();
+                var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
+                var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
+                var imageUrl = "";
+                if (matchResult.Success)
+                {
+                    imageUrl = matchResult.Groups[1].Value;
+                    //HandyControl.Controls.MessageBox.Show(imageUrl);
+
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        BitmapImage img = new BitmapImage(new Uri(imageUrl));
+                        bok.Cover = img;
+                    });
+                }
             }).Start();
         }
         private void Del_Loaded(object sender, RoutedEventArgs e, Fiction fic)
@@ -422,7 +504,7 @@ namespace UIdesign
             LV_loadedPage.ItemsSource = loaded;
             new Thread(() =>//前端添加下载项，无限制
             {
-                
+
                 Dispatcher.Invoke(delegate ()
                 {
                     loaded.Remove(fic);
@@ -450,41 +532,33 @@ namespace UIdesign
                 System.Windows.Forms.MessageBox.Show("添加成功！");
                 
             }).Start();
-            new Thread(() =>//前端添加下载项，无限制
+
+            Fiction fiction = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
+            if (progress != null)
             {
-                Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
-                if (progress != null)
-                {
+                fiction.Barvalue = 0;
+            }
 
-                    fiction.Barvalue = 0;
-                }
-                Dispatcher.Invoke(delegate ()
-                {
-                    progress.Add(fiction);
+            progress.Add(fiction);
 
-                });
 
-            }).Start();
+
         }
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
 
-            new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
+            if (is_prepared == true)
             {
-                if (is_prepared)
-                {
-                    is_prepared = false;
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        Dwn_start.IsEnabled = false;
-                        Dwn_stop.IsEnabled = true;
-                    });
-                    dwn.download_novel();
-                }
+                is_prepared = false;
+
+                Dwn_start.IsEnabled = false;
+                Dwn_stop.IsEnabled = true;
+
+                form.button1_Click(sender, e);
+            }
 
 
 
-            }).Start();
 
             new Thread(() =>//前端下载进度显示，显示第一条
             {
@@ -539,10 +613,8 @@ namespace UIdesign
 
         #endregion
 
-
-
-
         // 2021.6.12 新增
+        #region 切换主题
         /// <summary>
         /// 切换主题
         /// </summary>
@@ -572,6 +644,8 @@ namespace UIdesign
                     break;
             }
         }
+        #endregion
+
         #region  设置模式
         public class PropertyGridModel
         {
@@ -684,7 +758,7 @@ namespace UIdesign
         天蓝色,
         浅紫色
     }
-    public class CardModel
+    public class CardModel : INotifyPropertyChanged
     {
         private string fiction;
 
@@ -699,10 +773,10 @@ namespace UIdesign
                 OnPropertyChanged(Writer);
             }
         }
-        
+
         public BitmapImage Cover
         {
-            get { return   cover; }
+            get { return cover; }
             set
             {
                 cover = value;
@@ -731,7 +805,7 @@ namespace UIdesign
         }
     }
 
-   
+
     #endregion
 
 }
