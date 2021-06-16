@@ -40,16 +40,19 @@
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\home.png" Width="24" Height="24"/>
-                        <TextBlock FontSize="20" Text=" 首页"></TextBlock>
+                        <TextBlock FontSize="20" Text=" 首页" Foreground="#FF555555"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid>
-                    <Image x:Name="logo" Source="img\logo2.png" Margin="187,12,121,337.333"/>
+                    <hc:TransitioningContentControl TransitionMode="Top2BottomWithFade">
+                        <Image x:Name="logo" Source="img\logo4.png" Margin="-76,8,-71,322.667" />
+                    </hc:TransitioningContentControl>
+                    
                     <DockPanel>
                     <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade" Width="1110">
                         <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
-                            <Label x:Name="state" Content="小说" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53"/>
-                            <TextBox x:Name="keySearch" Margin="10" Width="800" VerticalAlignment="Center" Height="53" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" KeyDown="content_key" >
+                            <Label x:Name="state" Content="NOVEL" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53" BorderBrush="{x:Null}" Foreground="#FF555555"/>
+                            <TextBox x:Name="keySearch" Margin="10" Width="800" VerticalAlignment="Center" Height="48" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" KeyDown="content_key" >
                                 <TextBox.Resources>
                                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="Uniform" AlignmentX="Left" >
                                         <VisualBrush.Visual>
@@ -58,7 +61,7 @@
                                     </VisualBrush>
                                 </TextBox.Resources>
                             </TextBox>
-                            <Button x:Name="searchBtn" Margin="0,10" Style="{StaticResource ButtonPrimary}" Width="150" Content="搜索" Height="52" FontSize="20" Click="Button_Click"/>
+                            <Button x:Name="searchBtn" Margin="0,10" Style="{StaticResource ButtonPrimary}" Width="150" Content="搜 索" Height="52" FontSize="20" Click="Button_Click"/>
 
                         </WrapPanel>
                     </hc:TransitioningContentControl>
@@ -95,7 +98,7 @@
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\download.png" Width="24" Height="24"/>
-                        <TextBlock FontSize="20" Text=" 下载"></TextBlock>
+                        <TextBlock FontSize="20" Text=" 下载" Foreground="#FF555555"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid>
@@ -174,7 +177,7 @@
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\bookshelf.png" Width="24" Height="24"/>
-                        <TextBlock FontSize="20" Text=" 书架"></TextBlock>
+                        <TextBlock FontSize="20" Text=" 书架" Foreground="#FF555555"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid x:Name="Boksf_grid">
@@ -251,7 +254,7 @@
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\set.png" Width="24" Height="24"/>
-                        <TextBlock FontSize="20" Text=" 设置"></TextBlock>
+                        <TextBlock FontSize="20" Text=" 设置" Foreground="#FF555555"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid>

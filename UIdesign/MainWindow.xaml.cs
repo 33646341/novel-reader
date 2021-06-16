@@ -172,7 +172,8 @@ namespace UIdesign
 
             Dispatcher.Invoke(delegate ()
             {
-                state.Foreground = new SolidColorBrush(Colors.DarkCyan);
+                var color1 = (Color)ColorConverter.ConvertFromString("#3d6633");
+                state.Foreground = new SolidColorBrush(color1);
                 state.Content = $"Loading...";
 
             });
@@ -259,7 +260,8 @@ namespace UIdesign
                                     }
                                     else
                                     {
-                                        state.Foreground = new SolidColorBrush(Colors.DarkGreen);
+                                        var color1 = (Color)ColorConverter.ConvertFromString("#90c981");
+                                        state.Foreground = new SolidColorBrush(color1);
                                         state.Content = $"完毕";
                                         ShowProgress = Visibility.Collapsed;
 
