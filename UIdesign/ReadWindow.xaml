@@ -166,14 +166,14 @@
             </hc:SplitButton>
             <!--<Button Content="字体大小" Grid.Column="1" HorizontalAlignment="Left" Margin="82.333,78,0,-0.333" VerticalAlignment="Top" Width="93" Height="41" FontSize="15" Background="#FF5A5858" BorderBrush="#FF5A5858" Foreground="#FFF6F5F5" Click="Button_Click_2"/>-->
 
-            <hc:SplitButton Style="{StaticResource SplitButtonPrimary}" Grid.Column="1" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372" Width="173" Height="31">
+            <!--<hc:SplitButton Style="{StaticResource SplitButtonPrimary}" Grid.Column="1" Margin="28.333,79,28.333,9.667" Content="字体大小" HitMode="Hover" HorizontalAlignment="Stretch" RenderTransformOrigin="0.312,0.372" Width="173" Height="31">
                 <hc:SplitButton.DropDownContent>
                     <StackPanel>
                         <MenuItem Header="字体变大" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command1" Click="bigger_Click"/>
                         <MenuItem Header="字体变小" hc:IconElement.Geometry="{StaticResource SubGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command2" Click="smaller_Click"/>
                     </StackPanel>
                 </hc:SplitButton.DropDownContent>
-            </hc:SplitButton>
+            </hc:SplitButton>-->
 
 
 
@@ -195,22 +195,9 @@
 
         </Grid>
         <Grid x:Name="Grid1" Grid.Row="1" Background="#FFFFFF" RenderTransformOrigin="0.27,0.183">
+            <FlowDocumentReader x:Name="flowdocumentreader1" Document="{DynamicResource FlowDocumentDemo}" Margin="14,51,13.333,-3.333" Background="White"/>
 
-            <ScrollViewer>
-                <TabItem x:Name="TabItem1"    Height="471" RenderTransformOrigin="0.5,0.5" Width="955">
-                    <TabItem.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform AngleX="0.92"/>
-                            <RotateTransform/>
-                            <TranslateTransform X="3.984"/>
-                        </TransformGroup>
-                    </TabItem.RenderTransform>
-                    <FlowDocumentReader Document="{DynamicResource FlowDocumentDemo}" Width="640" Height="400" Margin="32"/>
-                </TabItem>
-
-            </ScrollViewer>
-            <Label x:Name="label1" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Height="4127" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Visibility="Collapsed"/>
+            <!--<Label x:Name="label1" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Height="3793" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Width="995" />-->
             <hc:ColorPicker x:Name="ColorPicker" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged1" Canceled="Canceled"/>
             <hc:ColorPicker x:Name="ColorPicker1" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged2" Canceled="Canceled2"/>
             <TextBlock x:Name="textblock1" HorizontalAlignment="Left" Margin="49,18,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" FontSize="20" Height="57" Width="900"/>

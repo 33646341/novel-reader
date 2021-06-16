@@ -198,7 +198,10 @@
         </TabControl>
         <Button  x:Name="Dwn_start" Content="开始下载" Grid.Row="4"  FontSize="30" Grid.Column="0"  Width="278" Height="61" Click="Dwn_start_Click"></Button>
         <Button  x:Name="Dwn_stop" Content="停止下载" Grid.Row="4"  FontSize="30" Grid.Column="1"   Width="278" Height="61" Click="Dwn_stop_Click"></Button>
-        <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="BlueViolet" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />
+        <Border VerticalAlignment="Center" Visibility="{Binding ShowProgress}" Margin="212,129.333,212.333,262.333" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="3" Height="131">
+            <hc:LoadingCircle Style="{StaticResource LoadingCircleLight}"  Height="80" Width="80" Margin="10,10,10,10"/>
+        </Border>
+        <!--<hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="BlueViolet" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />-->
         <TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
     </Grid>
 </Window>

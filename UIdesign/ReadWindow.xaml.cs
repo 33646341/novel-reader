@@ -25,11 +25,9 @@ namespace UIdesign
             get_chapter_content g = new get_chapter_content();
             InitializeComponent();
             string url1 = "https://www.biquzhh.com" + url;
-            //TabItem1.Header = number + " " + name;
             var p = this.Resources["FlowDocumentDemo"] as FlowDocument;
-            Paragraph paragraph1 = new Paragraph(new Run("11"));
+            Paragraph paragraph1 = new Paragraph(new Run(g.Get_Chapter_Content(url1)));
             p.Blocks.Add(paragraph1);
-            label1.Content = g.Get_Chapter_Content(url1);
             ProgressBar1.Value = propotion;
             textblock1.Text = number + " " + name;
         }
@@ -38,26 +36,27 @@ namespace UIdesign
             string color = ColorPicker.SelectedBrush.ToString();
             var color1 = (Color)ColorConverter.ConvertFromString(color);
             System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
-            label1.Background = BColor;
+            flowdocumentreader1.Background = BColor;
         }
         private void SelectedColorChanged2(object sender, RoutedEventArgs e)
         {
             string color = ColorPicker1.SelectedBrush.ToString();
             var color1 = (Color)ColorConverter.ConvertFromString(color);
             System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
-            label1.Foreground = BColor;
+            flowdocumentreader1.Foreground = BColor;
         }
         private void Canceled(object sender, EventArgs e)
         {
             var color1 = (Color)ColorConverter.ConvertFromString("#FFF3F1EC");
             System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
-            label1.Background = BColor;
+
+            flowdocumentreader1.Background = BColor;
         }
         private void Canceled2(object sender, EventArgs e)
         {
             var color1 = (Color)ColorConverter.ConvertFromString("#000000");
             System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
-            label1.Foreground = BColor;
+            flowdocumentreader1.Foreground = BColor;
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -102,7 +101,8 @@ namespace UIdesign
             this.Topmost = true;
             this.WindowStyle = System.Windows.WindowStyle.None;
             this.WindowState = System.Windows.WindowState.Maximized;
-            label1.Height = 800;
+            
+            flowdocumentreader1.Height = 800;
             //MessageBox.Show("Esc退出全屏");
         }
         private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -112,22 +112,22 @@ namespace UIdesign
                 this.WindowState = System.Windows.WindowState.Normal;
                 this.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             }
-     
-            label1.Height = 578;
+
+            flowdocumentreader1.Height = 578;
         }
 
-        private void bigger_Click(object sender, RoutedEventArgs e)
-        {
-            label1.FontSize= label1.FontSize+3;
-        }
+        //private void bigger_Click(object sender, RoutedEventArgs e)
+        //{
+        //    label1.FontSize= label1.FontSize+3;
+        //}
 
-        private void smaller_Click(object sender, RoutedEventArgs e)
-        {
-            if (label1.FontSize > 3)
-                label1.FontSize = label1.FontSize - 3;
-            else
-                MessageBox.Show("字体已经不能缩小！");
-        }
+        //private void smaller_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (label1.FontSize > 3)
+        //        label1.FontSize = label1.FontSize - 3;
+        //    else
+        //        MessageBox.Show("字体已经不能缩小！");
+        //}
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
