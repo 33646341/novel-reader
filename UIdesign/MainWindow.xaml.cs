@@ -493,7 +493,7 @@ namespace UIdesign
             bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
             bi.EndInit();
 
-            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author };
+            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author,Url=fic.Url };
 
             Boksf_lb.ItemsSource = boksf;
 
@@ -554,7 +554,7 @@ namespace UIdesign
         {
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
-            //dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
+            dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
             dwn.novel_name = fic.Name;
             new Thread(() =>//后端添加到下载队列
             {
@@ -562,7 +562,7 @@ namespace UIdesign
                 dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
                 while (!dwn.down_or_not()) ;
                 is_prepared = true;
-                System.Windows.Forms.MessageBox.Show("添加成功！");
+                //System.Windows.Forms.MessageBox.Show("添加成功！");
                 
             }).Start();
 
@@ -794,7 +794,7 @@ namespace UIdesign
     public class CardModel : INotifyPropertyChanged
     {
         private string fiction;
-
+        private string url;
         private BitmapImage cover;
         private string writer;
         public string Writer
@@ -823,6 +823,15 @@ namespace UIdesign
             {
                 fiction = value;
                 OnPropertyChanged(Fiction);
+            }
+        }
+        public string Url
+        {
+            get { return url; }
+            set
+            {
+                fiction = value;
+                OnPropertyChanged(Url);
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
