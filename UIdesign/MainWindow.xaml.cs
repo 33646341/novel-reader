@@ -188,14 +188,14 @@ namespace UIdesign
                     {
                         _ltfi_Search.Clear();
 
-                    // 2021.6.16 转移
+                        // 2021.6.16 转移
 
-                    //searchPanel.Visibility = Visibility.Collapsed;
-                    //searchPanel2.Visibility = Visibility.Collapsed;
-                    //DockPanel.SetDock(searchPanel, Dock.Top);
-                    //searchPanel.Visibility = Visibility.Visible;
-                    //searchPanel2.Visibility = Visibility.Visible;
-                });
+                        //searchPanel.Visibility = Visibility.Collapsed;
+                        //searchPanel2.Visibility = Visibility.Collapsed;
+                        //DockPanel.SetDock(searchPanel, Dock.Top);
+                        //searchPanel.Visibility = Visibility.Visible;
+                        //searchPanel2.Visibility = Visibility.Visible;
+                    });
                     //Thread.Sleep(2000);
                     //Dispatcher.Invoke(delegate ()
                     //{
@@ -216,32 +216,37 @@ namespace UIdesign
 
                         Dispatcher.Invoke(delegate ()
                         {
-                        //_ltfi_Search.Add(fiction_i);
-                    });
+                            //_ltfi_Search.Add(fiction_i);
+                        });
 
                         // 预加载开始
                         new Thread(() =>
                         {
                             get_homepage_content content = new get_homepage_content();
                             Tuple<fiction_info, List<chapter_list>> result;
-                        // 先查快表
-                        if (!fictionResultCache.Keys.Contains(fiction_i))
+                            // 先查快表
+                            if (!fictionResultCache.Keys.Contains(fiction_i))
                             {
                                 result = content.TupleDetail(fiction_i.Url);
                                 fictionResultCache.Add(fiction_i, result); // 加入快表
-                            Console.WriteLine($"{fiction_i.Id} Done!");
+                                Console.WriteLine($"{fiction_i.Id} Done!");
                                 Dispatcher.Invoke(delegate ()
                                 {
                                     _ltfi_Search.Add(fiction_i);
 
-                                // 等到预加载成功的小说超过五个时，才展示出来
-                                if (_fic_info.Count > 0 && _ltfi_Search.Count == Math.Min(5, _fic_info.Count))
+                                    // 等到预加载成功的小说超过五个时，才展示出来
+                                    if (_fic_info.Count > 0 && _ltfi_Search.Count == Math.Min(5, _fic_info.Count))
                                     {
-                                        searchPanel.Visibility = Visibility.Collapsed;
-                                        searchPanel2.Visibility = Visibility.Collapsed;
-                                        DockPanel.SetDock(searchPanel, Dock.Top);
-                                        searchPanel.Visibility = Visibility.Visible;
-                                        searchPanel2.Visibility = Visibility.Visible;
+
+                                        if (DockPanel.GetDock(searchPanel) != Dock.Top)
+                                        {
+                                            searchPanel.Visibility = Visibility.Collapsed;
+                                            searchPanel2.Visibility = Visibility.Collapsed;
+                                            DockPanel.SetDock(searchPanel, Dock.Top);
+                                            searchPanel.Visibility = Visibility.Visible;
+                                            searchPanel2.Visibility = Visibility.Visible;
+                                        }
+
 
                                         ShowProgress = Visibility.Collapsed;
                                     }
@@ -317,8 +322,8 @@ namespace UIdesign
             ShowProgress = Visibility.Visible;
             new Thread(() =>
             {
-        // 本地调试开始
-        var localServerResult = Settings.ReadSetting("tempChaptersWeb", out string localServer);
+                // 本地调试开始
+                var localServerResult = Settings.ReadSetting("tempChaptersWeb", out string localServer);
                 if (!localServerResult)
                 {
                     Settings.AddUpdateAppSettings("tempChaptersWeb", "https://static.avosapps.us/chapters.htm");
@@ -326,46 +331,46 @@ namespace UIdesign
                 }
                 if (localServer != "")
                 {
-            //////////////////////////////emp.Url = localServer;
-        }
-        // 本地调试结束
+                    //////////////////////////////emp.Url = localServer;
+                }
+                // 本地调试结束
 
 
-        Tuple<fiction_info, List<chapter_list>> result;
+                Tuple<fiction_info, List<chapter_list>> result;
 
-        //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
-        while (!fictionResultCache.Keys.Contains(emp))
+                //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
+                while (!fictionResultCache.Keys.Contains(emp))
                 {
                     Thread.Sleep(100);
                 }
                 result = fictionResultCache[emp];
-        /*
-        // 先查快表
-        if (fictionResultCache.Keys.Contains(emp))
-        {
-            result = fictionResultCache[emp];
-        }
-        else
-        {
-            result = content.TupleDetail(emp.Url);
-            try
-            {
-                fictionResultCache.Add(emp, result); // 加入快表
+                /*
+                // 先查快表
+                if (fictionResultCache.Keys.Contains(emp))
+                {
+                    result = fictionResultCache[emp];
+                }
+                else
+                {
+                    result = content.TupleDetail(emp.Url);
+                    try
+                    {
+                        fictionResultCache.Add(emp, result); // 加入快表
 
-            }catch(Exception e)
-            {
-                HandyControl.Controls.MessageBox.Show(e.Message);
-            }
-        }
-        // 查快表结束
-        */
+                    }catch(Exception e)
+                    {
+                        HandyControl.Controls.MessageBox.Show(e.Message);
+                    }
+                }
+                // 查快表结束
+                */
 
 
                 List<chapter_list> lis = result.Item2;
-        //MessageBox.Show(lis[1].col_chapter_content);
-        fiction_info li = result.Item1;
-        //MessageBox.Show(li.col_fiction_introduction);
-        ShowProgress = Visibility.Collapsed;
+                //MessageBox.Show(lis[1].col_chapter_content);
+                fiction_info li = result.Item1;
+                //MessageBox.Show(li.col_fiction_introduction);
+                ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
                     Window1 login1 = new Window1(lis, li);   //Login为窗口名，把要跳转的新窗口实例化
@@ -566,15 +571,15 @@ namespace UIdesign
                 if (matchResult.Success)
                 {
                     imageUrl = matchResult.Groups[1].Value;
-            //HandyControl.Controls.MessageBox.Show(imageUrl);
+                    //HandyControl.Controls.MessageBox.Show(imageUrl);
 
-            novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
+                    novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
 
                     Dispatcher.Invoke(delegate ()
     {
-                        BitmapImage img = new BitmapImage(new Uri(imageUrl));
-                        bok.Cover = img;
-                    });
+        BitmapImage img = new BitmapImage(new Uri(imageUrl));
+        bok.Cover = img;
+    });
                 }
             }).Start();
         }
@@ -604,13 +609,13 @@ namespace UIdesign
             dwn.novel_name = fic.Name;
             new Thread(() =>//后端添加到下载队列
             {
-        //dwn.button3_Click(sender, e);//添加按钮，添加到队列开始下载
-        dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
+                //dwn.button3_Click(sender, e);//添加按钮，添加到队列开始下载
+                dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
                 while (!dwn.down_or_not()) ;
                 is_prepared = true;
-        //System.Windows.Forms.MessageBox.Show("添加成功！");
+                //System.Windows.Forms.MessageBox.Show("添加成功！");
 
-    }).Start();
+            }).Start();
 
             Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
             if (progress != null)
@@ -641,8 +646,8 @@ namespace UIdesign
 
             new Thread(() =>//前端下载进度显示，显示第一条
             {
-        //MessageBox.Show($"{form.barvalue}");
-        if (progress[0].Barvalue == 100)
+                //MessageBox.Show($"{form.barvalue}");
+                if (progress[0].Barvalue == 100)
                 {
                     ;
                 }
@@ -651,8 +656,8 @@ namespace UIdesign
                     if (dwn.barvalue <= 100)
                     {
                         progress[0].Barvalue = dwn.barvalue;
-                //Thread.Sleep(100);
-            }
+                        //Thread.Sleep(100);
+                    }
 
                     if (progress.Count > 0 && progress[0].Barvalue >= 100)
                     {
@@ -664,11 +669,11 @@ namespace UIdesign
                             System.Windows.Forms.MessageBox.Show($"显示：{progress[0].Barvalue}");
 
                             loaded.Add(progress[0]);
-                    //Thread.Sleep(2000);
-                    progress.Remove(progress[0]);
+                            //Thread.Sleep(2000);
+                            progress.Remove(progress[0]);
                             System.Windows.Forms.MessageBox.Show("删除表项第一个！");
-                    /// 放置数据库代码progress[0]，其中的四个属性
-                });
+                            /// 放置数据库代码progress[0]，其中的四个属性
+                        });
                     }
                 }
 
