@@ -240,6 +240,7 @@ namespace UIdesign
 
                                         if (DockPanel.GetDock(searchPanel) != Dock.Top)
                                         {
+                                            logo.Visibility = Visibility.Collapsed;
                                             searchPanel.Visibility = Visibility.Collapsed;
                                             searchPanel2.Visibility = Visibility.Collapsed;
                                             DockPanel.SetDock(searchPanel, Dock.Top);

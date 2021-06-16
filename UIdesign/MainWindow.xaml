@@ -43,7 +43,9 @@
                         <TextBlock FontSize="24" Text=" 首页"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
-                <DockPanel>
+                <Grid>
+                    <Image x:Name="logo" Source="img\logo2.png" Margin="187,12,121,337.333"/>
+                    <DockPanel>
                     <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade" Width="1110">
                         <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
                             <Label x:Name="state" Content="小说" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53"/>
@@ -87,6 +89,7 @@
                         </DataGrid>
                     </hc:TransitioningContentControl>
                 </DockPanel>
+                </Grid>
             </TabItem>
             <TabItem IsSelected="True" Width="255" >
                 <TabItem.Header>

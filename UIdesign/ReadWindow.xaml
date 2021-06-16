@@ -7,14 +7,11 @@
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Name="Window1" x:Class="UIdesign.ReadWindow"
         mc:Ignorable="d"
         Title="ReadWindow" Height="800" Width="1000">
-
     <Window.Resources>
         <FlowDocument x:Key="FlowDocumentDemo" x:Shared="False" ColumnWidth="400" IsOptimalParagraphEnabled="True" IsHyphenationEnabled="True">
-            <Section FontSize="12">
-                <Paragraph x:Name="Paragraph1">
-                    balablabla
-                </Paragraph>
-            </Section>
+            <!--<Paragraph x:Name="Paragraph2">
+                balablablaa
+            </Paragraph>-->
         </FlowDocument>
         <Style TargetType="{x:Type ProgressBar}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
