@@ -74,7 +74,9 @@ namespace UIdesign
 
             };
 
-            LV_loadedPage.ItemsSource = loaded;
+            //LV_loadedPage.ItemsSource = loaded;
+            Boksf_lb.ItemsSource = boksf;
+            this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
 
             // 数据库开始
 
@@ -93,20 +95,31 @@ namespace UIdesign
                 loaded.Add(fiction);
             }
 
-            //// 读取已收藏
-            //foreach (var obj in novelDAL.getStarredNovels())
-            //{
-            //    Fiction fiction = new Fiction()
-            //    {
-            //        Id = obj[0].ToString(),
-            //        Name = obj[1].ToString(),
-            //        Author = obj[2].ToString(),
-            //        Url = obj[3].ToString()
-            //    };
-            //    var image = obj[3].ToString();
+            // 读取已收藏
 
-            //    loaded.Add(fiction);
-            //}
+            foreach (var obj in novelDAL.getStarredNovels())
+            {
+                var imageURL = obj["imageURL"].ToString();
+                if (imageURL == "")
+                {
+                    imageURL = @"..\..\img\emp.jpg";
+                }
+
+                BitmapImage bi = new BitmapImage();
+                // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+                bi.BeginInit();
+                bi.UriSource = new Uri(imageURL, UriKind.RelativeOrAbsolute);
+                bi.EndInit();
+
+                CardModel bok = new CardModel()
+                {
+                    Cover = bi,
+                    Fiction = obj[1].ToString(),
+                    Writer = obj[2].ToString(),
+                    Url = obj[3].ToString()
+                };
+                boksf.Add(bok);
+            }
 
             // 数据库结束
 
@@ -153,8 +166,8 @@ namespace UIdesign
             form.querytext = kw;
             List<fiction_info> _fic_info;
             // 不使用List类型，可实现自动刷新而不必切换源
+            //this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
 
-            this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
             ShowProgress = Visibility.Visible;
             //textstat(sender, "加载中");
             new Thread(() =>
@@ -493,9 +506,8 @@ namespace UIdesign
             bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
             bi.EndInit();
 
-            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author,Url=fic.Url };
+            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author, Url = fic.Url };
 
-            Boksf_lb.ItemsSource = boksf;
 
             boksf.Add(bok);
 
@@ -503,7 +515,7 @@ namespace UIdesign
             var novelDAL = new NovelManager.NovelDAL();
             if (novelDAL.exsitsNovel(fic.Name) == 0)
             {
-                novelDAL.addNovel(fic.Name, "hi");
+                novelDAL.addNovel(fic.Name, fic.Url);
             }
             var Novel_id = novelDAL.exsitsNovel(fic.Name);
             Console.WriteLine(Novel_id);
@@ -523,6 +535,8 @@ namespace UIdesign
                 {
                     imageUrl = matchResult.Groups[1].Value;
                     //HandyControl.Controls.MessageBox.Show(imageUrl);
+
+                    novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
 
                     Dispatcher.Invoke(delegate ()
                     {
@@ -563,7 +577,7 @@ namespace UIdesign
                 while (!dwn.down_or_not()) ;
                 is_prepared = true;
                 //System.Windows.Forms.MessageBox.Show("添加成功！");
-                
+
             }).Start();
 
             Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
@@ -600,14 +614,14 @@ namespace UIdesign
                 {
                     ;
                 }
-                    while (dwn.tag)
+                while (dwn.tag)
                 {
                     if (dwn.barvalue <= 100)
                     {
                         progress[0].Barvalue = dwn.barvalue;
                         //Thread.Sleep(100);
                     }
-                    
+
                     if (progress.Count > 0 && progress[0].Barvalue >= 100)
                     {
                         progress[0].Barvalue = 0;
@@ -626,7 +640,7 @@ namespace UIdesign
                     }
                 }
 
-                    
+
             }).Start();
         }
         private void Dwn_stop_Click(object sender, RoutedEventArgs e)

@@ -48,7 +48,7 @@ namespace NovelManager
         public IEnumerable<SqliteDataReader> getStarredNovels()
         {
             return ExecuteReader($@"
-                SELECT `nid`,`name`,`author`,`url`,`image`
+                SELECT `nid`,`name`,`author`,`url`,`image`,`imageURL`
                 FROM novel
                 WHERE starred is not NULL
                 order by nid
