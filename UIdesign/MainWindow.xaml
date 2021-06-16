@@ -39,8 +39,8 @@
             <TabItem IsSelected="True" FontSize="20" Width="255" >
                 <TabItem.Header>
                     <WrapPanel>
-                        <Image Source="img\read.png" Width="24" Height="24"/>
-                        <TextBlock FontSize="24" Text=" 首页"></TextBlock>
+                        <Image Source="img\home.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="20" Text=" 首页"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid>
@@ -94,8 +94,8 @@
             <TabItem IsSelected="True" Width="255" >
                 <TabItem.Header>
                     <WrapPanel>
-                        <Image Source="img\read.png" Width="24" Height="24"/>
-                        <TextBlock FontSize="24" Text=" 下载"></TextBlock>
+                        <Image Source="img\download.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="20" Text=" 下载"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid>
@@ -170,7 +170,13 @@
                     <Button  x:Name="Dwn_start" Content="开始下载" FontSize="20" Grid.Column="1" Height="45" Width="200"  Click="Dwn_start_Click" Margin="348.8,-30,209.6,585"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="书架" IsSelected="True" FontSize="24"  Width="255">
+            <TabItem IsSelected="True" FontSize="20"  Width="255">
+                <TabItem.Header>
+                    <WrapPanel>
+                        <Image Source="img\bookshelf.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="20" Text=" 书架"></TextBlock>
+                    </WrapPanel>
+                </TabItem.Header>
                 <Grid x:Name="Boksf_grid">
                     <TabControl>
                         <TabItem Header="Origion">
@@ -244,8 +250,8 @@
             <TabItem FontSize="18" IsSelected="True" Width="255">
                 <TabItem.Header>
                     <WrapPanel>
-                        <Image Source="img\font.png" Width="24" Height="24"/>
-                        <TextBlock FontSize="24" Text=" 设置"></TextBlock>
+                        <Image Source="img\set.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="20" Text=" 设置"></TextBlock>
                     </WrapPanel>
                 </TabItem.Header>
                 <Grid>
