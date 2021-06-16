@@ -23,13 +23,13 @@ namespace UIdesign
         public ReadWindow(string url,string number,string name,string content,int propotion)
         {
             get_chapter_content g = new get_chapter_content();
+            string url1 = "https://www.biquzhh.com" + url;
+            Run r = new Run("ababab");
+            Paragraph paragraph1 = new Paragraph(/*new Run(g.Get_Chapter_Content(url1))*/);
+            paragraph1.Inlines.Add(r);
             InitializeComponent();
-            //string url1 = "https://www.biquzhh.com" + url;
-            //var p = this.Resources["FlowDocumentDemo"] as FlowDocument;
-            //Run r = new Run("ababab");
-            //Paragraph paragraph1 = new Paragraph(/*new Run(g.Get_Chapter_Content(url1))*/);
-            //paragraph1.Inlines.Add(r);
-            //p.Blocks.Add(paragraph1);
+            var p = this.Resources["FlowDocumentDemo"] as FlowDocument;
+            p.Blocks.Add(paragraph1);
             ProgressBar1.Value = propotion;
             textblock1.Text = number + " " + name;
         }
