@@ -533,7 +533,7 @@ namespace UIdesign
                 
             }).Start();
 
-            Fiction fiction = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
+            Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
             if (progress != null)
             {
                 fiction.Barvalue = 0;
@@ -554,7 +554,7 @@ namespace UIdesign
                 Dwn_start.IsEnabled = false;
                 Dwn_stop.IsEnabled = true;
 
-                form.button1_Click(sender, e);
+                dwn.download_novel();
             }
 
 
