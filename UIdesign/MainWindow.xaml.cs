@@ -74,7 +74,7 @@ namespace UIdesign
 
             };
 
-            //LV_loadedPage.ItemsSource = loaded;
+            LV_loadedPage.ItemsSource = loaded;
             Boksf_lb.ItemsSource = boksf;
             this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
 
@@ -179,11 +179,14 @@ namespace UIdesign
                     Dispatcher.Invoke(delegate ()
                     {
                         _ltfi_Search.Clear();
-                        searchPanel.Visibility = Visibility.Collapsed;
-                        searchPanel2.Visibility = Visibility.Collapsed;
-                        DockPanel.SetDock(searchPanel, Dock.Top);
-                        searchPanel.Visibility = Visibility.Visible;
-                        searchPanel2.Visibility = Visibility.Visible;
+
+                        // 2021.6.16 转移
+
+                        //searchPanel.Visibility = Visibility.Collapsed;
+                        //searchPanel2.Visibility = Visibility.Collapsed;
+                        //DockPanel.SetDock(searchPanel, Dock.Top);
+                        //searchPanel.Visibility = Visibility.Visible;
+                        //searchPanel2.Visibility = Visibility.Visible;
                     });
                     //Thread.Sleep(2000);
                     //Dispatcher.Invoke(delegate ()
@@ -205,7 +208,7 @@ namespace UIdesign
 
                         Dispatcher.Invoke(delegate ()
                         {
-                            _ltfi_Search.Add(fiction_i);
+                            //_ltfi_Search.Add(fiction_i);
                         });
 
                         // 预加载开始
@@ -221,10 +224,25 @@ namespace UIdesign
                                 Console.WriteLine($"{fiction_i.Id} Done!");
                                 Dispatcher.Invoke(delegate ()
                                 {
+                                    _ltfi_Search.Add(fiction_i);
+
+                                    // 等到预加载成功的小说超过五个时，才展示出来
+                                    if (_ltfi_Search.Count == 5)
+                                    {
+                                        searchPanel.Visibility = Visibility.Collapsed;
+                                        searchPanel2.Visibility = Visibility.Collapsed;
+                                        DockPanel.SetDock(searchPanel, Dock.Top);
+                                        searchPanel.Visibility = Visibility.Visible;
+                                        searchPanel2.Visibility = Visibility.Visible;
+
+                                        ShowProgress = Visibility.Collapsed;
+
+                                    }
+
+
                                     if (fictionResultCache.Count < _fic_info.Count)
                                     {
-
-                                        state.Content = $"{fictionResultCache.Count * 1.0 / _fic_info.Count}%";
+                                        state.Content = $"{(fictionResultCache.Count * 100 / _fic_info.Count)}%";
                                     }
                                     else
                                     {
@@ -240,7 +258,6 @@ namespace UIdesign
 
 
                     }
-                    ShowProgress = Visibility.Collapsed;
 
                     //加载一个空的小说详情页网站，提高再次访问时速度
                     //HtmlWeb _web_Main = new HtmlWeb();
@@ -568,7 +585,7 @@ namespace UIdesign
         {
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
-            dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
+            //dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
             dwn.novel_name = fic.Name;
             new Thread(() =>//后端添加到下载队列
             {
