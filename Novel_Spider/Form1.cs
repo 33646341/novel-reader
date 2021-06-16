@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.IO.Compression;
+using System.Threading;
 using NovelManager;
 //using System.Data.SQLite;
 
@@ -357,6 +358,9 @@ namespace Novel_Spider
                     Novel_Name = Novel_Name.Replace(except_char[i], "");
                 }
 
+                    path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
+               
+
                 Picture_Url = Regex.Match(html, "<meta property=\"og:image\" content=\"https://.*?/>").Value.Replace("<meta property=\"og:image\" content=\"", "").Replace("\"/>", "");
 
                 // 数据库开始
@@ -366,14 +370,9 @@ namespace Novel_Spider
                     novelDAL.addNovel(Novel_Name, book[index]);
                 }
                 var Novel_id = novelDAL.exsitsNovel(Novel_Name);
-                Console.WriteLine(Novel_id);
+                Console.WriteLine($"即将下载小说 nid={Novel_id}");
                 // 数据库结束
 
-                //novel_name1 = Novel_Name;//获取书名
-
-                path.Add(System.AppDomain.CurrentDomain.BaseDirectory + "/Novel/" + Novel_Name);
-
-                
                 if (!Directory.Exists(path[index]))
                 {
                     Directory.CreateDirectory(path[index]);

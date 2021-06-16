@@ -4,16 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UIdesign"
+        xmlns:data="clr-namespace:UIdesign"
+        xmlns:vm="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1120" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="800" Width="1120" WindowStartupLocation="CenterScreen"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <Style x:Key="ListItemstyle" TargetType="ListViewItem">
             <EventSetter Event="MouseDoubleClick" Handler="SListView_ItemDoubleClick"/>
         </Style>
-
-        <local:Student x:Key="stu"/>
-        <local:ProgressBarvalue x:Key="Bar"/>
+        <Style x:Key="DwnPage" TargetType="TabItem">
+            <EventSetter Event="MouseLeftButtonDown" Handler="ItemClick"/>
+        </Style>
+        <local:Fiction x:Key="Fic"/>
 
     </Window.Resources>
     <Grid x:Name="Total_grid">
@@ -32,69 +36,82 @@
         </Grid.ColumnDefinitions>
         <TabControl SelectionChanged="TabControl_SelectionChanged" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="5">
 
-            <TabItem x:Name="Homepg_item" Header="首页" IsSelected="True" FontSize="24" Width="255" >
-                <StackPanel >
-                    <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
-                        <Label Content="C#R" VerticalAlignment="Bottom" Width="126" Height="72"/>
-                        <TextBox x:Name="keySearch" Width="816" FontStyle="Italic" VerticalAlignment="Bottom" Height="73" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" TextChanged="TextBox_TextChanged">
-                            <TextBox.Resources>
-                                <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
-                                    <VisualBrush.Visual>
-                                        <TextBlock FontStyle="Italic" Text="请输入关键词" />
-                                    </VisualBrush.Visual>
-                                </VisualBrush>
-                            </TextBox.Resources>
-                        </TextBox>
-                        <Button x:Name="searchBtn" Style="{StaticResource ButtonPrimary}" Width="156" Content="搜索" Height="72" FontSize="20" Click="Button_Click"/>
+            <TabItem IsSelected="True" FontSize="20" Width="255" >
+                <TabItem.Header>
+                    <WrapPanel>
+                        <Image Source="img\read.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="24" Text=" 首页"></TextBlock>
                     </WrapPanel>
+                </TabItem.Header>
+                <DockPanel>
+                    <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade" Width="1110">
+                        <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
+                            <Label x:Name="state" Content="小说" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53"/>
+                            <TextBox x:Name="keySearch" Margin="10" Width="800" VerticalAlignment="Center" Height="53" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" KeyDown="content_key" >
+                                <TextBox.Resources>
+                                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="Uniform" AlignmentX="Left" >
+                                        <VisualBrush.Visual>
+                                            <TextBlock FontStyle="Italic" Text="请输入关键词" />
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </TextBox.Resources>
+                            </TextBox>
+                            <Button x:Name="searchBtn" Margin="0,10" Style="{StaticResource ButtonPrimary}" Width="150" Content="搜索" Height="52" FontSize="20" Click="Button_Click"/>
+
+                        </WrapPanel>
+                    </hc:TransitioningContentControl>
+
+
                     <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
-                    <ListView x:Name="Lv_HomePage" 
-                              Background="#FFF1ECEC" 
-                              SelectionChanged="ListView_SelectionChanged" 
-                              ItemsSource="{Binding Source={StaticResource Bar}}"
-                              ItemContainerStyle="{StaticResource ListItemstyle}"
-                              GridViewColumnHeader.Click="Sort_Click"
-                              Grid.Row="2" Height="594" Margin="0,0,-0.4,0" RenderTransformOrigin="0.5,0.489"
-                              >
-                        <ListView.View >
-                            <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
-                                <GridViewColumn x:Name="fiction_id" DisplayMemberBinding=
-                          "{Binding Path=Id}"  Header="序号" Width="180"></GridViewColumn>
-                                <GridViewColumn x:Name="fiction_name" DisplayMemberBinding=
-                          "{Binding Path=Name}" Header="小说名称" Width="200"></GridViewColumn>
-                                <GridViewColumn x:Name="author_name" DisplayMemberBinding=
-                          "{Binding Path=Author}" Header="作者" Width="200"></GridViewColumn>
+                    <hc:TransitioningContentControl x:Name="searchPanel2" TransitionMode="Top2BottomWithFade">
+                        <DataGrid x:Name="Lv_HomePage" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource Fic}}" hc:DataGridAttach.ShowRowNumber="True" MouseDoubleClick="SListView_ItemDoubleClick">
+                            <DataGrid.Columns>
 
-                            </GridView>
-
-                        </ListView.View>
-                        <ListView.ContextMenu >
-                            <ContextMenu Visibility="{Binding Conmenu}">
-                                <MenuItem Header="查看详情" Click="InfoPage"/>
-                                <MenuItem Header="添加书架" Click="BookShelf"/>
-                                <MenuItem Header="添加下载" Click="DownLoadBook"/>
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                    </ListView>
-                </StackPanel>
+                                <!--<DataGridTemplateColumn Width="60" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding ImgPath}" Width="32" Height="32" Stretch="Uniform"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                                <DataGridTextColumn Binding="{Binding Name}" Width="500" Header="小说名称" IsReadOnly="True"/>
+                                <DataGridTextColumn Binding="{Binding Author}" Header="作者" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu Visibility="{Binding Conmenu}">
+                                    <MenuItem Header="查看详情" Click="InfoPage"/>
+                                    <MenuItem Header="添加书架" Click="BookShelf"/>
+                                    <MenuItem Header="添加下载" Click="DownLoadBook"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                        </DataGrid>
+                    </hc:TransitioningContentControl>
+                </DockPanel>
             </TabItem>
-            <TabItem Header="下载" IsSelected="True" FontSize="24" Width="255">
+            <TabItem IsSelected="True" Width="255" >
+                <TabItem.Header>
+                    <WrapPanel>
+                        <Image Source="img\read.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="24" Text=" 下载"></TextBlock>
+                    </WrapPanel>
+                </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="113*"/>
+                        <ColumnDefinition Width="355*"/>
+                        <ColumnDefinition Width="758*"/>
                     </Grid.ColumnDefinitions>
-                    <TabControl Margin="0,0,-0.2,0">
-                        <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="24" Width="200">
+                    <TabControl Margin="0,0,9.6,-0.4" Grid.ColumnSpan="2">
+                        <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
                             <StackPanel>
-                                <ListView Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
-                                          ItemsSource="{Binding Source={StaticResource Bar}}">
+                                <ListView x:Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
+                                          ItemsSource="{Binding Source={StaticResource Fic}}">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="小说名" Width="200">
+                                            <GridViewColumn Header="小说名" Width="300">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <Grid>
-                                                            <TextBlock VerticalAlignment="Center" Text="{Binding  Path=Name}"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}"/>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -103,7 +120,7 @@
                                                 <GridViewColumn.CellTemplate >
                                                     <DataTemplate >
                                                         <Grid>
-                                                            <ProgressBar Name="prs"  Value="{Binding Path=Barvalue}" Width="700" Maximum="100" Height="40"/>
+                                                            <ProgressBar x:Name="prs"  Value="{Binding Barvalue}" Width="700" Maximum="100" Height="40"/>
 
                                                         </Grid>
                                                     </DataTemplate>
@@ -115,12 +132,12 @@
                             </StackPanel>
 
                         </TabItem>
-                        <TabItem Header="已下载" IsSelected="True" FontSize="24" Width="200">
+                        <TabItem Header="已下载" IsSelected="True" FontSize="20" Width="200">
                             <StackPanel>
                                 <ListView x:Name="LV_loadedPage" 
                               Background="#FFF1ECEC" 
                               SelectionChanged="LV_loadedPage_SelectionChanged" 
-                              ItemsSource="{Binding Source={StaticResource Bar}}"
+                              ItemsSource="{Binding Source={StaticResource Fic}}"
                               ItemContainerStyle="{StaticResource ListItemstyle}"
                               GridViewColumnHeader.Click="Sort_Click"
                               Grid.Row="2" Height="618" Margin="0,0,-0.667,0" RenderTransformOrigin="0.5,0.489"
@@ -136,72 +153,123 @@
                                     </ListView.View>
                                     <ListView.ContextMenu >
                                         <ContextMenu Visibility="{Binding Conmenu}">
-                                            <MenuItem Header="查看详情" Click="InfoPage"/>
-                                            <MenuItem Header="添加书架" Click="BookShelf"/>
+                                            <MenuItem Header="查看详情" Click="Dwn_InfoPage"/>
+                                            <MenuItem Header="添加书架" Click="Dwn_BookShelf"/>
+                                            <MenuItem Header="删除本书" Click="Del_bk"/>
                                         </ContextMenu>
                                     </ListView.ContextMenu>
                                 </ListView>
                             </StackPanel>
                         </TabItem>
-                        <TabItem Header="下载设置" IsSelected="True" FontSize="24" Width="200">
-                            <Button Content="123456" Margin="537,0,255.8,0">
-                            </Button>
-                        </TabItem>
+
                     </TabControl>
+                    <Button  x:Name="Dwn_stop" Content="停止下载" FontSize="20" Grid.Column="1"  Height="45" Width="200" Click="Dwn_stop_Click" Margin="548.8,-30,9.6,585"/>
+                    <Button  x:Name="Dwn_start" Content="开始下载" FontSize="20" Grid.Column="1" Height="45" Width="200"  Click="Dwn_start_Click" Margin="348.8,-30,209.6,585"/>
                 </Grid>
             </TabItem>
             <TabItem Header="书架" IsSelected="True" FontSize="24"  Width="255">
                 <Grid x:Name="Boksf_grid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20"/>
-                    </Grid.RowDefinitions>
-                    <Button Content="boksf" Height="43" Width="91" FontSize="24" Margin="454,0,448.6,-22.2" Click="Button_Click_1"></Button>
-                    <ListView x:Name="Boksf_lv" 
+                    <TabControl>
+                        <TabItem Header="Origion">
+                            <ListView x:Name="Boksf_lv" 
                               Background="#FFCEC4C4" 
                               SelectionChanged="Boksf_lv_SelectionChanged" 
                               Margin="0,43,-0.4,-660.2" RenderTransformOrigin="0.5,0.489"
-                              ItemsSource="{Binding Source={StaticResource stu}}"
+                              ItemsSource="{Binding Source={StaticResource Fic}}"
                               >
-                        <ListView.View >
-                            <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
-                                <GridViewColumn x:Name="fictionid" DisplayMemberBinding=
-                          "{Binding Path=Id}"  Header="更新日期" Width="180"></GridViewColumn>
-                                <GridViewColumn x:Name="fictionname" DisplayMemberBinding=
-                          "{Binding Path=Name}" Header="小说名称" Width="200"></GridViewColumn>
-                                <GridViewColumn x:Name="authorname" DisplayMemberBinding=
-                          "{Binding Path=Age}" Header="作者名称" Width="200"></GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                        <ListView.ContextMenu>
-                            <ContextMenu >
-                                <MenuItem Header="查看详情" Click="InfoPage"/>
-                                <MenuItem Header="移除书架" Click="BookShelf"/>
-                                <MenuItem Header="下载本书" Click="DownLoadBook"/>
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                    </ListView>
-
+                                <ListView.View >
+                                    <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
+                                        <GridViewColumn x:Name="fict_name" DisplayMemberBinding=
+                          "{Binding Path=Name}"  Header="小说名" Width="180"></GridViewColumn>
+                                        <GridViewColumn x:Name="aut_name" DisplayMemberBinding=
+                          "{Binding Path=Author}" Header="作者" Width="200"></GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                                <ListView.ContextMenu>
+                                    <ContextMenu >
+                                        <MenuItem Header="查看详情" Click="Bok_InfoPage"/>
+                                        <MenuItem Header="移除书架" Click="RemoveBk"/>
+                                        <MenuItem Header="添加下载" Click="Bok_DownLoadBook"/>
+                                    </ContextMenu>
+                                </ListView.ContextMenu>
+                            </ListView>
+                        </TabItem>
+                        <TabItem Header="Test">
+                            <Grid>
+                                <Grid.Resources>
+                                    <vm:CardModel x:Key="Card"></vm:CardModel>
+                                </Grid.Resources>
+                                <Grid.DataContext>
+                                    <Binding Source="{StaticResource Card}"/>
+                                </Grid.DataContext>
+                                <ListBox x:Name="Boksf_lb" Margin="10,0,-0.4,0" BorderThickness="0" Style="{DynamicResource WrapPanelHorizontalListBox}" ItemsSource="{Binding Source={StaticResource Card}}" Height="612" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.406">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="data:CardModel">
+                                            <hc:Card Width="200" BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="8" Footer="{Binding Writer}">
+                                                <!--Card 的内容部分模板-->
+                                                <Border CornerRadius="4,4,0,0" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type hc:Card}}}">
+                                                    <Image  Source="{Binding Cover}" Stretch="Fill" Height="{Binding Path=Height,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Margin="0,0,0,0" >
+                                                        <hc:Magnifier.Instance>
+                                                            <hc:Magnifier Scale="6" HorizontalOffset="-16" VerticalOffset="-16"/>
+                                                        </hc:Magnifier.Instance>
+                                                    </Image>
+                                                </Border>
+                                                <!--Card 的尾部部分模板-->
+                                                <hc:Card.FooterTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Margin="10" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type Border}}}">
+                                                            <!--Card 的一级内容-->
+                                                            <TextBlock x:Name="Header" TextWrapping="NoWrap"  Style="{DynamicResource TextBlockLargeBold}" TextTrimming="CharacterEllipsis" 
+                                           Text="{Binding DataContext.Fiction,RelativeSource={RelativeSource AncestorType=hc:Card}}" 
+                                           HorizontalAlignment="Left"/>
+                                                            <!--Card 的二级内容-->
+                                                            <TextBlock TextWrapping="NoWrap" Style="{DynamicResource TextBlockDefault}" TextTrimming="CharacterEllipsis" 
+                                           Text="{Binding}" Margin="0,6,0,0"
+                                           HorizontalAlignment="Left"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </hc:Card.FooterTemplate>
+                                            </hc:Card>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="设置" IsSelected="True" FontSize="24"  Width="255">
+            <TabItem FontSize="18" IsSelected="True" Width="255">
+                <TabItem.Header>
+                    <WrapPanel>
+                        <Image Source="img\font.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="24" Text=" 设置"></TextBlock>
+                    </WrapPanel>
+                </TabItem.Header>
                 <Grid>
-                    <Grid Height="200"  VerticalAlignment="Top" Margin="0,0,-0.4,0">
-                        <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="0,0,659,159" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Name="Setting"  Height="180"  VerticalAlignment="Top" Margin="0,486.2,-0.4,-662.2" Grid.Row="1">
+                        <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="0,0,400.2,0" RenderTransformOrigin="0.563,-0.341" VerticalAlignment="Top" />
+                        <UniformGrid Rows="1" Columns="8" Grid.ColumnSpan="3" Margin="0,0,-0.4,0">
+                            <!--<hc:Interaction.Triggers>
+                                <hc:EventTrigger EventName="Checked">
+                                    <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
+                                </hc:EventTrigger>
+                            </hc:Interaction.Triggers>-->
+                            <RadioButton Checked="RadioButton_Checked" Margin="10,0,0,0" BorderThickness="1" hc:IconElement.Geometry="{StaticResource CalendarGeometry}" Style="{StaticResource RadioButtonIcon}" Content="天蓝主题"/>
+                            <RadioButton Checked="RadioButton_Checked" Margin="10,0,0,0" BorderThickness="1" Style="{StaticResource RadioButtonIcon}" Content="紫色主题"/>
+                        </UniformGrid>
                     </Grid>
-                    <Grid HorizontalAlignment="Left" Height="156" Margin="0,205,-0.4,0" VerticalAlignment="Top" Width="794">
-                        <Label Content="下载设置" Width="136" Height="44" FontSize="18" Margin="0,0,658,106"></Label>
-                        <TextBox Text="11" Width="100" Height="32" Margin="148,49,546,69" FontSize="14"/>
-                        <Label Content="下载队列大小"  Width="132" Height="32" FontSize="15" Margin="0,49,662,69"/>
+                    <Grid Margin="0,10.2,-0.4,-459.6" Grid.Row="1">
+                        <hc:PropertyGrid SelectedObject="{Binding DemoModel}" Margin="0,-1,0,0.2"/>
                     </Grid>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button  x:Name="Dwn_start" Content="开始下载" Grid.Row="4"  FontSize="30" Grid.Column="0"  Width="278" Height="61" Click="Dwn_start_Click"></Button>
-        <Button  x:Name="Dwn_stop" Content="停止下载" Grid.Row="4"  FontSize="30" Grid.Column="1"   Width="278" Height="61" Click="Dwn_stop_Click"></Button>
-        <Border VerticalAlignment="Center" Visibility="{Binding ShowProgress}" Margin="212,129.333,212.333,262.333" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="3" Height="131">
-            <hc:LoadingCircle Style="{StaticResource LoadingCircleLight}"  Height="80" Width="80" Margin="10,10,10,10"/>
-        </Border>
-        <!--<hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="BlueViolet" Grid.Row="3" Grid.ColumnSpan="4" RenderTransformOrigin="0.452,3.676" />-->
-        <TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
+
+        <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="{DynamicResource PrimaryBrush}" Grid.Row="3" Grid.ColumnSpan="4" Width="50" Height="50" RenderTransformOrigin="0.452,3.676" />
+        <!--TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></-->
     </Grid>
 </Window>

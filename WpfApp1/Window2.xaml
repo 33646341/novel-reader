@@ -11,17 +11,17 @@
         
     
         mc:Ignorable="d"
-        Title="Window2" Height="450" Width="800">
+        Title="Window2" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
 
-
-        <Window.Resources>
-            <Style x:Key="TagCustomStyle" BasedOn="{StaticResource TagBaseStyle}" TargetType="hc:Tag">
-                <Setter Property="Content" Value="{Binding Name}"/>
-                <Setter Property="Margin" Value="5"/>
-                <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-            </Style>
-        </Window.Resources>
+    <Window.Resources>
+        <Style x:Key="TagCustomStyle" BasedOn="{StaticResource TagBaseStyle}" TargetType="hc:Tag">
+            <Setter Property="Content" Value="{Binding Name}"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <hc:TransitioningContentControl>
             <StackPanel Margin="11">
@@ -50,6 +50,19 @@
                     <Button Command="{Binding AddItemCmd}" Margin="10,0,0,0" DockPanel.Dock="Right" Content="right"/>
                     <TextBox Text="{Binding TagName}"/>
                 </DockPanel>
+
+
+                <hc:PropertyGrid Width="500" SelectedObject="{Binding DemoModel}"/>
+                <TextBox hc:TitleElement.Title="String" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.String,Mode=OneWay}" IsReadOnly="True"/>
+                <TextBox hc:TitleElement.Title="Enum" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.Enum,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
+                <TextBox hc:TitleElement.Title="Integer" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.Integer,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
+                <TextBox hc:TitleElement.Title="Boolean" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.Boolean,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
+                <TextBox hc:TitleElement.Title="HorizontalAlignment" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.HorizontalAlignment,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
+                <TextBox hc:TitleElement.Title="VerticalAlignment" hc:TitleElement.TitlePlacement="Left" Style="{StaticResource TextBoxExtend}" Text="{Binding DemoModel.VerticalAlignment,Mode=OneWay}" IsReadOnly="True" Margin="0,6,0,0"/>
+                <GroupBox Style="{StaticResource GroupBoxOriginal}" Header="ImageSource" hc:TitleElement.TitlePlacement="Left" Margin="0,6,0,0">
+                    <hc:Gravatar HorizontalAlignment="Left" Source="{Binding DemoModel.ImageSource}"/>
+                </GroupBox>
+
             </StackPanel>
         </hc:TransitioningContentControl>
     </Grid>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NovelManager
 {
-    class Settings
+    public class Settings
     {
         public static void Main(string[] args)
         {
@@ -71,7 +71,7 @@ namespace NovelManager
             {
                 var appSettings = ConfigurationManager.AppSettings;
                 result = appSettings[key] ?? "Not Found";
-                return appSettings[key] == "";
+                return appSettings[key] != null;
             }
             catch (ConfigurationErrorsException)
             {

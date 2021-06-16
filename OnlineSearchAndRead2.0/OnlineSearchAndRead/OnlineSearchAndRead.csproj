@@ -121,6 +121,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\NovelManager\NovelManager\NovelManager.csproj">
+      <Project>{62a76172-9a41-495f-aa3c-88bc15fd5314}</Project>
+      <Name>NovelManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
