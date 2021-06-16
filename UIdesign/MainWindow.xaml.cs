@@ -433,22 +433,26 @@ namespace UIdesign
         #endregion 
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
-        Novel_Spider.Form1 form = new Novel_Spider.Form1();
+        Novel_Spider.Spider dwn = new Novel_Spider.Spider();
         bool is_prepared = false;
         private void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
         {
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
-            form.url = fic.Url;
-            form.novel_name = fic.Name;
+            //dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
+            dwn.novel_name = fic.Name;
             new Thread(() =>//后端添加到下载队列
             {
-                form.button3_Click(sender, e);//添加按钮，添加到队列开始下载
+                //dwn.button3_Click(sender, e);//添加按钮，添加到队列开始下载
+                dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
+                while (!dwn.down_or_not()) ;
                 is_prepared = true;
+                System.Windows.Forms.MessageBox.Show("添加成功！");
+                
             }).Start();
             new Thread(() =>//前端添加下载项，无限制
             {
-                Fiction fiction = new Fiction(fic.Name, form.barvalue, fic.Author, fic.Url);
+                Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
                 if (progress != null)
                 {
 
@@ -467,7 +471,7 @@ namespace UIdesign
 
             new Thread(() =>//后端开始下载--当且仅当当前小说是第一个时
             {
-                if (is_prepared == true)
+                if (is_prepared)
                 {
                     is_prepared = false;
                     Dispatcher.Invoke(delegate ()
@@ -475,7 +479,7 @@ namespace UIdesign
                         Dwn_start.IsEnabled = false;
                         Dwn_stop.IsEnabled = true;
                     });
-                    form.button1_Click(sender, e);
+                    dwn.download_novel();
                 }
 
 
@@ -485,28 +489,43 @@ namespace UIdesign
             new Thread(() =>//前端下载进度显示，显示第一条
             {
                 //MessageBox.Show($"{form.barvalue}");
-
-                while (form.barvalue < 100)
+                if (progress[0].Barvalue == 100)
                 {
-                    //MessageBox.Show($"{form.barvalue}");
-                    progress[0].Barvalue = form.barvalue;
-                    Thread.Sleep(100);
+                    ;
                 }
-                Dispatcher.Invoke(delegate ()
+                    while (dwn.tag)
                 {
-                    //MessageBox.Show($"{form.barvalue}");
-                    loaded.Add(progress[0]);
-                    //Thread.Sleep(2000);
-                    progress.Remove(progress[0]);
-                    /// 放置数据库代码progress[0]，其中的四个属性
+                    if (dwn.barvalue <= 100)
+                    {
+                        progress[0].Barvalue = dwn.barvalue;
+                        //Thread.Sleep(100);
+                    }
+                    
+                    if (progress.Count > 0 && progress[0].Barvalue >= 100)
+                    {
+                        progress[0].Barvalue = 0;
+                        System.Windows.Forms.MessageBox.Show("睡眠态！");
+                        Dispatcher.Invoke(delegate ()
+                        {
+                            System.Windows.Forms.MessageBox.Show($"实际：{dwn.barvalue}");
+                            System.Windows.Forms.MessageBox.Show($"显示：{progress[0].Barvalue}");
 
-                });
+                            loaded.Add(progress[0]);
+                            //Thread.Sleep(2000);
+                            progress.Remove(progress[0]);
+                            System.Windows.Forms.MessageBox.Show("删除表项第一个！");
+                            /// 放置数据库代码progress[0]，其中的四个属性
+                        });
+                    }
+                }
+
+                    
             }).Start();
         }
         private void Dwn_stop_Click(object sender, RoutedEventArgs e)
         {
             Dwn_stop.IsEnabled = false;
-            form.button2_Click(sender, e);
+            dwn.download_pause();
             Dwn_start.IsEnabled = true;
         }
 

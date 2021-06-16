@@ -13,7 +13,7 @@ using NovelManager;
 
 namespace Novel_Spider
 {
-    class Spider
+    public class Spider
     {
         int index = -1;
 
@@ -37,7 +37,7 @@ namespace Novel_Spider
         public List<int> chapter_sum = new List<int>();
         //double chapter_sum2 = 0;
 
-        bool tag = true;//标记是否暂停,初始为未暂停
+        public bool tag = true;//标记是否暂停,初始为未暂停
 
         public double barvalue
         {
@@ -120,8 +120,8 @@ namespace Novel_Spider
                             book.RemoveAt(0);
                             chapter_num.RemoveAt(0);
                             chapter_sum.RemoveAt(0);
-
                             download_progress = 100;
+                            MessageBox.Show("下载完一本！");
                             if (chapter_sum.Count != 0)
                                 download_progress = 0;
                             //MethodInvoker mi = new MethodInvoker(() =>
