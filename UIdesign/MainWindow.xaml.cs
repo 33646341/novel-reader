@@ -25,6 +25,8 @@ using HandyControl.Data;
 using HandyControl.Themes;
 using HandyControl.Tools;
 using HandyControl.Controls;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace UIdesign
 {
@@ -59,6 +61,8 @@ namespace UIdesign
         public MainWindow()
         {
             InitializeComponent();
+            keySearch.Focus();
+
             #region
             DataContext = this;
             #endregion
@@ -401,20 +405,35 @@ namespace UIdesign
         }
         private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
-            get_homepage_content content = new get_homepage_content();
-            Tuple<fiction_info, List<chapter_list>> result = content.TupleDetail(fic.Url);
-            string urlposter = result.Item1.col_url_poster;
-            BitmapImage img = new BitmapImage(new Uri(urlposter));
-            CardModel bok = new CardModel() { Cover = img, Fiction = fic.Name, Writer = fic.Author };
-            
-            Boksf_lb.ItemsSource = boksf;
-            new Thread(() =>//前端添加下载项，无限制
-            {
-                Dispatcher.Invoke(delegate ()
-                {
-                    boksf.Add(bok);
-                });
+            BitmapImage bi = new BitmapImage();
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            bi.BeginInit();
+            bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
+            bi.EndInit();
 
+            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author };
+
+            Boksf_lb.ItemsSource = boksf;
+            
+            boksf.Add(bok);
+
+            new Thread(() =>
+            {
+                WebClient webClient = new WebClient();
+                var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
+                var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
+                var imageUrl = "";
+                if (matchResult.Success)
+                {
+                    imageUrl = matchResult.Groups[1].Value;
+                    //HandyControl.Controls.MessageBox.Show(imageUrl);
+
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        BitmapImage img = new BitmapImage(new Uri(imageUrl));
+                        bok.Cover = img;
+                    });
+                }
             }).Start();
         }
         private void Del_Loaded(object sender, RoutedEventArgs e, Fiction fic)
@@ -520,10 +539,8 @@ namespace UIdesign
 
         #endregion
 
-
-
-
         // 2021.6.12 新增
+        #region 切换主题
         /// <summary>
         /// 切换主题
         /// </summary>
@@ -553,6 +570,8 @@ namespace UIdesign
                     break;
             }
         }
+        #endregion
+
         #region  设置模式
         public class PropertyGridModel
         {
@@ -665,7 +684,7 @@ namespace UIdesign
         天蓝色,
         浅紫色
     }
-    public class CardModel
+    public class CardModel: INotifyPropertyChanged
     {
         private string fiction;
 
