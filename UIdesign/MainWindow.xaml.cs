@@ -77,6 +77,9 @@ namespace UIdesign
             LV_loadedPage.ItemsSource = loaded;
 
             // 数据库开始
+
+            // 读取已下载
+
             NovelDAL novelDAL = new NovelDAL();
             foreach (var obj in novelDAL.getDownloadedNovels())
             {
@@ -89,6 +92,22 @@ namespace UIdesign
                 };
                 loaded.Add(fiction);
             }
+
+            //// 读取已收藏
+            //foreach (var obj in novelDAL.getStarredNovels())
+            //{
+            //    Fiction fiction = new Fiction()
+            //    {
+            //        Id = obj[0].ToString(),
+            //        Name = obj[1].ToString(),
+            //        Author = obj[2].ToString(),
+            //        Url = obj[3].ToString()
+            //    };
+            //    var image = obj[3].ToString();
+
+            //    loaded.Add(fiction);
+            //}
+
             // 数据库结束
 
         }
@@ -211,9 +230,9 @@ namespace UIdesign
                     ShowProgress = Visibility.Collapsed;
 
                     //加载一个空的小说详情页网站，提高再次访问时速度
-                    HtmlWeb _web_Main = new HtmlWeb();
-                    _web_Main.OverrideEncoding = Encoding.GetEncoding("gb2312");
-                    HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
+                    //HtmlWeb _web_Main = new HtmlWeb();
+                    //_web_Main.OverrideEncoding = Encoding.GetEncoding("gb2312");
+                    //HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
                     //_doc_Main = _web_Main.Load("https://www.biquzhh.com/13_13134/");
 
                     //textstat(sender, "就绪");
@@ -479,6 +498,20 @@ namespace UIdesign
             Boksf_lb.ItemsSource = boksf;
 
             boksf.Add(bok);
+
+            // 数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(fic.Name) == 0)
+            {
+                novelDAL.addNovel(fic.Name, "hi");
+            }
+            var Novel_id = novelDAL.exsitsNovel(fic.Name);
+            Console.WriteLine(Novel_id);
+            novelDAL.updateNovel(Novel_id, "starred", "1");
+            // 数据库结束
+
+
+
 
             new Thread(() =>
             {

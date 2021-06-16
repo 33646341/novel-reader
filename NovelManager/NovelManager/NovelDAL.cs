@@ -44,6 +44,17 @@ namespace NovelManager
             Console.ReadLine();
         }
 
+
+        public IEnumerable<SqliteDataReader> getStarredNovels()
+        {
+            return ExecuteReader($@"
+                SELECT `nid`,`name`,`author`,`url`,`image`
+                FROM novel
+                WHERE starred is not NULL
+                order by nid
+            ");
+        }
+
         public IEnumerable<SqliteDataReader> getDownloadedNovels()
         {
             return ExecuteReader($@"
@@ -151,13 +162,20 @@ namespace NovelManager
             }
         }
 
-        public bool isStarred(int nid)
+        public int isStarred(int nid)
         {
-            return ExecuteReader($@"
-                SELECT `cid`,`nid`
-                FROM collection
+            foreach (var obj in ExecuteReader($@"
+                SELECT `starred`
+                FROM novel
                 where nid = {nid};
-            ").Count() > 0;
+            "))
+            {
+                if (!obj.IsDBNull(0))
+                {
+                    return obj.GetInt32(0); // 成功返回
+                }
+            }
+            return 0; // 失败返回
         }
 
         public double readingProgress(int cid)
