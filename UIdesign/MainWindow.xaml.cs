@@ -606,7 +606,7 @@ namespace UIdesign
         //已完成中每项是可删除
         Novel_Spider.Spider dwn = new Novel_Spider.Spider();
         bool is_prepared = false;
-        private void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
+        public void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
         {
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源

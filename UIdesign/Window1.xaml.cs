@@ -110,36 +110,12 @@ namespace UIdesign
             {
                 object sen = this.detaillist.SelectedItems[i];
                 Fiction emp = sen as Fiction;
-                Down_Load(sender, e, emp);
+                MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                mainWindow.Down_Load(sender, e, emp);
             }
         }
 
-        ObservableCollection<Fiction> pro = new ObservableCollection<Fiction>();
-        Novel_Spider.Spider dwn = new Novel_Spider.Spider();
-        bool is_prepared = false;
-        private void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
-        {
-            //LV_DwnPage.ItemsSource = progress;
-            dwn.novel_name = fic.Name;
-            new Thread(() =>//后端添加到下载队列
-            {
-                //dwn.button3_Click(sender, e);//添加按钮，添加到队列开始下载
-                dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
-                while (!dwn.down_or_not()) ;
-                is_prepared = true;
-                //System.Windows.Forms.MessageBox.Show("添加成功！");
-
-            }).Start();
-
-            Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
-            if (pro != null)
-            {
-                fiction.Barvalue = 0;
-            }
-
-            pro.Add(fiction);
-
-        }
+       
         #endregion
 
         #region 加入书架
