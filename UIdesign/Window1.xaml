@@ -330,15 +330,15 @@
                                 <GridViewColumn x:Name="number" DisplayMemberBinding=
                           "{Binding number}"   Header="章节数" Width="180" ></GridViewColumn>
                                 <GridViewColumn x:Name="name" DisplayMemberBinding=
-                          "{Binding name}" Header="章节名" Width="200"></GridViewColumn>
-                                <GridViewColumn x:Name="progress" Header="阅读进度" Width="200">
+                          "{Binding name}" Header="章节名" Width="260"></GridViewColumn>
+                                <GridViewColumn x:Name="progress" Header="阅读进度" Width="180">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <ProgressBar  Style="{DynamicResource ProgressBarPrimaryStripe}" Value="50"  HorizontalAlignment="Left" Margin="0" Height="18" VerticalAlignment="Top" Width="150" FontSize="10" Visibility="Visible" Background="#FFFFFF"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn x:Name="download"  CellTemplate="{StaticResource checkBoxTemplate}" Header="是否下载" Width="200"></GridViewColumn>
+                                <GridViewColumn x:Name="download"  CellTemplate="{StaticResource checkBoxTemplate}" Header="是否下载" Width="180"></GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>

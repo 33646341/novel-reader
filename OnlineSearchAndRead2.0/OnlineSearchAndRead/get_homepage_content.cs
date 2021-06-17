@@ -113,7 +113,7 @@ namespace OnlineSearchAndRead
                 HtmlNodeCollection _hnc_Content_List = _doc_Main.DocumentNode.SelectNodes("//div[starts-with(@class,'listmain')]/dl/dd");
                     //查询列表第一项为表头，所有查询项数据需要大于1
                     for (int i = 0; i < 12; i++)
-                        _hnc_Content_List.RemoveAt(0);
+                        if (_hnc_Content_List != null) _hnc_Content_List.RemoveAt(0);
 
                     foreach (HtmlNode _hn in _hnc_Content_List)
                 {
@@ -179,7 +179,7 @@ namespace OnlineSearchAndRead
                     HtmlNodeCollection _hnc_Content_List = _doc_Main.DocumentNode.SelectNodes("//div[starts-with(@class,'listmain')]/dl/dd");
                     //查询列表第一项为表头，所有查询项数据需要大于1
                     for (int i = 0; i < 12; i++)
-                        _hnc_Content_List.RemoveAt(0);
+                        if (_hnc_Content_List != null) _hnc_Content_List.RemoveAt(0);
 
                     foreach (HtmlNode _hn in _hnc_Content_List)
                     {

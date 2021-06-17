@@ -50,12 +50,16 @@ namespace UIdesign
                     if (l1[i].col_chapter_name[l] == '章') break;
                     if (l1[i].col_chapter_name[l] != '章' && l == l1[i].col_chapter_name.Length - 1)
                     {
-                        chapter_name = "断更";
+                        chapter_name = l1[i].col_chapter_name;
+                        chapter_number = "作者并未设置章节数！";
                     }
+                    
                 }
                 if (l < l1[i].col_chapter_name.Length)
                 {
                     chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
+                    if (chapter_name == "") chapter_name = "作者并未设置章节名称!";
+                    if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
                     chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
                 }
 
