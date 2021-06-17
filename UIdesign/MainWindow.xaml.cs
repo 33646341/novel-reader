@@ -27,6 +27,7 @@ using HandyControl.Tools;
 using HandyControl.Controls;
 using System.Net;
 using System.Text.RegularExpressions;
+using Microsoft.VisualBasic;
 
 namespace UIdesign
 {
@@ -161,6 +162,7 @@ namespace UIdesign
         #region 搜索按钮
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
@@ -382,17 +384,11 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis, li);   //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(lis, li);  //Login为窗口名，把要跳转的新窗口实例化
+                   
                     login1.Show();
                 });
             }).Start();
-
-
-
-
-
-
-
 
         }
         #endregion

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using OnlineSearchAndRead;
+using Microsoft.VisualBasic;
+
 
 namespace UIdesign
 {
@@ -20,7 +22,7 @@ namespace UIdesign
     /// </summary>
     public partial class ReadWindow : Window
     {
-        public ReadWindow(string url,string number,string name,string content,int propotion)
+        public ReadWindow(string url,string number,string name)
         {
             get_chapter_content g = new get_chapter_content();
             string url1 = "https://www.biquzhh.com" + url;
@@ -30,7 +32,7 @@ namespace UIdesign
             InitializeComponent();
             var p = this.Resources["FlowDocumentDemo"] as FlowDocument;
             p.Blocks.Add(paragraph1);
-            ProgressBar1.Value = propotion;
+            ProgressBar1.Value = 1;
             textblock1.Text = number + " " + name;
         }
         private void SelectedColorChanged1(object sender, RoutedEventArgs e)
@@ -133,6 +135,12 @@ namespace UIdesign
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+                                                                                                                                                                                                                                                         
+        }
+
+        private void addnote_Click(object sender, RoutedEventArgs e)
+        {
+            String s = Interaction.InputBox("", "添加笔记", "", -1, -1);
 
         }
     }

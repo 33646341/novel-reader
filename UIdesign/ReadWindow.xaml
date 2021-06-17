@@ -9,9 +9,9 @@
         Title="ReadWindow" Height="800" Width="1000">
     <Window.Resources>
         <FlowDocument x:Key="FlowDocumentDemo" x:Shared="False" ColumnWidth="400" IsOptimalParagraphEnabled="True" IsHyphenationEnabled="True">
-            <!--<Paragraph x:Name="Paragraph2">
-                balablablaa
-            </Paragraph>-->
+            <Paragraph x:Name="Paragraph2">
+                balablablaaa
+            </Paragraph>
         </FlowDocument>
         <Style TargetType="{x:Type ProgressBar}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
@@ -171,10 +171,12 @@
                     </StackPanel>
                 </hc:SplitButton.DropDownContent>
             </hc:SplitButton>-->
+            <Viewbox Margin="4.333,0,4.333,0" Grid.Column="1">
+                <hc:FlipClock Panel.ZIndex="10000" Margin="0,0,0,0" DisplayTime="2021-06-17"  Background="#FFFF6363"/>
+            </Viewbox>
 
 
-
-            <Button x:Name="addnote" Style="{StaticResource ButtonPrimary}" Content="添加笔记" Grid.Column="2" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" RenderTransformOrigin="0.312,0.372"  Width="173" Height="31" FontSize="12" Foreground="#FFFBF8F8" Background="#FF2286F3" BorderBrush="#FF5A5858"/>
+            <Button x:Name="addnote" Style="{StaticResource ButtonPrimary}" Content="添加笔记" Grid.Column="2" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" RenderTransformOrigin="0.312,0.372"  Width="173" Height="31" FontSize="12" Foreground="#FFFBF8F8" Background="#FF2286F3" BorderBrush="#FF5A5858" Click="addnote_Click"/>
             <!--<Button x:Name="fullbtn" Style="{StaticResource ButtonPrimary}" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" VerticalAlignment="Top" Width="174" Height="29" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown">
                 <hc:Poptip.Instance>
                     <hc:Poptip  Content="按ESC退出全屏" PlacementType="TopLeft"/>
@@ -186,7 +188,6 @@
             <!--<Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="80.333,40,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>
             <Button x:Name="smaller" Content="-" Grid.Column="1" HorizontalAlignment="Left" Margin="130.333,40,0,0" VerticalAlignment="Top" Visibility="Hidden" RenderTransformOrigin="0.315,0.407" Background="#FFA46464" Foreground="#FFFEFDFD" Height="34" FontSize="15" Width="35" Click="smaller_Click"/>-->
             <Image Grid.Column="0" Source="img\read.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="1.883,0.564"/>
-            <Image x:Name="fontimg" Visibility="Visible"  Grid.Column="1" Source="img\font.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="39"/>
             <Image Grid.Column="2" Source="img\write.png" HorizontalAlignment="Stretch" Height="39" Margin="104,29,104,0" VerticalAlignment="Top" Width="37"/>
             <Image Grid.Column="3" Source="img\fullscreen.png" HorizontalAlignment="Stretch" Height="39" Margin="104,30,104,0" VerticalAlignment="Top" Width="42" RenderTransformOrigin="0.714,0.658"/>
 

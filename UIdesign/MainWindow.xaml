@@ -109,7 +109,7 @@
                     <TabControl Margin="0,0,9.6,-0.4" Grid.ColumnSpan="2">
                         <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
                             <StackPanel>
-                                <ListView x:Name="LV_DwnPage"  SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
+                                <ListView x:Name="LV_DwnPage" SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
                                           ItemsSource="{Binding Source={StaticResource Fic}}">
                                     <ListView.View>
                                         <GridView>
