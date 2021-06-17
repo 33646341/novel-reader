@@ -229,10 +229,10 @@ namespace UIdesign
                             if (!fictionResultCache.Keys.Contains(fiction_i))
                             {
                                 result = content.TupleDetail(fiction_i.Url);
-                                while (result == null )
+                                if (result == null)
                                 {
                                     HandyControl.Controls.MessageBox.Info("王继承的函数报空值异常，但是他又没去做处理，可能导致错误结果，点击确认尝试再次加载（可以略等一会，防止服务器繁忙）");
-                                    result = content.TupleDetail(fiction_i.Url);
+                                    //result = content.TupleDetail(fiction_i.Url);
 
                                 }
                                 fictionResultCache.Add(fiction_i, result); // 加入快表
@@ -347,12 +347,39 @@ namespace UIdesign
 
                 Tuple<fiction_info, List<chapter_list>> result;
 
-                //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
-                while (!fictionResultCache.Keys.Contains(emp))
+                if (fictionResultCache.Keys.Contains(emp))
                 {
-                    Thread.Sleep(100);
+                    result = fictionResultCache[emp];
                 }
-                result = fictionResultCache[emp];
+                else if (!_ltfi_Search.Contains(emp))
+                {
+                    // 如果不是从搜索页发出的请求，那就直接查
+                    result = content.TupleDetail(emp.Url);
+                    try
+                    {
+                        fictionResultCache.Add(emp, result); // 加入快表
+
+                    }
+                    catch (Exception e)
+                    {
+                        HandyControl.Controls.MessageBox.Show(e.Message);
+                    }
+
+                }
+                else
+                {
+                    //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
+                    while (!fictionResultCache.Keys.Contains(emp))
+                    {
+                        Thread.Sleep(100);
+                    }
+                    result = fictionResultCache[emp];
+                }
+
+
+
+
+
                 /*
                 // 先查快表
                 if (fictionResultCache.Keys.Contains(emp))
