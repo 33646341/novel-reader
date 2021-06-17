@@ -27,6 +27,7 @@ using HandyControl.Tools;
 using HandyControl.Controls;
 using System.Net;
 using System.Text.RegularExpressions;
+using Microsoft.VisualBasic;
 
 namespace UIdesign
 {
@@ -161,6 +162,7 @@ namespace UIdesign
         #region 搜索按钮
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
@@ -234,7 +236,7 @@ namespace UIdesign
                                     HandyControl.Controls.MessageBox.Info("王继承的函数报空值异常，但是他又没去做处理，可能导致错误结果，点击确认尝试再次加载（可以略等一会，防止服务器繁忙）");
                                     //result = content.TupleDetail(fiction_i.Url);
 
-                                }
+                                //}
                                 fictionResultCache.Add(fiction_i, result); // 加入快表
                                 Console.WriteLine($"{fiction_i.Id} Done!");
                                 Dispatcher.Invoke(delegate ()
@@ -409,17 +411,11 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis, li);   //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(lis, li);  //Login为窗口名，把要跳转的新窗口实例化
+                   
                     login1.Show();
                 });
             }).Start();
-
-
-
-
-
-
-
 
         }
         #endregion

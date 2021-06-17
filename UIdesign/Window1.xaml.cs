@@ -13,6 +13,10 @@ using System.Windows.Media.Imaging;
 using OnlineSearchAndRead;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Net;
+using System.Text.RegularExpressions;
+
 
 namespace UIdesign
 {
@@ -24,7 +28,7 @@ namespace UIdesign
     {
 
         ObservableCollection<Chapterlist> alllist = new ObservableCollection<Chapterlist>();
-        string url = "";
+        
         public Window1(List<chapter_list> l1, fiction_info a)
         {
             InitializeComponent();
@@ -40,7 +44,7 @@ namespace UIdesign
                 int l = 0;
                 string chapter_name = "";
                 string chapter_number = "";
-                url = l1[i].col_chapter_url;
+                
                 for (; l < l1[i].col_chapter_name.Length; l++)
                 {
                     if (l1[i].col_chapter_name[l] == '章') break;
@@ -60,7 +64,7 @@ namespace UIdesign
 
                     number = chapter_number,
                     name = chapter_name,
-                    content = l1[i].col_chapter_content
+                    url = l1[i].col_chapter_url
                 };
 
                 alllist.Add(chapterlist1);
@@ -75,11 +79,9 @@ namespace UIdesign
         {
             var firstint = alllist.First();
             var listsize = alllist.Count;
-            MessageBox.Show(listsize.ToString());
-            int propotion = 1;
-            ReadWindow readWindow1 = new ReadWindow(url, firstint.number, firstint.name, firstint.content, propotion);
+            ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name);
             readWindow1.Show();
-            this.Close();
+            
         }
         #endregion
 
@@ -90,21 +92,111 @@ namespace UIdesign
             var listsize = alllist.Count;
             Console.WriteLine(listsize);
             //int index = this.detaillist.Items.IndexOf(emp);
-            int propotion =  /*index*100 / listsize;*/80;
-            ReadWindow readWindow1 = new ReadWindow(url, emp.number, emp.name, emp.content, propotion);
+            ReadWindow readWindow1 = new ReadWindow(emp.url, emp.number, emp.name);
             readWindow1.Show();
         }
         #endregion
 
+        #region 点击下载
+
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-
+            
+            for(int i=0;i< this.detaillist.SelectedItems.Count; i++)
+            {
+                object sen = this.detaillist.SelectedItems[i];
+                Fiction emp = sen as Fiction;
+                Down_Load(sender, e, emp);
+            }
         }
 
+        ObservableCollection<Fiction> pro = new ObservableCollection<Fiction>();
+        Novel_Spider.Spider dwn = new Novel_Spider.Spider();
+        bool is_prepared = false;
+        private void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            //LV_DwnPage.ItemsSource = progress;
+            dwn.novel_name = fic.Name;
+            new Thread(() =>//后端添加到下载队列
+            {
+                //dwn.button3_Click(sender, e);//添加按钮，添加到队列开始下载
+                dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
+                while (!dwn.down_or_not()) ;
+                is_prepared = true;
+                //System.Windows.Forms.MessageBox.Show("添加成功！");
+
+            }).Start();
+
+            Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
+            if (pro != null)
+            {
+                fiction.Barvalue = 0;
+            }
+
+            pro.Add(fiction);
+
+        }
+        #endregion
+
+        #region 加入书架
+        ObservableCollection<CardModel> boksf = new ObservableCollection<CardModel>();//书架页
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            for (int i = 0; i < this.detaillist.SelectedItems.Count; i++)
+            {
+                object sen = this.detaillist.SelectedItems[i];
+                Fiction emp = sen as Fiction;
+                Add_Bksf(sender, e, emp);
+            }
+            
         }
+
+        private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            BitmapImage bi = new BitmapImage();
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            bi.BeginInit();
+            bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
+            bi.EndInit();
+
+            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author, Url = fic.Url };
+
+
+            boksf.Add(bok);
+
+            // 数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(fic.Name) == 0)
+            {
+                novelDAL.addNovel(fic.Name, fic.Url);
+            }
+            var Novel_id = novelDAL.exsitsNovel(fic.Name);
+            Console.WriteLine(Novel_id);
+            novelDAL.updateNovel(Novel_id, "starred", "1");
+            // 数据库结束
+
+            new Thread(() =>
+            {
+                WebClient webClient = new WebClient();
+                var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
+                var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
+                var imageUrl = "";
+                if (matchResult.Success)
+                {
+                    imageUrl = matchResult.Groups[1].Value;
+                    //HandyControl.Controls.MessageBox.Show(imageUrl);
+
+                    novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
+
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        BitmapImage img = new BitmapImage(new Uri(imageUrl));
+                        bok.Cover = img;
+                    });
+                }
+            }).Start();
+        }
+        #endregion
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -128,7 +220,7 @@ namespace UIdesign
     {
         public string number { get; set; }
         public string name { get; set; }
-        public string content { get; set; }
+        public string url { get; set; }
     }
     #endregion
 }
