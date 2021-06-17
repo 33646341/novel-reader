@@ -22,19 +22,21 @@ namespace UIdesign
     /// </summary>
     public partial class ReadWindow : Window
     {
+        string content;
         public ReadWindow(string url,string number,string name)
         {
             get_chapter_content g = new get_chapter_content();
             string url1 = "https://www.biquzhh.com" + url;
-            Run r = new Run("ababab");
-            Paragraph paragraph1 = new Paragraph(/*new Run(g.Get_Chapter_Content(url1))*/);
-            paragraph1.Inlines.Add(r);
+            content = g.Get_Chapter_Content(url1);
+            //MessageBox.Show(content);
+            Run r = new Run(content);
+            Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
             InitializeComponent();
-            var p = this.Resources["FlowDocumentDemo"] as FlowDocument;
-            p.Blocks.Add(paragraph1);
             ProgressBar1.Value = 1;
             textblock1.Text = number + " " + name;
+            FlowDocument1.Blocks.Add(paragraph1);
         }
+
         private void SelectedColorChanged1(object sender, RoutedEventArgs e)
         {
             string color = ColorPicker.SelectedBrush.ToString();
@@ -135,13 +137,20 @@ namespace UIdesign
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-                                                                                                                                                                                                                                                         
+            MessageBox.Show(addnote.IsLoaded.ToString());
+            MessageBox.Show(FlowDocument1.IsLoaded.ToString());
+            //if (this.IsLoaded)
+            //{
+            //    Run r = new Run(content);
+            //    Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
+            //    //FlowDocument1.Blocks.Add(paragraph1);
+            //}
+
         }
 
         private void addnote_Click(object sender, RoutedEventArgs e)
         {
             String s = Interaction.InputBox("", "添加笔记", "", -1, -1);
-
         }
     }
 }
