@@ -327,6 +327,7 @@ namespace UIdesign
         private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
+            
             get_homepage_content content = new get_homepage_content();
             //MessageBox.Show(emp.col_fiction_url);
 
@@ -411,7 +412,7 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis, li);  //Login为窗口名，把要跳转的新窗口实例化
+                    Window1 login1 = new Window1(lis, li,emp);  //Login为窗口名，把要跳转的新窗口实例化
                    
                     login1.Show();
                 });
@@ -567,7 +568,7 @@ namespace UIdesign
 
             //}).Start();
         }
-        private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
             BitmapImage bi = new BitmapImage();
             // BitmapImage.UriSource must be in a BeginInit/EndInit block.
@@ -656,8 +657,6 @@ namespace UIdesign
             }
 
             progress.Add(fiction);
-
-
 
         }
         private void Dwn_start_Click(object sender, RoutedEventArgs e)

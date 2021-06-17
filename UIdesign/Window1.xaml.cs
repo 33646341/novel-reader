@@ -28,17 +28,19 @@ namespace UIdesign
     {
 
         ObservableCollection<Chapterlist> alllist = new ObservableCollection<Chapterlist>();
-        
-        public Window1(List<chapter_list> l1, fiction_info a)
+        Fiction f1 = new Fiction();
+        List<chapter_list> l2;
+        public Window1(List<chapter_list> l1, fiction_info a,Fiction f)
         {
             InitializeComponent();
+            l2 = l1;
             Fiction_name.Text = a.col_fiction_name;
             Author_name.Text = a.col_fiction_author + " | " + a.col_fiction_type;
             Total_number.Text = $"小说 | " + a.col_fiction_stata;
             this.detaillist.ItemsSource = alllist;
             this.introduction.Text = a.col_fiction_introduction;
             this.surfaceimg.Source = new BitmapImage(new Uri(a.col_url_poster));
-
+            f1 = f;
             for (int i = 0; i < l1.Count; i++)
             {
                 int l = 0;
@@ -51,14 +53,14 @@ namespace UIdesign
                     if (l1[i].col_chapter_name[l] != '章' && l == l1[i].col_chapter_name.Length - 1)
                     {
                         chapter_name = l1[i].col_chapter_name;
-                        chapter_number = "作者并未设置章节数！";
+                        chapter_number = "章节数格式不规范！";
                     }
                     
                 }
                 if (l < l1[i].col_chapter_name.Length)
                 {
                     chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
-                    if (chapter_name == "") chapter_name = "作者并未设置章节名称!";
+                    if (chapter_name == "") chapter_name = "章节名称格式不规范!";
                     if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
                     chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
                 }
@@ -83,7 +85,7 @@ namespace UIdesign
         {
             var firstint = alllist.First();
             var listsize = alllist.Count;
-            ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name);
+            ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name, l2,0);
             readWindow1.Show();
             
         }
@@ -93,10 +95,11 @@ namespace UIdesign
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Chapterlist emp = detaillist.SelectedItem as Chapterlist;
+            int index = detaillist.SelectedIndex;
             var listsize = alllist.Count;
             Console.WriteLine(listsize);
             //int index = this.detaillist.Items.IndexOf(emp);
-            ReadWindow readWindow1 = new ReadWindow(emp.url, emp.number, emp.name);
+            ReadWindow readWindow1 = new ReadWindow(emp.url, emp.number, emp.name,l2,index);
             readWindow1.Show();
         }
         #endregion
@@ -105,14 +108,8 @@ namespace UIdesign
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            
-            for(int i=0;i< this.detaillist.SelectedItems.Count; i++)
-            {
-                object sen = this.detaillist.SelectedItems[i];
-                Fiction emp = sen as Fiction;
                 MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                mainWindow.Down_Load(sender, e, emp);
-            }
+                mainWindow.Down_Load(sender, e, f1);
         }
 
        
@@ -122,60 +119,60 @@ namespace UIdesign
         ObservableCollection<CardModel> boksf = new ObservableCollection<CardModel>();//书架页
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < this.detaillist.SelectedItems.Count; i++)
-            {
-                object sen = this.detaillist.SelectedItems[i];
-                Fiction emp = sen as Fiction;
-                Add_Bksf(sender, e, emp);
-            }
-            
+                MainWindow mainwin = Application.Current.MainWindow as MainWindow;
+                mainwin.Add_Bksf(sender, e, f1);
         }
 
-        private void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
-        {
-            BitmapImage bi = new BitmapImage();
-            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
-            bi.BeginInit();
-            bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
-            bi.EndInit();
+        //public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        //{
+        //    BitmapImage bi = new BitmapImage();
+        //    // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+        //    bi.BeginInit();
+        //    bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
+        //    bi.EndInit();
 
-            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author, Url = fic.Url };
+        //    CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author, Url = fic.Url };
 
 
-            boksf.Add(bok);
+        //    boksf.Add(bok);
 
-            // 数据库开始
-            var novelDAL = new NovelManager.NovelDAL();
-            if (novelDAL.exsitsNovel(fic.Name) == 0)
-            {
-                novelDAL.addNovel(fic.Name, fic.Url);
-            }
-            var Novel_id = novelDAL.exsitsNovel(fic.Name);
-            Console.WriteLine(Novel_id);
-            novelDAL.updateNovel(Novel_id, "starred", "1");
-            // 数据库结束
+        //    // 数据库开始
+        //    var novelDAL = new NovelManager.NovelDAL();
+        //    if (novelDAL.exsitsNovel(fic.Name) == 0)
+        //    {
+        //        novelDAL.addNovel(fic.Name, fic.Url);
+        //    }
+        //    var Novel_id = novelDAL.exsitsNovel(fic.Name);
+        //    Console.WriteLine(Novel_id);
+        //    novelDAL.updateNovel(Novel_id, "starred", "1");
+        //    // 数据库结束
 
-            new Thread(() =>
-            {
-                WebClient webClient = new WebClient();
-                var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
-                var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
-                var imageUrl = "";
-                if (matchResult.Success)
-                {
-                    imageUrl = matchResult.Groups[1].Value;
-                    //HandyControl.Controls.MessageBox.Show(imageUrl);
 
-                    novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
 
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        BitmapImage img = new BitmapImage(new Uri(imageUrl));
-                        bok.Cover = img;
-                    });
-                }
-            }).Start();
-        }
+
+        //    new Thread(() =>
+        //    {
+        //        WebClient webClient = new WebClient();
+        //        var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
+        //        var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
+        //        var imageUrl = "";
+        //        if (matchResult.Success)
+        //        {
+        //            imageUrl = matchResult.Groups[1].Value;
+        //            //HandyControl.Controls.MessageBox.Show(imageUrl);
+
+        //            novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
+
+        //            Dispatcher.Invoke(delegate ()
+        //            {
+        //                BitmapImage img = new BitmapImage(new Uri(imageUrl));
+        //                bok.Cover = img;
+        //            });
+        //        }
+        //    }).Start();
+        //}
+
+
         #endregion
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -192,7 +189,14 @@ namespace UIdesign
         {
 
         }
+        #region
+        public void AddNote(object sender, RoutedEventArgs e, String s)
+        {
+
+        }
+        #endregion
     }
+
 
 
     #region 数据源

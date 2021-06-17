@@ -23,8 +23,12 @@ namespace UIdesign
     public partial class ReadWindow : Window
     {
         string content;
-        public ReadWindow(string url,string number,string name)
+        int index1;
+        List<chapter_list> list1;
+        public ReadWindow(string url,string number,string name, List<chapter_list> l1,int index)
         {
+            index1 = index;
+            list1 = l1;
             get_chapter_content g = new get_chapter_content();
             string url1 = "https://www.biquzhh.com" + url;
             content = g.Get_Chapter_Content(url1);
@@ -32,7 +36,9 @@ namespace UIdesign
             Run r = new Run(content);
             Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
             InitializeComponent();
-            ProgressBar1.Value = 1;
+            double pvalue = (index + 1) * 100 / l1.Count;
+            if (pvalue < 1) pvalue = 1;
+            ProgressBar1.Value = pvalue;
             textblock1.Text = number + " " + name;
             FlowDocument1.Blocks.Add(paragraph1);
         }
@@ -137,8 +143,43 @@ namespace UIdesign
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(addnote.IsLoaded.ToString());
-            MessageBox.Show(FlowDocument1.IsLoaded.ToString());
+            //MessageBox.Show(addnote.IsLoaded.ToString());
+            //MessageBox.Show(FlowDocument1.IsLoaded.ToString());
+
+            index1++;
+            int l = 0;
+            string chapter_name = "";
+            string chapter_number = "";
+
+            for (; l < list1[index1].col_chapter_name.Length; l++)
+            {
+                if (list1[index1].col_chapter_name[l] == '章') break;
+                if (list1[index1].col_chapter_name[l] != '章'&& l == list1[index1].col_chapter_name.Length - 1)
+                {
+                    chapter_name = list1[index1].col_chapter_name;
+                    chapter_number = "章节数不规范！";
+                }
+
+            }
+            if (l < list1[index1].col_chapter_name.Length)
+            {
+                chapter_name = list1[index1].col_chapter_name.Substring(l + 1, list1[index1].col_chapter_name.Length - l - 1);
+                if (chapter_name == "") chapter_name = "章节名称不规范!";
+                if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, list1[index1].col_chapter_name.Length - l - 1);
+                chapter_number = list1[index1].col_chapter_name.Substring(0, l + 1);
+            }
+
+            var chapterlist1 = new Chapterlist()
+            {
+
+                number = chapter_number,
+                name = chapter_name,
+                url = list1[index1].col_chapter_url
+            };
+            
+            ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1);
+            readWindow1.Show();
+            Close();
             //if (this.IsLoaded)
             //{
             //    Run r = new Run(content);
@@ -148,9 +189,69 @@ namespace UIdesign
 
         }
 
+        bool iswriting = false;
         private void addnote_Click(object sender, RoutedEventArgs e)
         {
-            String s = Interaction.InputBox("", "添加笔记", "", -1, -1);
+            if(iswriting == false)
+            {
+                GroupBox1.Visibility = Visibility.Visible;
+                string s = Textnode.Text;
+                addnote.Content = "保存笔记";
+                iswriting = true;
+            }
+            else
+            {
+                GroupBox1.Visibility = Visibility.Collapsed;
+                addnote.Content = "添加笔记";
+                iswriting = false;
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            
+            if (index1 > 0)
+            {
+                index1--;
+                int l = 0;
+                string chapter_name = "";
+                string chapter_number = "";
+
+                for (; l < list1[index1].col_chapter_name.Length; l++)
+                {
+                    if (list1[index1].col_chapter_name[l] == '章') break;
+                    if (list1[index1].col_chapter_name[l] != '章'&& l == list1[index1].col_chapter_name.Length - 1)
+                    {
+                        chapter_name = list1[index1].col_chapter_name;
+                        chapter_number = "章节数格式不规范！";
+                    }
+
+                }
+                if (l < list1[index1].col_chapter_name.Length)
+                {
+                    chapter_name = list1[index1].col_chapter_name.Substring(l + 1, list1[index1].col_chapter_name.Length - l - 1);
+                    if (chapter_name == "") chapter_name = "章节名称格式不规范!";
+                    if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, list1[index1].col_chapter_name.Length - l - 1);
+                    chapter_number = list1[index1].col_chapter_name.Substring(0, l + 1);
+                }
+
+                var chapterlist1 = new Chapterlist()
+                {
+
+                    number = chapter_number,
+                    name = chapter_name,
+                    url = list1[index1].col_chapter_url
+                };
+                
+                ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1);
+                readWindow1.Show();
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("已经是第一章！");
+            }
+           
         }
     }
 }
