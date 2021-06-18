@@ -37,14 +37,16 @@ namespace UIdesign
         This_chapter_list pro = new This_chapter_list();
         int seed = 0;
         bool isonline1;
+        string novelname1;
         public Window1(List<chapter_list> l1, fiction_info a,Fiction f,Boolean isonline, This_chapter_list prolist)
         {
             InitializeComponent();
             l2 = l1;
             pro = prolist;
             isonline1 = isonline;
+            novelname1 = f.fic_name;
             if (!isonline)
-            {
+            { 
                 Fiction_name.Text = a.col_fiction_name;
                 Author_name.Text = a.col_fiction_author + " | " + a.col_fiction_type;
                 Total_number.Text = $"小说 | " + a.col_fiction_stata;
@@ -99,7 +101,7 @@ namespace UIdesign
             {
                 MessageBox.Show(prolist.chapter_name.Count.ToString());
                 Fiction_name.Text = f.fic_name;
-                Author_name.Text = f.fic_author + " | " ;
+                Author_name.Text = "["+f.fic_author + "]" ;
                 Total_number.Text = $"小说 | 已下载 ";
                 this.detaillist.ItemsSource = alllist;
                 this.notelist1.ItemsSource = notelist;
@@ -181,7 +183,7 @@ namespace UIdesign
             var firstint = alllist.First();
             var listsize = alllist.Count;
             //MessageBox.Show(firstint.url);
-            ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name, l2,0,isonline1,pro);
+            ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name, l2,0,isonline1,pro,novelname1);
             readWindow1.Show();
             
         }
@@ -216,7 +218,7 @@ namespace UIdesign
             var listsize = alllist.Count;
             Console.WriteLine(listsize);
             //int index = this.detaillist.Items.IndexOf(emp);
-            ReadWindow readWindow1 = new ReadWindow(emp.url, emp.number, emp.name,l2,index,isonline1,pro);
+            ReadWindow readWindow1 = new ReadWindow(emp.url, emp.number, emp.name,l2,index,isonline1,pro,novelname1);
             readWindow1.Show();
         }
         #endregion

@@ -23,17 +23,21 @@ namespace UIdesign
     public partial class ReadWindow : Window
     {
         string content;
+        string chaptername;
         int index1;
         Boolean isonline1;
         List<chapter_list> list1;
         This_chapter_list pro;
-        public ReadWindow(string url, string number, string name, List<chapter_list> l1, int index,Boolean isonline, This_chapter_list prolist)
+        string novelname1;
+        public ReadWindow(string url, string number, string name, List<chapter_list> l1, int index,Boolean isonline, This_chapter_list prolist,string novelname)
         {
             InitializeComponent();
             index1 = index;
             isonline1 = isonline;
             list1 = l1;
             pro = prolist;
+            chaptername = name;
+            novelname1 = novelname;
             if (!isonline)
             {
                 get_chapter_content g = new get_chapter_content();
@@ -216,12 +220,12 @@ namespace UIdesign
                     url = list1[index1].col_chapter_url
                 };
 
-                ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1, isonline1, pro);
+                ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1, isonline1, pro,novelname1);
                 readWindow1.Show();
             }
             else
             {
-                ReadWindow readWindow1 = new ReadWindow("", "", "", list1, index1, isonline1, pro);
+                ReadWindow readWindow1 = new ReadWindow("", "", "", list1, index1, isonline1, pro,novelname1);
                 readWindow1.Show();
             }
             
@@ -235,24 +239,28 @@ namespace UIdesign
 
         }
 
-        bool iswriting = false;
+      
         string s;
         private void addnote_Click(object sender, RoutedEventArgs e)
         {
-            if (iswriting == false)
-            {
+            
                 GroupBox1.Visibility = Visibility.Visible;
-                s = Textnode.Text;
-                Textnode.Focus();
-                addnote.Content = "保存笔记";
-                iswriting = true;
-            }
-            else
-            {
-                GroupBox1.Visibility = Visibility.Collapsed;
-                addnote.Content = "添加笔记";
-                iswriting = false;
-            }
+                
+            
+        }
+        private void finishnote_Click(object sender, RoutedEventArgs e)
+        {
+            chapter_comment cc = new chapter_comment();
+            s = Textnode.Text;
+            cc.save_comment(novelname1, chaptername, s, "C:\\User\\ASW\\Desktop\\note\\");
+            GroupBox1.Visibility = Visibility.Collapsed;
+        }
+
+        private void checknote_Click(object sender, RoutedEventArgs e)
+        {
+            chapter_comment cc = new chapter_comment();
+            Textnode.Text = cc.load_comment(novelname1, chaptername,"C:\\User\\ASW\\Desktop\\note\\");
+            GroupBox1.Visibility = Visibility.Visible;
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -293,13 +301,13 @@ namespace UIdesign
                         url = list1[index1].col_chapter_url
                     };
 
-                    ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1, isonline1, pro);
+                    ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1, isonline1, pro,novelname1);
                     readWindow1.Show();
 
                 }
                 else
                 {
-                    ReadWindow readWindow1 = new ReadWindow("", "", "", list1, index1, isonline1, pro);
+                    ReadWindow readWindow1 = new ReadWindow("", "", "", list1, index1, isonline1, pro,novelname1);
                     readWindow1.Show();
                 }
                
@@ -309,6 +317,36 @@ namespace UIdesign
             {
                 MessageBox.Show("已经是第一章！");
             }
+
+        }
+        chapter_reader cr = new chapter_reader();
+        Boolean isreading = false;
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            if(isreading == false)
+            {
+                cr.speak_begin(content);
+                isreading = true;
+            }
+            else
+            {
+                cr.pause_and_resume();
+                if (cr.tag == false)
+                {
+                    var color1 = (Color)ColorConverter.ConvertFromString("#555");
+                    System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+                    readbtn.Background = BColor;
+
+                }
+                else
+                {
+                    var color1 = (Color)ColorConverter.ConvertFromString("#FFE9AF20");
+                    System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+                    readbtn.Background = BColor;
+                }
+
+            }
+            
 
         }
     }
