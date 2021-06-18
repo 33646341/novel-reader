@@ -162,7 +162,7 @@ namespace UIdesign
         #region 搜索按钮
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
@@ -185,10 +185,11 @@ namespace UIdesign
             {
 
                 _fic_info = form.Search_Result();
-                _fic_info = _fic_info.Take(10).ToList();
 
                 if (_fic_info != null)
                 {
+                    _fic_info = _fic_info.Take(10).ToList();
+
                     Dispatcher.Invoke(delegate ()
                     {
                         _ltfi_Search.Clear();
@@ -233,11 +234,15 @@ namespace UIdesign
                             if (!fictionResultCache.Keys.Contains(fiction_i))
                             {
                                 result = content.TupleDetail(fiction_i.Url);
-                                if (result == null)
+                                int liveTimes = 5;
+                                while (liveTimes > 0 && result == null)
                                 {
+                                    liveTimes -= 1;
+                                    Console.WriteLine("liveTimes = " + liveTimes);
+                                    Thread.Sleep(5000);
+                                    Console.WriteLine("王继承的函数报空值异常，但是他又没去做处理，可能导致错误结果，点击确认尝试再次加载（可以略等一会，防止服务器繁忙）");
                                     //HandyControl.Controls.MessageBox.Info("王继承的函数报空值异常，但是他又没去做处理，可能导致错误结果，点击确认尝试再次加载（可以略等一会，防止服务器繁忙）");
                                     result = content.TupleDetail(fiction_i.Url);
-
                                 }
                                 fictionResultCache.TryAdd(fiction_i, result); // 加入快表
                                 Console.WriteLine($"{fiction_i.Id} Done!");
@@ -329,7 +334,7 @@ namespace UIdesign
         private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
-            
+
             get_homepage_content content = new get_homepage_content();
             //MessageBox.Show(emp.col_fiction_url);
 
@@ -406,6 +411,11 @@ namespace UIdesign
                 // 查快表结束
                 */
 
+                if (result == null)
+                {
+                    HandyControl.Controls.MessageBox.Info("您的请求过于频繁，请稍候再试。");
+                    return;
+                }
 
                 List<chapter_list> lis = result.Item2;
                 //MessageBox.Show(lis[1].col_chapter_content);
@@ -414,8 +424,8 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis, li,emp);  //Login为窗口名，把要跳转的新窗口实例化
-                   
+                    Window1 login1 = new Window1(lis, li, emp);  //Login为窗口名，把要跳转的新窗口实例化
+
                     login1.Show();
                 });
             }).Start();
