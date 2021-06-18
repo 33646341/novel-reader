@@ -108,7 +108,13 @@
                         <ColumnDefinition Width="758*"/>
                     </Grid.ColumnDefinitions>
                     <TabControl Margin="0,0,9.6,-0.4" Grid.ColumnSpan="2">
-                        <TabItem Header="正在下载" Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
+                        
+                        <TabItem  Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
+                            <TabItem.Header>
+                                <hc:Badge Text="{Binding }" BadgeMargin="80,-14,-20,0" Height="30">
+                                    正在下载
+                                </hc:Badge>
+                            </TabItem.Header>
                             <StackPanel>
                                 <ListView x:Name="LV_DwnPage" SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
                                           ItemsSource="{Binding Source={StaticResource Fic}}">

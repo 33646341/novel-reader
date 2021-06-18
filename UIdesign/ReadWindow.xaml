@@ -141,6 +141,7 @@
                 <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="35" Margin="11,7,0,17.333" TextWrapping="Wrap" Text="阅读进度" VerticalAlignment="center" Width="80" BorderBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="#FFF6F5F5" FontSize="15" Background="{x:Null}" SelectionBrush="{x:Null}"/>
 
             </Grid>
+            <Button x:Name="readbtn"  Content="" Style="{StaticResource ButtonWarning}" hc:IconElement.Geometry="{StaticResource AudioGeometry}" Padding="6" HorizontalAlignment="Left" Margin="146,11,0,0" VerticalAlignment="Top" Width="34" Height="33" Click="Button_Click_4"/>
         </Grid>
         <Grid x:Name="Grid2" Grid.Row="2" Background="#FFFFFF">
             <Grid.ColumnDefinitions>
@@ -171,9 +172,15 @@
             <Viewbox Margin="4.333,0,4.333,0" Grid.Column="1">
                 <hc:FlipClock Panel.ZIndex="10000" Margin="0,0,0,0" DisplayTime="2021-06-17"  Background="#FFFF6363"/>
             </Viewbox>
-
-
-            <Button x:Name="addnote" Style="{StaticResource ButtonPrimary}" Content="添加笔记" Grid.Column="2" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" RenderTransformOrigin="0.312,0.372"  Width="173" Height="31" FontSize="12" Foreground="#FFFBF8F8" Background="#FF2286F3" BorderBrush="#FF5A5858" Click="addnote_Click"/>
+            <hc:SplitButton Style="{StaticResource SplitButtonPrimary}" Content="关于笔记" Grid.Column="2" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" RenderTransformOrigin="0.312,0.372"  Width="173" Height="31" FontSize="12" Foreground="#FFFBF8F8" Background="#FF2286F3" BorderBrush="#FF5A5858" >
+                <hc:SplitButton.DropDownContent>
+                    <StackPanel>
+                        <MenuItem Header="添加笔记" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command1" Click="addnote_Click"/>
+                        <MenuItem Header="查看笔记" hc:IconElement.Geometry="{StaticResource SubGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command2" Click="checknote_Click"/>
+                        <MenuItem Header="保存笔记" hc:IconElement.Geometry="{StaticResource AddGeometry}" Command="{Binding SelectCmd}" CommandParameter="Command3" Click="finishnote_Click"/>
+                    </StackPanel>
+                </hc:SplitButton.DropDownContent>
+            </hc:SplitButton>
             <!--<Button x:Name="fullbtn" Style="{StaticResource ButtonPrimary}" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667" VerticalAlignment="Top" Width="174" Height="29" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown">
                 <hc:Poptip.Instance>
                     <hc:Poptip  Content="按ESC退出全屏" PlacementType="TopLeft"/>
@@ -191,9 +198,9 @@
         </Grid>
         <Grid x:Name="Grid1" Grid.Row="1" Background="#FFFFFF" RenderTransformOrigin="0.27,0.183">
             <hc:TransitioningContentControl Panel.ZIndex="10000" x:Name="searchPanel" TransitionMode="Top2BottomWithFade" >
-                <GroupBox x:Name="GroupBox1" Grid.Row="0" Grid.Column="1" Visibility="Collapsed" Header="ADD NOTE" Padding="10" Margin="1,-1,-1.667,196.667" hc:TitleElement.TitlePlacement="Left">
+                <GroupBox x:Name="GroupBox1" Grid.Row="0" Grid.Column="1"  Header="ADD NOTE" Visibility="Collapsed" Padding="10" Margin="1,-1,-1.667,196.667" hc:TitleElement.TitlePlacement="Left">
                     <Border Background="{DynamicResource RegionBrush}" CornerRadius="4">
-                        <hc:TextBox x:Name="Textnode" TextWrapping="Wrap" FontSize="20" Text="" VerticalAlignment="Center" HorizontalAlignment="Center" Height="315" Margin="32,32,31.333,27" Width="872"/>
+                        <hc:TextBox x:Name="Textnode" TextWrapping="Wrap" FontSize="20" Text="" VerticalAlignment="Center" HorizontalAlignment="Center" Height="270" Margin="32,32,31.333,72" Width="872"/>
                     </Border>
                 </GroupBox>
             </hc:TransitioningContentControl>

@@ -90,6 +90,55 @@ namespace NovelManager
             }
         }
 
+
+        public int updateChapter(int cid, string propName, string value)
+        {
+            if (exsitsChapter(cid) > 0)
+            {
+                return ExecuteNonQuery($@"
+                    UPDATE chapter
+                    set {propName} = {value}
+                    where chaid = {cid}
+                ");
+            }
+            return 0;
+        }
+
+
+        public int exsitsChapter(int chaid)
+        {
+            // 此处低调的foreach实则是GetEnumerator()的优雅形式。
+            foreach (var obj in ExecuteReader($@"
+                SELECT chapter.chaid 
+                FROM chapter 
+                WHERE chapter.chaid = {chaid};
+            "))
+            {
+                if (!obj.IsDBNull(0))
+                {
+                    return obj.GetInt32(0); // 成功返回
+                }
+            }
+            return 0; // 失败返回
+        }
+
+        public int exsitsChapter(string url)
+        {
+            // 此处低调的foreach实则是GetEnumerator()的优雅形式。
+            foreach (var obj in ExecuteReader($@"
+                SELECT chapter.chaid 
+                FROM chapter 
+                WHERE chapter.curl = '{url}';
+            "))
+            {
+                if (!obj.IsDBNull(0))
+                {
+                    return obj.GetInt32(0); // 成功返回
+                }
+            }
+            return 0; // 失败返回
+        }
+
         public int updateNovel(int nid, string propName, string value)
         {
             if (exsitsNovel(nid) > 0)
@@ -161,6 +210,28 @@ namespace NovelManager
                 return 0; // 违反唯一性约束，已收藏的小说重复收藏了
             }
         }
+
+
+        public int hadRead(string curl)
+        {
+            if (exsitsChapter(curl) > 0)
+            {
+                foreach (var obj in ExecuteReader($@"
+                    SELECT chapter.readTimes 
+                    FROM chapter 
+                    where curl = {curl};
+                "))
+                {
+                    if (!obj.IsDBNull(0))
+                    {
+                        return obj.GetInt32(0); // 成功返回
+                    }
+                }
+                return 0; // 失败返回
+            }
+            return 0;
+        }
+
 
         public int isStarred(int nid)
         {

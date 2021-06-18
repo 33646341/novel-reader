@@ -34,10 +34,7 @@
             this.labChapter = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.btnRead = new System.Windows.Forms.Button();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.导入书籍ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // labName
@@ -54,7 +51,7 @@
             // 
             this.txtContent.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.txtContent.Location = new System.Drawing.Point(347, 35);
-            this.txtContent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtContent.Margin = new System.Windows.Forms.Padding(4);
             this.txtContent.Multiline = true;
             this.txtContent.Name = "txtContent";
             this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -65,7 +62,7 @@
             // 
             this.treeView1.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.treeView1.Location = new System.Drawing.Point(16, 35);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(4);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(321, 620);
             this.treeView1.TabIndex = 2;
@@ -84,7 +81,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(1777, 609);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 29);
             this.button1.TabIndex = 4;
@@ -95,31 +92,13 @@
             // btnRead
             // 
             this.btnRead.Location = new System.Drawing.Point(1617, 609);
-            this.btnRead.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnRead.Margin = new System.Windows.Forms.Padding(4);
             this.btnRead.Name = "btnRead";
             this.btnRead.Size = new System.Drawing.Size(100, 29);
             this.btnRead.TabIndex = 5;
             this.btnRead.Text = "下一章";
             this.btnRead.UseVisualStyleBackColor = true;
             this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.导入书籍ToolStripMenuItem1});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1924, 28);
-            this.menuStrip1.TabIndex = 7;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // 导入书籍ToolStripMenuItem1
-            // 
-            this.导入书籍ToolStripMenuItem1.Name = "导入书籍ToolStripMenuItem1";
-            this.导入书籍ToolStripMenuItem1.Size = new System.Drawing.Size(83, 24);
-            this.导入书籍ToolStripMenuItem1.Text = "导入书籍";
-            this.导入书籍ToolStripMenuItem1.Click += new System.EventHandler(this.导入书籍ToolStripMenuItem1_Click);
             // 
             // openFileDialog1
             // 
@@ -130,21 +109,17 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1924, 662);
-            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.btnRead);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.labChapter);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.txtContent);
             this.Controls.Add(this.labName);
-            this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,8 +132,6 @@
         private System.Windows.Forms.Label labChapter;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnRead;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem 导入书籍ToolStripMenuItem1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
