@@ -186,6 +186,8 @@ namespace UIdesign
             {
 
                 _fic_info = form.Search_Result();
+                _fic_info = _fic_info.Take(10).ToList();
+
                 if (_fic_info != null)
                 {
                     Dispatcher.Invoke(delegate ()
@@ -234,8 +236,8 @@ namespace UIdesign
                                 result = content.TupleDetail(fiction_i.Url);
                                 if (result == null)
                                 {
-                                    HandyControl.Controls.MessageBox.Info("王继承的函数报空值异常，但是他又没去做处理，可能导致错误结果，点击确认尝试再次加载（可以略等一会，防止服务器繁忙）");
-                                    //result = content.TupleDetail(fiction_i.Url);
+                                    //HandyControl.Controls.MessageBox.Info("王继承的函数报空值异常，但是他又没去做处理，可能导致错误结果，点击确认尝试再次加载（可以略等一会，防止服务器繁忙）");
+                                    result = content.TupleDetail(fiction_i.Url);
 
                                 }
                                 fictionResultCache.Add(fiction_i, result); // 加入快表

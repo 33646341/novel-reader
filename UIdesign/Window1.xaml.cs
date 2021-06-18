@@ -70,7 +70,7 @@ namespace UIdesign
                     if (l < l1[i].col_chapter_name.Length)
                     {
                         chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
-                        if (chapter_name == "") chapter_name = "章节名称格式不规范!";
+                        if (chapter_name == "") chapter_name = "[无章节名]";
                         //if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
                         chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
                     }
@@ -123,7 +123,7 @@ namespace UIdesign
                     if (l < prolist.chapter_name[i][l])
                     {
                         chapter_name = prolist.chapter_name[i].Substring(l + 1, prolist.chapter_name[i].Length - l - 1);
-                        if (chapter_name == "") chapter_name = "章节名称格式不规范!";
+                        if (chapter_name == "") chapter_name = "[无章节名]";
                         //if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
                         chapter_number = prolist.chapter_name[i].Substring(0, l + 1);
                     }
@@ -178,7 +178,7 @@ namespace UIdesign
             
             var firstint = alllist.First();
             var listsize = alllist.Count;
-            MessageBox.Show(firstint.url);
+            //MessageBox.Show(firstint.url);
             ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name, l2,0);
             readWindow1.Show();
             
