@@ -548,7 +548,7 @@ namespace UIdesign
             Fiction emp = sen as Fiction;
             this_chapter_list t1 = new this_chapter_list();
             This_chapter_list l1 = new This_chapter_list();
-            l1 = t1.Get_chapter("C:\\User\\ASW\\Desktop\\down\\Novel\\" + emp.Name);
+            l1 = t1.Get_chapter(@".\Novel\" + emp.Name);
             
             Window1 login1 = new Window1(null,null, emp, true, l1);  //Login为窗口名，把要跳转的新窗口实例化
             login1.Show();
@@ -682,7 +682,7 @@ namespace UIdesign
             };
             new Thread(() =>//显示添加下载状态
             { 
-                dwn.download_add(fic.Url, "C://Users//ASW//Desktop//down");
+                dwn.download_add(fic.Url, @".\down");
                 //添加进度条
             }).Start();
             if (dwn.down_or_not())
