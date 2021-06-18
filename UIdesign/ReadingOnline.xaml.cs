@@ -683,7 +683,7 @@ namespace UIdesign
                 //    search_stat.Text = "添加中...";
                 //});
                 //System.Windows.MessageBox.Show("添加中！");
-                dwn.download_add(fic.Url, "C://Users//ASW//Desktop//down");
+                dwn.download_add(fic.Url, Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
                 //System.Windows.MessageBox.Show("添加成功！");
                 //Dispatcher.Invoke(delegate ()
                 //{
@@ -691,17 +691,33 @@ namespace UIdesign
                 //});
                 //添加进度条
             }).Start();
-                if (dwn.down_or_not())
-                {
-                    DwnProgress = Visibility.Collapsed;
-                    Thread.Sleep(1000);
 
-                    //
-                    Dwnum++;
-                    Thread.Sleep(1000);
-                    search_stat.Text = "";
-                    is_prepared = true;
-                };
+                new Thread(() =>
+                {
+                    while (true)
+                    {
+                        if (dwn.down_or_not())
+                        {
+                            DwnProgress = Visibility.Collapsed;
+                            Thread.Sleep(1000);
+
+                            //
+                            Dwnum++;
+                            Thread.Sleep(1000);
+                            this.Dispatcher.Invoke(
+               new Action(
+                    delegate
+                    {
+                        search_stat.Text = "";
+                    }
+               ));
+                            is_prepared = true;
+                            break;
+                        };
+                    }
+                }
+                ).Start();
+
                 Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
                 if (progress != null)
                 {
