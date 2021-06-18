@@ -95,6 +95,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BindableBase.cs" />
+    <Compile Include="chapter_comment.cs" />
     <Compile Include="ReadWindow.xaml.cs">
       <DependentUpon>ReadWindow.xaml</DependentUpon>
     </Compile>
