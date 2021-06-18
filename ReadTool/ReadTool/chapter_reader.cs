@@ -11,6 +11,8 @@ namespace ReadTool
     {
         public SpeechSynthesizer speak = new SpeechSynthesizer();
 
+        public bool tag = true;
+
         public void speak_begin(string chapter)
         {
             speak.Volume = 100;
@@ -23,9 +25,20 @@ namespace ReadTool
             }
         }
 
-        public void speak_puase()
+        public void pause_and_resume()
         {
-            speak.Pause();
+            if(tag == true)
+            {
+                speak.Pause();
+
+                tag = false;
+            }
+            else
+            {
+                speak.Resume();
+
+                tag = true;
+            }
         }
     }
 }
