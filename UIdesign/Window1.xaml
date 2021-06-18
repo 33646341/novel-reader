@@ -147,8 +147,140 @@
 
         </Style>
 
+        <Style x:Key="headerListView1" TargetType="{x:Type GridViewColumnHeader}">
+
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="Background" Value="#FFFFFF"/>
+
+            <Setter Property="Foreground" Value="#555"/>
+
+            <Setter Property="BorderBrush" Value="#FF0977EF"/>
+
+            <Setter Property="BorderThickness" Value="0,0,0,3"/>
+
+            <Setter Property="Height" Value="60"/>
+
+            <Setter Property="FontSize" Value="10"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <!--<SnippetGVCHControlTemplateStart>-->
+
+                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+
+                        <!--</SnippetGVCHControlTemplateStart>-->
+
+                        <Grid>
+
+                            <DockPanel Background="{TemplateBinding Background}">
+
+                                <!-- Hightlight at bottom -->
+
+                                <Border x:Name="HighlightBorder"
+ 
+                                                DockPanel.Dock="Bottom"
+ 
+                                                Background="Transparent"
+ 
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+ 
+                                                Height="3" BorderThickness="{TemplateBinding BorderThickness}"/>
+
+                                <!-- GridViewColumnHeader Content -->
+
+                                <Border BorderThickness="{TemplateBinding BorderThickness}"
+ 
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+ 
+                                                Padding="{TemplateBinding Padding}"
+ 
+                                                Height="{TemplateBinding Height}">
+
+                                    <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"                              
+ 
+                                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+ 
+                                                              RecognizesAccessKey="True"/>
+
+                                </Border>
+
+                            </DockPanel>
+
+                        </Grid>
 
 
+
+                        <ControlTemplate.Triggers>
+
+                            <!--</SnippetControlTemplateTriggersStart>-->
+
+                            <!--Trigger Property="IsMouseOver" Value="true">
+                                        <Setter TargetName="HighlightBorder" Property="BorderBrush" Value="Red"/>
+                                        <Setter TargetName="HighlightBorder" Property="Background" Value="Blue"/>
+                                        <Setter TargetName="HighlightBorder" Property="CornerRadius" Value="0,0,3,3"/>
+                                        <Setter TargetName="HighlightBorder" Property="BorderThickness" Value="1,0,1,1"/>
+                                        <Setter Property="Background" Value="#ffaa"/>
+                                    </Trigger-->
+
+                            <!--<SnippetIsPressed>-->
+
+                            <Trigger Property="IsPressed" Value="true">
+
+                                <Setter TargetName="HighlightBorder" Property="Visibility" Value="Hidden"/>
+
+                                <Setter Property="Background" Value="#FF0977EF"/>
+
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+
+                            </Trigger>
+
+                            <!--</SnippetIsPressed>-->
+
+                            <Trigger Property="Height" Value="Auto">
+
+                                <Setter Property="MinHeight" Value="20"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="false">
+
+                                <Setter Property="Foreground" Value="mistyrose"/>
+
+                            </Trigger>
+
+                            <!--<SnippetFloating>-->
+
+                            <Trigger Property="Role" Value="Floating">
+
+                                <Setter Property="Background" Value="#FF326CF3"/>
+
+                            </Trigger>
+
+                            <!--</SnippetFloating>-->
+
+                            <!--<SnippetControlTemplateTriggersEnd>-->
+
+                        </ControlTemplate.Triggers>
+
+                        <!--</SnippetControlTemplateTriggersEnd>-->
+
+                        <!--<SnippetGVCHControlTemplateEnd>-->
+
+                    </ControlTemplate>
+
+                    <!--</SnippetGVCHControlTemplateEnd>-->
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+    
         <Style x:Key="Listviewstyle" TargetType="ListView">
             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5"/>
@@ -201,6 +333,7 @@
             </Setter>
         </Style>
         <local:Chapterlist x:Key="t"/>
+        <local:note x:Key="n"/>
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
@@ -211,7 +344,18 @@
                         <ColumnDefinition Width="5*"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="introduction"   Grid.Column="0" TextWrapping="Wrap" Width="200" Background="#FFFFFF" FontSize="15" Foreground="#FF326CF3"  Margin="10,10,10,10" Text="Header" Style="{StaticResource TextBlockTitle}" HorizontalAlignment="Left" />
+                    <!--<TextBlock x:Name="introduction"   Grid.Column="0" TextWrapping="Wrap" Width="200" Background="#FFFFFF" FontSize="15" Foreground="#FF326CF3"  Margin="10,10,10,10" Text="Header" Style="{StaticResource TextBlockTitle}" HorizontalAlignment="Left" />-->
+                    <ListView x:Name="notelist1" Grid.Column="0" Margin="2"
+                              FontSize="10" ItemsSource="{Binding Source={StaticResource n}}" SelectionMode="Multiple">
+                        <ListView.View>
+                            <GridView  ColumnHeaderContainerStyle="{StaticResource headerListView1}" >
+                                <GridViewColumn x:Name="index" Width="50" Header="索引" DisplayMemberBinding=
+                          "{Binding index}"/>
+                                <GridViewColumn x:Name="context"  Width="180" Header="笔记内容" DisplayMemberBinding=
+                          "{Binding context}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
@@ -247,6 +391,7 @@
                     </LinearGradientBrush>
                 </Grid.OpacityMask>
                 <Border HorizontalAlignment="Stretch"  Style="{StaticResource BorderRegion}"  Margin="0,0,32,32">
+                    
                     <Border CornerRadius="15" Effect="{StaticResource EffectShadow5}" Margin="-4.333,-5.333,-817.667,-18.667">
                         <Border.Background>
                             <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
@@ -254,9 +399,17 @@
                                 <GradientStop Color="{DynamicResource DarkPrimaryColor}" Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
+                        
                         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
                     </Border>
                 </Border>
+                <hc:TransitioningContentControl Panel.ZIndex="1000" x:Name="searchPanel" Visibility="Collapsed" TransitionMode="Top2BottomWithFade" Grid.ColumnSpan="2" Margin="-191,3,319.333,23.667" >
+                    <GroupBox x:Name="GroupBox2" Grid.Row="0" Grid.Column="1"  Header="ADD NOTE" Padding="10" Margin="179,1,176,1.667" hc:TitleElement.TitlePlacement="Left" Width="481">
+                        <Border Background="{DynamicResource RegionBrush}" CornerRadius="4">
+                            <hc:TextBox x:Name="Textnode" TextWrapping="Wrap" FontSize="20" Text="" VerticalAlignment="Center" HorizontalAlignment="Center" Height="315" Margin="32,32,31.333,27" Width="872"/>
+                        </Border>
+                    </GroupBox>
+                </hc:TransitioningContentControl>
                 <Grid Grid.Column="0" Margin="0,0,0,0" RenderTransformOrigin="0.6,0.681">
                     <Border Background="#FFFFFF" Margin="60,30,0,40" CornerRadius="15">
                         <Image x:Name="surfaceimg" Source="img/emp.jpg" Height="170" Margin="0,0,0,0" >
@@ -334,7 +487,7 @@
                                 <GridViewColumn x:Name="progress" Header="阅读进度" Width="180">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <ProgressBar  Style="{DynamicResource ProgressBarPrimaryStripe}" Value="50"  HorizontalAlignment="Left" Margin="0" Height="18" VerticalAlignment="Top" Width="150" FontSize="10" Visibility="Visible" Background="#FFFFFF"/>
+                                            <ProgressBar  Style="{DynamicResource ProgressBarPrimaryStripe}" Value= "{Binding value}"  HorizontalAlignment="Left" Margin="0" Height="18" VerticalAlignment="Top" Width="150" FontSize="10" Visibility="Visible" Background="#FFFFFF"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

@@ -190,12 +190,13 @@ namespace UIdesign
         }
 
         bool iswriting = false;
+        string s;
         private void addnote_Click(object sender, RoutedEventArgs e)
         {
             if(iswriting == false)
             {
                 GroupBox1.Visibility = Visibility.Visible;
-                string s = Textnode.Text;
+                s = Textnode.Text;
                 addnote.Content = "保存笔记";
                 iswriting = true;
             }

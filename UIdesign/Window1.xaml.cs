@@ -18,6 +18,8 @@ using System.Net;
 using System.Text.RegularExpressions;
 
 
+
+
 namespace UIdesign
 {
     /// <summary>
@@ -28,8 +30,11 @@ namespace UIdesign
     {
 
         ObservableCollection<Chapterlist> alllist = new ObservableCollection<Chapterlist>();
+        ObservableCollection<note> notelist = new ObservableCollection<note>();
         Fiction f1 = new Fiction();
         List<chapter_list> l2;
+
+        int seed = 0;
         public Window1(List<chapter_list> l1, fiction_info a,Fiction f)
         {
             InitializeComponent();
@@ -38,7 +43,8 @@ namespace UIdesign
             Author_name.Text = a.col_fiction_author + " | " + a.col_fiction_type;
             Total_number.Text = $"小说 | " + a.col_fiction_stata;
             this.detaillist.ItemsSource = alllist;
-            this.introduction.Text = a.col_fiction_introduction;
+            this.notelist1.ItemsSource = notelist;
+            //this.introduction.Text = a.col_fiction_introduction;
             this.surfaceimg.Source = new BitmapImage(new Uri(a.col_url_poster));
             f1 = f;
             for (int i = 0; i < l1.Count; i++)
@@ -61,23 +67,50 @@ namespace UIdesign
                 {
                     chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
                     if (chapter_name == "") chapter_name = "章节名称格式不规范!";
-                    if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
+                    //if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
                     chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
                 }
-
+                
+                Random rd = new Random(seed);  //无参即为使用系统时钟为种子
+                string ss=rd.Next(100).ToString();
+                int v = int.Parse(ss);
+                seed = seed+5;
                 var chapterlist1 = new Chapterlist()
                 {
 
                     number = chapter_number,
                     name = chapter_name,
-                    url = l1[i].col_chapter_url
+                    url = l1[i].col_chapter_url,
+                    value = v
                 };
 
                 alllist.Add(chapterlist1);
 
             }
+            for (int l = 0; l < 4; l++)
+            {
+                var note1 = new note()
+                { 
+                    index = l,
+                    context = "abababab"
+                };
+                notelist.Add(note1);
+            }
 
         }
+        #region 添加笔记项
+        public void addnewnote(string s)
+        {
+
+            var note1 = new note()
+            {
+                index = notelist.Count,
+                context = s
+            };
+            notelist.Add(note1);
+
+        }
+        #endregion
 
 
         #region 立即阅读
@@ -205,6 +238,13 @@ namespace UIdesign
         public string number { get; set; }
         public string name { get; set; }
         public string url { get; set; }
+        public int value { get; set; }
+    }
+
+    public class note
+    {
+        public int index { get; set; }
+        public string context { get; set; }
     }
     #endregion
 }
