@@ -522,7 +522,7 @@ namespace UIdesign
         #region 书架页右键 查看详情，移除书架，添加下载
         public void Bok_InfoPage(object sender, RoutedEventArgs e)
         {
-            object sen = this.Boksf_lv.SelectedItems[0];
+            object sen = this.Boksf_lb.SelectedItems[0];
             Fiction emp = sen as Fiction;
             toinfopage(emp);
         }
@@ -535,7 +535,7 @@ namespace UIdesign
         public void Bok_DownLoadBook(object sender, RoutedEventArgs e)
         {
 
-            object sen = this.Boksf_lv.SelectedItems[0];
+            object sen = this.Boksf_lb.SelectedItems[0];
             Fiction emp = sen as Fiction;
             Down_Load(sender, e, emp);
         }
@@ -572,7 +572,7 @@ namespace UIdesign
         ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();//搜索页
         private void Remove_Bksf(object sender, RoutedEventArgs e, CardModel fic)
         {
-            Boksf_lv.ItemsSource = boksf;
+            Boksf_lb.ItemsSource = boksf;
             new Thread(() =>//前端添加下载项，无限制
             {
                 Dispatcher.Invoke(delegate ()
