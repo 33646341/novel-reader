@@ -28,6 +28,7 @@ using HandyControl.Controls;
 using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
+using ReadTool;
 
 namespace UIdesign
 {
@@ -238,7 +239,7 @@ namespace UIdesign
                                     result = content.TupleDetail(fiction_i.Url);
 
                                 }
-                                fictionResultCache.Add(fiction_i, result); // 加入快表
+                                fictionResultCache.TryAdd(fiction_i, result); // 加入快表
                                 Console.WriteLine($"{fiction_i.Id} Done!");
                                 Dispatcher.Invoke(delegate ()
                                 {
@@ -321,7 +322,7 @@ namespace UIdesign
         }
 
         //打开新窗口
-        Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>> fictionResultCache = new Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>>();
+        System.Collections.Concurrent.ConcurrentDictionary<Fiction, Tuple<fiction_info, List<chapter_list>>> fictionResultCache = new System.Collections.Concurrent.ConcurrentDictionary<Fiction, Tuple<fiction_info, List<chapter_list>>>();
         private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
@@ -358,7 +359,7 @@ namespace UIdesign
                     result = content.TupleDetail(emp.Url);
                     try
                     {
-                        fictionResultCache.Add(emp, result); // 加入快表
+                        fictionResultCache.TryAdd(emp, result); // 加入快表
 
                     }
                     catch (Exception e)
@@ -410,8 +411,9 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis, li, emp);  //Login为窗口名，把要跳转的新窗口实例化
-
+                    This_chapter_list provisionallist = new This_chapter_list();
+                    Window1 login1 = new Window1(lis, li,emp,false, provisionallist);  //Login为窗口名，把要跳转的新窗口实例化
+                   
                     login1.Show();
                 });
             }).Start();
@@ -535,7 +537,12 @@ namespace UIdesign
         {
             object sen = this.LV_loadedPage.SelectedItems[0];
             Fiction emp = sen as Fiction;
-            toinfopage(emp);
+            this_chapter_list t1 = new this_chapter_list();
+            This_chapter_list l1 = new This_chapter_list();
+            l1 = t1.Get_chapter("C:\\User\\ASW\\Desktop\\down\\Novel\\" + emp.Name);
+            
+            Window1 login1 = new Window1(null,null, emp, true, l1);  //Login为窗口名，把要跳转的新窗口实例化
+            login1.Show();
         }
         public void Del_bk(object sender, RoutedEventArgs e)
         {
@@ -819,9 +826,9 @@ namespace UIdesign
 
     public class Fiction : INotifyPropertyChanged
     {
-        private string fic_name;
-        private double barvalue;
-        private string fic_author;
+        public string fic_name;
+        public double barvalue;
+        public string fic_author;
         private string fic_url;
         private string id;
         public Fiction()

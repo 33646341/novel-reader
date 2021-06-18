@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using OnlineSearchAndRead;
 using Microsoft.VisualBasic;
-
+using ReadTool;
 
 namespace UIdesign
 {
@@ -24,32 +24,60 @@ namespace UIdesign
     {
         string content;
         int index1;
+        Boolean isonline1;
         List<chapter_list> list1;
-        public ReadWindow(string url, string number, string name, List<chapter_list> l1, int index)
+        This_chapter_list pro;
+        public ReadWindow(string url, string number, string name, List<chapter_list> l1, int index,Boolean isonline, This_chapter_list prolist)
         {
             InitializeComponent();
             index1 = index;
+            isonline1 = isonline;
             list1 = l1;
-            get_chapter_content g = new get_chapter_content();
-            string url1 = "https://www.biquzhh.com" + url;
-            content = g.Get_Chapter_Content(url1);
-            //MessageBox.Show(content);
-            //Run r = new Run();
-
-            foreach (var p in content.Split("\r\n".ToCharArray()))
+            pro = prolist;
+            if (!isonline)
             {
-                if (p.Length == 0 || p == "　　")
-                //if (p.Length < 5)
+                get_chapter_content g = new get_chapter_content();
+                string url1 = "https://www.biquzhh.com" + url;
+                content = g.Get_Chapter_Content(url1);
+                //MessageBox.Show(content);
+                //Run r = new Run();
+
+                foreach (var p in content.Split("\r\n".ToCharArray()))
                 {
-                    Console.WriteLine("跳过空章节！->" + p + "<-"); continue;
+                    if (p.Length == 0 || p == "　　")
+                    //if (p.Length < 5)
+                    {
+                        Console.WriteLine("跳过空章节！->" + p + "<-"); continue;
+                    }
+                    FlowDocument1.Blocks.Add(new Paragraph(new Run("　　" + p)));
                 }
-                FlowDocument1.Blocks.Add(new Paragraph(new Run("　　" + p)));
+                //Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
+                double pvalue = (index + 1) * 100 / l1.Count;
+                if (pvalue < 1) pvalue = 1;
+                ProgressBar1.Value = pvalue;
+                textblock1.Text = l1[index].col_chapter_name;
+
             }
-            //Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
-            double pvalue = (index + 1) * 100 / l1.Count;
-            if (pvalue < 1) pvalue = 1;
-            ProgressBar1.Value = pvalue;
-            textblock1.Text = number + " " + name;
+            else
+            {
+                content = prolist.chapter_content[index];
+                foreach (var p in content.Split("\r\n".ToCharArray()))
+                {
+                    if (p.Length == 0 || p == "　　")
+                    //if (p.Length < 5)
+                    {
+                        Console.WriteLine("跳过空章节！->" + p + "<-"); continue;
+                    }
+                    FlowDocument1.Blocks.Add(new Paragraph(new Run("　　" + p)));
+                }
+                //Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
+                double pvalue = (index + 1) * 100 / prolist.chapter_name.Count;
+                if (pvalue < 1) pvalue = 1;
+                ProgressBar1.Value = pvalue;
+                textblock1.Text = prolist.chapter_name[index];
+
+            }
+           
         }
 
         private void SelectedColorChanged1(object sender, RoutedEventArgs e)
@@ -123,7 +151,7 @@ namespace UIdesign
             this.WindowStyle = System.Windows.WindowStyle.None;
             this.WindowState = System.Windows.WindowState.Maximized;
 
-            flowdocumentreader1.Height = 800;
+            flowdocumentreader1.Height = 700;
             //MessageBox.Show("Esc退出全屏");
         }
         private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -157,37 +185,46 @@ namespace UIdesign
 
             index1++;
             int l = 0;
-            string chapter_name = "";
-            string chapter_number = "";
-
-            for (; l < list1[index1].col_chapter_name.Length; l++)
+            if (!isonline1)
             {
-                if (list1[index1].col_chapter_name[l] == '章') break;
-                if (list1[index1].col_chapter_name[l] != '章' && l == list1[index1].col_chapter_name.Length - 1)
+                string chapter_name = "";
+                string chapter_number = "";
+
+                for (; l < list1[index1].col_chapter_name.Length; l++)
                 {
-                    chapter_name = list1[index1].col_chapter_name;
-                    chapter_number = "章节数不规范！";
+                    if (list1[index1].col_chapter_name[l] == '章') break;
+                    if (list1[index1].col_chapter_name[l] != '章' && l == list1[index1].col_chapter_name.Length - 1)
+                    {
+                        chapter_name = list1[index1].col_chapter_name;
+                        chapter_number = "章节数不规范！";
+                    }
+
+                }
+                if (l < list1[index1].col_chapter_name.Length)
+                {
+                    chapter_name = list1[index1].col_chapter_name.Substring(l + 1, list1[index1].col_chapter_name.Length - l - 1);
+                    if (chapter_name == "") chapter_name = "[无章节名]";
+                    if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, list1[index1].col_chapter_name.Length - l - 1);
+                    chapter_number = list1[index1].col_chapter_name.Substring(0, l + 1);
                 }
 
+                var chapterlist1 = new Chapterlist()
+                {
+
+                    number = chapter_number,
+                    name = chapter_name,
+                    url = list1[index1].col_chapter_url
+                };
+
+                ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1, isonline1, pro);
+                readWindow1.Show();
             }
-            if (l < list1[index1].col_chapter_name.Length)
+            else
             {
-                chapter_name = list1[index1].col_chapter_name.Substring(l + 1, list1[index1].col_chapter_name.Length - l - 1);
-                if (chapter_name == "") chapter_name = "章节名称不规范!";
-                if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, list1[index1].col_chapter_name.Length - l - 1);
-                chapter_number = list1[index1].col_chapter_name.Substring(0, l + 1);
+                ReadWindow readWindow1 = new ReadWindow("", "", "", list1, index1, isonline1, pro);
+                readWindow1.Show();
             }
-
-            var chapterlist1 = new Chapterlist()
-            {
-
-                number = chapter_number,
-                name = chapter_name,
-                url = list1[index1].col_chapter_url
-            };
-
-            ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1);
-            readWindow1.Show();
+            
             Close();
             //if (this.IsLoaded)
             //{
@@ -206,6 +243,7 @@ namespace UIdesign
             {
                 GroupBox1.Visibility = Visibility.Visible;
                 s = Textnode.Text;
+                Textnode.Focus();
                 addnote.Content = "保存笔记";
                 iswriting = true;
             }
@@ -224,37 +262,47 @@ namespace UIdesign
             {
                 index1--;
                 int l = 0;
-                string chapter_name = "";
-                string chapter_number = "";
-
-                for (; l < list1[index1].col_chapter_name.Length; l++)
+                if (!isonline1)
                 {
-                    if (list1[index1].col_chapter_name[l] == '章') break;
-                    if (list1[index1].col_chapter_name[l] != '章' && l == list1[index1].col_chapter_name.Length - 1)
+                    string chapter_name = "";
+                    string chapter_number = "";
+
+                    for (; l < list1[index1].col_chapter_name.Length; l++)
                     {
-                        chapter_name = list1[index1].col_chapter_name;
-                        chapter_number = "章节数格式不规范！";
+                        if (list1[index1].col_chapter_name[l] == '章') break;
+                        if (list1[index1].col_chapter_name[l] != '章' && l == list1[index1].col_chapter_name.Length - 1)
+                        {
+                            chapter_name = list1[index1].col_chapter_name;
+                            chapter_number = "章节数格式不规范！";
+                        }
+
+                    }
+                    if (l < list1[index1].col_chapter_name.Length)
+                    {
+                        chapter_name = list1[index1].col_chapter_name.Substring(l + 1, list1[index1].col_chapter_name.Length - l - 1);
+                        if (chapter_name == "") chapter_name = "[无章节名]";
+                        if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, list1[index1].col_chapter_name.Length - l - 1);
+                        chapter_number = list1[index1].col_chapter_name.Substring(0, l + 1);
                     }
 
+                    var chapterlist1 = new Chapterlist()
+                    {
+
+                        number = chapter_number,
+                        name = chapter_name,
+                        url = list1[index1].col_chapter_url
+                    };
+
+                    ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1, isonline1, pro);
+                    readWindow1.Show();
+
                 }
-                if (l < list1[index1].col_chapter_name.Length)
+                else
                 {
-                    chapter_name = list1[index1].col_chapter_name.Substring(l + 1, list1[index1].col_chapter_name.Length - l - 1);
-                    if (chapter_name == "") chapter_name = "章节名称格式不规范!";
-                    if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, list1[index1].col_chapter_name.Length - l - 1);
-                    chapter_number = list1[index1].col_chapter_name.Substring(0, l + 1);
+                    ReadWindow readWindow1 = new ReadWindow("", "", "", list1, index1, isonline1, pro);
+                    readWindow1.Show();
                 }
-
-                var chapterlist1 = new Chapterlist()
-                {
-
-                    number = chapter_number,
-                    name = chapter_name,
-                    url = list1[index1].col_chapter_url
-                };
-
-                ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1);
-                readWindow1.Show();
+               
                 Close();
             }
             else
