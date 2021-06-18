@@ -33,9 +33,9 @@ using ReadTool;
 namespace UIdesign
 {
     /// <summary>
-    /// MainWindow.xaml 的交互逻辑
+    /// ReadingOnline.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : System.Windows.Window, INotifyPropertyChanged
+    public partial class ReadingOnline : System.Windows.Window, INotifyPropertyChanged
     {
         #region 加载圈相关
         public event PropertyChangedEventHandler PropertyChanged;
@@ -60,7 +60,7 @@ namespace UIdesign
             }
         }
         #endregion
-        public MainWindow()
+        public ReadingOnline()
         {
             InitializeComponent();
             keySearch.Focus();
@@ -672,29 +672,40 @@ namespace UIdesign
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
             dwn.novel_name = fic.Name;
-            if (!dwn.down_or_not())
-            {//未成功时进入while循环 ，成功时退出循环
-             //添加中
-                search_stat.Text = "添加中...";
-                search_stat.Text = "";
-                DwnProgress = Visibility.Visible;
-            };
+            //if (!dwn.down_or_not())
+            //{//未成功时进入while循环 ，成功时退出循环
+            // //添加中
+              
+            //    search_stat.Text = "";
+            //    DwnProgress = Visibility.Visible;
+            
+
             new Thread(() =>//显示添加下载状态
-            { 
+            {
+                //Dispatcher.Invoke(delegate ()
+                //{
+                //    search_stat.Text = "添加中...";
+                //});
+                System.Windows.MessageBox.Show("添加中！");
                 dwn.download_add(fic.Url, "C://Users//ASW//Desktop//down");
+                System.Windows.MessageBox.Show("添加成功！");
+                //Dispatcher.Invoke(delegate ()
+                //{
+                //    search_stat.Text = "添加成功";
+                //});
                 //添加进度条
             }).Start();
-            if (dwn.down_or_not())
-            {
-                DwnProgress = Visibility.Collapsed;
-                Thread.Sleep(1000);
-                search_stat.Text = "添加成功";
-                //
-                Dwnum ++ ;
-                Thread.Sleep(1000);
-                search_stat.Text = "";
-                is_prepared = true;
-            };
+            //if (dwn.down_or_not())
+            //{
+            //    DwnProgress = Visibility.Collapsed;
+            //    Thread.Sleep(1000);
+              
+            //    //
+            //    Dwnum ++ ;
+            //    Thread.Sleep(1000);
+            //    search_stat.Text = "";
+            //    is_prepared = true;
+            //};
             Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
             if (progress != null)
             {
@@ -817,7 +828,7 @@ namespace UIdesign
             public ImageSource DownLoadPath { get; set; }
         }
         public static readonly DependencyProperty DemoModelProperty = DependencyProperty.Register(
-            "DemoModel", typeof(PropertyGridModel), typeof(MainWindow), new PropertyMetadata(default(PropertyGridModel)));
+            "DemoModel", typeof(PropertyGridModel), typeof(ReadingOnline), new PropertyMetadata(default(PropertyGridModel)));
         public PropertyGridModel DemoModel
         {
             get => (PropertyGridModel)GetValue(DemoModelProperty);
