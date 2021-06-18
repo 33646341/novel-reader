@@ -17,9 +17,7 @@ using System.Threading;
 using System.Net;
 using System.Text.RegularExpressions;
 using ReadTool;
-
-
-
+using System.ComponentModel;
 
 namespace UIdesign
 {
@@ -40,6 +38,7 @@ namespace UIdesign
         string novelname1;
         public Window1(List<chapter_list> l1, fiction_info a,Fiction f,Boolean isonline, This_chapter_list prolist)
         {
+
             InitializeComponent();
             l2 = l1;
             pro = prolist;
@@ -90,7 +89,9 @@ namespace UIdesign
                         name = chapter_name,
                         url = l1[i].col_chapter_url,
                         value = v,
-                        content=""
+                        content = "",
+                        // 2021.6.28 新增 改色
+                        color = new SolidColorBrush(Color.FromRgb(100, 100, 100))
                     };
 
                     alllist.Add(chapterlist1);
@@ -215,6 +216,11 @@ namespace UIdesign
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Chapterlist emp = detaillist.SelectedItem as Chapterlist;
+
+            // 2021.6.28 新增 改色
+            emp.color = new SolidColorBrush(Color.FromRgb(0, 100, 100));
+            emp.OnPropertyChanged("color");
+
             int index = detaillist.SelectedIndex;
             saveReadRecord(emp, index);
             var listsize = alllist.Count;
@@ -328,13 +334,24 @@ namespace UIdesign
 
 
     #region 数据源
-    public class Chapterlist
+    public class Chapterlist: System.ComponentModel.INotifyPropertyChanged
     {
         public string number { get; set; }
         public string name { get; set; }
         public string url { get; set; }
         public int value { get; set; }
         public string content { get; set; }
+
+        public Brush color { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string info)
+        {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+
     }
 
     public class note

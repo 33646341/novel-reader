@@ -482,8 +482,16 @@
                                       ColumnHeaderContainerStyle="{StaticResource headerListView}">
                                 <GridViewColumn x:Name="number" DisplayMemberBinding=
                           "{Binding number}"   Header="章节数" Width="180" ></GridViewColumn>
-                                <GridViewColumn x:Name="name" DisplayMemberBinding=
-                          "{Binding name}" Header="章节名" Width="260"></GridViewColumn>
+                                <GridViewColumn x:Name="name" Header="章节名" Width="260">
+                                    <!--DisplayMemberBinding=
+                          "{Binding name}"-->
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Foreground="{Binding color}" Text="{Binding name}"></TextBlock>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+
+                                </GridViewColumn>
                                 <GridViewColumn x:Name="progress" Header="阅读进度" Width="180">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>

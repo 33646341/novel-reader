@@ -72,7 +72,7 @@ namespace UIdesign
                     {
                         Console.WriteLine("跳过空章节！->" + p + "<-"); continue;
                     }
-                    FlowDocument1.Blocks.Add(new Paragraph(new Run("　　" + p)));
+                    FlowDocument1.Blocks.Add(new Paragraph(new Run("　　" + p.Replace("　", ""))));
                 }
                 //Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
                 double pvalue = (index + 1) * 100 / prolist.chapter_name.Count;
