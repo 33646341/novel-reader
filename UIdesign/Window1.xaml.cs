@@ -242,7 +242,7 @@ namespace UIdesign
         #endregion
 
         #region 加入书架
-        ObservableCollection<CardModel> boksf = new ObservableCollection<CardModel>();//书架页
+        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();//书架页
         private void Button_Click(object sender, RoutedEventArgs e)
         {
                 MainWindow mainwin = Application.Current.MainWindow as MainWindow;

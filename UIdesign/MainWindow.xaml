@@ -190,7 +190,7 @@
                 <Grid x:Name="Boksf_grid">
                     <Grid>
                         <Grid.Resources>
-                            <vm:CardModel x:Key="Card"></vm:CardModel>
+                            <vm:Fiction x:Key="Card"></vm:Fiction>
                         </Grid.Resources>
                         <Grid.DataContext>
                             <Binding Source="{StaticResource Card}"/>
@@ -198,7 +198,7 @@
                         <ListBox x:Name="Boksf_lb" Margin="10,0,-0.4,0" BorderThickness="0" Style="{DynamicResource WrapPanelHorizontalListBox}" ItemsSource="{Binding Source={StaticResource Card}}" Height="612" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.406">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="data:CardModel">
-                                    <hc:Card Width="200" BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="8" Footer="{Binding Writer}">
+                                    <hc:Card Width="200" BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="8" Footer="{Binding Author}">
                                         <!--Card 的内容部分模板-->
                                         <Border CornerRadius="4,4,0,0" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type hc:Card}}}">
                                             <Image  Source="{Binding Cover}" Stretch="Fill" Height="{Binding Path=Height,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Margin="0,0,0,0" >
@@ -213,7 +213,7 @@
                                                 <StackPanel Margin="10" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type Border}}}">
                                                     <!--Card 的一级内容-->
                                                     <TextBlock x:Name="Header" TextWrapping="NoWrap"  Style="{DynamicResource TextBlockLargeBold}" TextTrimming="CharacterEllipsis" 
-                                           Text="{Binding DataContext.Fiction,RelativeSource={RelativeSource AncestorType=hc:Card}}" 
+                                           Text="{Binding DataContext.Name,RelativeSource={RelativeSource AncestorType=hc:Card}}" 
                                            HorizontalAlignment="Left"/>
                                                     <!--Card 的二级内容-->
                                                     <TextBlock TextWrapping="NoWrap" Style="{DynamicResource TextBlockDefault}" TextTrimming="CharacterEllipsis" 

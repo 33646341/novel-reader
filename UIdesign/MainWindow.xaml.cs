@@ -113,11 +113,11 @@ namespace UIdesign
                 bi.UriSource = new Uri(imageURL, UriKind.RelativeOrAbsolute);
                 bi.EndInit();
 
-                CardModel bok = new CardModel()
+                Fiction bok = new Fiction()
                 {
                     Cover = bi,
-                    Fiction = obj[1].ToString(),
-                    Writer = obj[2].ToString(),
+                    Name = obj[1].ToString(),
+                    Author = obj[2].ToString(),
                     Url = obj[3].ToString()
                 };
                 boksf.Add(bok);
@@ -529,7 +529,7 @@ namespace UIdesign
         public void RemoveBk(object sender, RoutedEventArgs e)
         {
             object sen = this.Boksf_lb.SelectedItems[0];
-            CardModel emp = sen as CardModel;
+            Fiction emp = sen as Fiction;
             Remove_Bksf(sender, e, emp);
         }
         public void Bok_DownLoadBook(object sender, RoutedEventArgs e)
@@ -566,11 +566,11 @@ namespace UIdesign
             Add_Bksf(sender, e, emp);
         }
         #endregion
-        ObservableCollection<CardModel> boksf = new ObservableCollection<CardModel>();//书架页
+        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();//书架页
         ObservableCollection<Fiction> progress = new ObservableCollection<Fiction>();//正下载
         ObservableCollection<Fiction> loaded = new ObservableCollection<Fiction>();//已下载
         ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();//搜索页
-        private void Remove_Bksf(object sender, RoutedEventArgs e, CardModel fic)
+        private void Remove_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
             Boksf_lb.ItemsSource = boksf;
             new Thread(() =>//前端添加下载项，无限制
@@ -588,9 +588,7 @@ namespace UIdesign
             bi.BeginInit();
             bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
             bi.EndInit();
-
-            CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author, Url = fic.Url };
-            boksf.Add(bok);
+            boksf.Add(fic);
 
             // 数据库开始
             var novelDAL = new NovelManager.NovelDAL();
@@ -622,7 +620,7 @@ namespace UIdesign
                     Dispatcher.Invoke(delegate ()
     {
         BitmapImage img = new BitmapImage(new Uri(imageUrl));
-        bok.Cover = img;
+        fic.Cover = img;
     });
                 }
             }).Start();
@@ -663,34 +661,27 @@ namespace UIdesign
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
             dwn.novel_name = fic.Name;
+            if (!dwn.down_or_not())
+            {//未成功时进入while循环 ，成功时退出循环
+             //添加中
+                search_stat.Text = "添加中...";
+                search_stat.Text = "";
+                DwnProgress = Visibility.Visible;
+            };
             new Thread(() =>//显示添加下载状态
-            {   while (!dwn.down_or_not()) {//未成功时进入while循环 ，成功时退出循环
-                                            //添加中
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        search_stat.Text = "添加中...";
-                        Thread.Sleep(1000);
-                        search_stat.Text = "";
-                        DwnProgress = Visibility.Visible;
-
-                    });
-                }
-                Dispatcher.Invoke(delegate ()
-                {
-                    DwnProgress = Visibility.Collapsed;
-                    Thread.Sleep(1000);
-                    search_stat.Text = "添加成功";
-                    Thread.Sleep(1000);
-                    search_stat.Text = "";
-
-                });
-                is_prepared = true;
+            { 
+                dwn.download_add(fic.Url, "C://Users//ASW//Desktop//down");
                 //添加进度条
             }).Start();
-            new Thread(() =>//后端添加到下载队列
+            if (dwn.down_or_not())
             {
-                dwn.download_add(fic.Url, "C://Users//ASW//Desktop//down");
-            }).Start();
+                DwnProgress = Visibility.Collapsed;
+                Thread.Sleep(1000);
+                search_stat.Text = "添加成功";
+                Thread.Sleep(1000);
+                search_stat.Text = "";
+                is_prepared = true;
+            };
             Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
             if (progress != null)
             {
@@ -837,6 +828,16 @@ namespace UIdesign
         public string fic_author;
         private string fic_url;
         private string id;
+        private BitmapImage cover;
+        public BitmapImage Cover
+        {
+            get { return cover; }
+            set
+            {
+                cover = value;
+                CoverPropertyChanged(nameof(Cover));
+            }
+        }
         public Fiction()
         {
         }
@@ -900,67 +901,17 @@ namespace UIdesign
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
+        private void CoverPropertyChanged(string info)
+        {
+            var handler = PropertyChanged;
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
     }
 
     public enum Gender
     {
         天蓝色,
         浅紫色
-    }
-    public class CardModel : INotifyPropertyChanged
-    {
-        private string fiction;
-        private string url;
-        private BitmapImage cover;
-        private string writer;
-        public string Writer
-        {
-            get { return writer; }
-            set
-            {
-                writer = value;
-                OnPropertyChanged(Writer);
-            }
-        }
-
-        public BitmapImage Cover
-        {
-            get { return cover; }
-            set
-            {
-                cover = value;
-                CoverPropertyChanged(nameof(Cover));
-            }
-        }
-        public string Fiction
-        {
-            get { return fiction; }
-            set
-            {
-                fiction = value;
-                OnPropertyChanged(Fiction);
-            }
-        }
-        public string Url
-        {
-            get { return url; }
-            set
-            {
-                url = value;
-                OnPropertyChanged(Url);
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string info)
-        {
-            var handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-        private void CoverPropertyChanged(string info)
-        {
-            var handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
     }
 
 
