@@ -71,8 +71,8 @@ namespace UIdesign
             DemoModel = new PropertyGridModel
             {
                 账户名 = "000001",
-                主题 = Gender.天蓝色,
                 读者号 = "2019305232130",
+                昵称="探险家",
 
             };
 
@@ -573,7 +573,7 @@ namespace UIdesign
         private void Remove_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
             Boksf_lb.ItemsSource = boksf;
-            new Thread(() =>//前端添加下载项，无限制
+            new Thread(() =>//前端删除下载项，无限制
             {
                 Dispatcher.Invoke(delegate ()
                 {
@@ -636,7 +636,7 @@ namespace UIdesign
         private void Del_Loaded(object sender, RoutedEventArgs e, Fiction fic)
         {
             LV_loadedPage.ItemsSource = loaded;
-            new Thread(() =>//前端添加下载项，无限制
+            new Thread(() =>//前端删除下载项，无限制
             {
 
                 Dispatcher.Invoke(delegate ()
@@ -668,49 +668,49 @@ namespace UIdesign
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
             dwn.novel_name = fic.Name;
-            //if (!dwn.down_or_not())
-            //{//未成功时进入while循环 ，成功时退出循环
-            // //添加中
-              
-            //    search_stat.Text = "";
-            //    DwnProgress = Visibility.Visible;
-            
+            if (!dwn.down_or_not())
+            {//未成功时进入while循环 ，成功时退出循环
+             //添加中
 
-            new Thread(() =>//显示添加下载状态
+                search_stat.Text = "";
+                DwnProgress = Visibility.Visible;
+
+
+                new Thread(() =>//显示添加下载状态
             {
                 //Dispatcher.Invoke(delegate ()
                 //{
                 //    search_stat.Text = "添加中...";
                 //});
-                System.Windows.MessageBox.Show("添加中！");
+                //System.Windows.MessageBox.Show("添加中！");
                 dwn.download_add(fic.Url, "C://Users//ASW//Desktop//down");
-                System.Windows.MessageBox.Show("添加成功！");
+                //System.Windows.MessageBox.Show("添加成功！");
                 //Dispatcher.Invoke(delegate ()
                 //{
                 //    search_stat.Text = "添加成功";
                 //});
                 //添加进度条
             }).Start();
-            //if (dwn.down_or_not())
-            //{
-            //    DwnProgress = Visibility.Collapsed;
-            //    Thread.Sleep(1000);
-              
-            //    //
-            //    Dwnum ++ ;
-            //    Thread.Sleep(1000);
-            //    search_stat.Text = "";
-            //    is_prepared = true;
-            //};
-            Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
-            if (progress != null)
-            {
-                fiction.Barvalue = 0;
+                if (dwn.down_or_not())
+                {
+                    DwnProgress = Visibility.Collapsed;
+                    Thread.Sleep(1000);
+
+                    //
+                    Dwnum++;
+                    Thread.Sleep(1000);
+                    search_stat.Text = "";
+                    is_prepared = true;
+                };
+                Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
+                if (progress != null)
+                {
+                    fiction.Barvalue = 0;
+                }
+                progress.Add(fiction);
             }
-            progress.Add(fiction);
+
         }
-
-
 
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
@@ -814,10 +814,7 @@ namespace UIdesign
             public string 读者号 { get; set; }
             public string 昵称 { get; set; }
 
-            [Category("个性化设置")]
-            public Gender 主题 { get; set; }
 
-            public ImageSource DownLoadPath { get; set; }
         }
         public static readonly DependencyProperty DemoModelProperty = DependencyProperty.Register(
             "DemoModel", typeof(PropertyGridModel), typeof(ReadingOnline), new PropertyMetadata(default(PropertyGridModel)));
@@ -924,34 +921,10 @@ namespace UIdesign
         }
     }
 
-    public enum Gender
-    {
-        天蓝色,
-        浅紫色
-    }
-
-    //public class Dwningnum : INotifyPropertyChanged
+    //public enum Gender
     //{
-    //    public string number;
-    //    public string Number
-    //    {
-    //        get { return number; }
-    //        set
-    //        {
-    //            number = value;
-    //            OnPropertyChanged(Number);
-    //        }
-    //    }
-    //    public Dwningnum()
-    //    {
-    //    }
-    //    public event PropertyChangedEventHandler PropertyChanged;
-    //    private void OnPropertyChanged(string info)
-    //    {
-    //        var handler = PropertyChanged;
-    //        handler?.Invoke(this, new PropertyChangedEventArgs(info));
-    //    }
-    //    
+    //    天蓝色,
+    //    浅紫色
     //}
     #endregion
 }
