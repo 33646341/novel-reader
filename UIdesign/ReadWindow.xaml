@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Name="Window1" x:Class="UIdesign.ReadWindow"
         mc:Ignorable="d"
-        Title="ReadWindow" Height="800" Width="1000">
+        Title="ReadWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
         <Style TargetType="{x:Type ProgressBar}">
@@ -196,11 +196,11 @@
                     </Border>
                 </GroupBox>
             </hc:TransitioningContentControl>
-            <FlowDocumentReader x:Name="flowdocumentreader1"  Margin="14,51,13.333,-3.333" Background="White">
-                <FlowDocument x:Name="FlowDocument1" ColumnWidth="400" IsOptimalParagraphEnabled="True" IsHyphenationEnabled="True">
-                    <Paragraph x:Name="Paragraph2">
-                    </Paragraph>
-                </FlowDocument>
+            <FlowDocumentReader x:Name="flowdocumentreader1" Margin="14,51,13.333,-3.333" Background="White">
+                <FlowDocumentReader.Document>
+                    <FlowDocument x:Name="FlowDocument1" ColumnWidth="400" IsOptimalParagraphEnabled="True" IsHyphenationEnabled="True">
+                    </FlowDocument>
+                </FlowDocumentReader.Document>
             </FlowDocumentReader>
             <!--<Label x:Name="label1" HorizontalAlignment="Stretch"  VerticalAlignment="Top" Height="3793" Background="#FFF3F1EC" BorderBrush="#FFF3F1EC" Width="995" />-->
             <hc:ColorPicker x:Name="ColorPicker" Margin="16,303,747.333,-68.333" Visibility="Hidden" SelectedColorChanged="SelectedColorChanged1" Canceled="Canceled"/>

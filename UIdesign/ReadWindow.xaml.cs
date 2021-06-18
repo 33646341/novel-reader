@@ -25,22 +25,31 @@ namespace UIdesign
         string content;
         int index1;
         List<chapter_list> list1;
-        public ReadWindow(string url,string number,string name, List<chapter_list> l1,int index)
+        public ReadWindow(string url, string number, string name, List<chapter_list> l1, int index)
         {
+            InitializeComponent();
             index1 = index;
             list1 = l1;
             get_chapter_content g = new get_chapter_content();
             string url1 = "https://www.biquzhh.com" + url;
             content = g.Get_Chapter_Content(url1);
             //MessageBox.Show(content);
-            Run r = new Run(content);
-            Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
-            InitializeComponent();
+            //Run r = new Run();
+
+            foreach (var p in content.Split("\r\n".ToCharArray()))
+            {
+                if (p.Length == 0 || p == "　　")
+                //if (p.Length < 5)
+                {
+                    Console.WriteLine("跳过空章节！->" + p + "<-"); continue;
+                }
+                FlowDocument1.Blocks.Add(new Paragraph(new Run("　　" + p)));
+            }
+            //Paragraph paragraph1 = new Paragraph(r/*new Run(g.Get_Chapter_Content(url1))*/);
             double pvalue = (index + 1) * 100 / l1.Count;
             if (pvalue < 1) pvalue = 1;
             ProgressBar1.Value = pvalue;
             textblock1.Text = number + " " + name;
-            FlowDocument1.Blocks.Add(paragraph1);
         }
 
         private void SelectedColorChanged1(object sender, RoutedEventArgs e)
@@ -89,8 +98,8 @@ namespace UIdesign
         }
         private void ThirdButton_Click(object sender, RoutedEventArgs e)
         {
-                ColorPicker.Visibility = System.Windows.Visibility.Hidden;
-                ColorPicker1.Visibility = System.Windows.Visibility.Hidden;
+            ColorPicker.Visibility = System.Windows.Visibility.Hidden;
+            ColorPicker1.Visibility = System.Windows.Visibility.Hidden;
 
         }
 
@@ -113,7 +122,7 @@ namespace UIdesign
             this.Topmost = true;
             this.WindowStyle = System.Windows.WindowStyle.None;
             this.WindowState = System.Windows.WindowState.Maximized;
-            
+
             flowdocumentreader1.Height = 800;
             //MessageBox.Show("Esc退出全屏");
         }
@@ -154,7 +163,7 @@ namespace UIdesign
             for (; l < list1[index1].col_chapter_name.Length; l++)
             {
                 if (list1[index1].col_chapter_name[l] == '章') break;
-                if (list1[index1].col_chapter_name[l] != '章'&& l == list1[index1].col_chapter_name.Length - 1)
+                if (list1[index1].col_chapter_name[l] != '章' && l == list1[index1].col_chapter_name.Length - 1)
                 {
                     chapter_name = list1[index1].col_chapter_name;
                     chapter_number = "章节数不规范！";
@@ -176,7 +185,7 @@ namespace UIdesign
                 name = chapter_name,
                 url = list1[index1].col_chapter_url
             };
-            
+
             ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1);
             readWindow1.Show();
             Close();
@@ -193,7 +202,7 @@ namespace UIdesign
         string s;
         private void addnote_Click(object sender, RoutedEventArgs e)
         {
-            if(iswriting == false)
+            if (iswriting == false)
             {
                 GroupBox1.Visibility = Visibility.Visible;
                 s = Textnode.Text;
@@ -210,7 +219,7 @@ namespace UIdesign
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            
+
             if (index1 > 0)
             {
                 index1--;
@@ -221,7 +230,7 @@ namespace UIdesign
                 for (; l < list1[index1].col_chapter_name.Length; l++)
                 {
                     if (list1[index1].col_chapter_name[l] == '章') break;
-                    if (list1[index1].col_chapter_name[l] != '章'&& l == list1[index1].col_chapter_name.Length - 1)
+                    if (list1[index1].col_chapter_name[l] != '章' && l == list1[index1].col_chapter_name.Length - 1)
                     {
                         chapter_name = list1[index1].col_chapter_name;
                         chapter_number = "章节数格式不规范！";
@@ -243,7 +252,7 @@ namespace UIdesign
                     name = chapter_name,
                     url = list1[index1].col_chapter_url
                 };
-                
+
                 ReadWindow readWindow1 = new ReadWindow(chapterlist1.url, chapterlist1.number, chapterlist1.name, list1, index1);
                 readWindow1.Show();
                 Close();
@@ -252,7 +261,7 @@ namespace UIdesign
             {
                 MessageBox.Show("已经是第一章！");
             }
-           
+
         }
     }
 }
