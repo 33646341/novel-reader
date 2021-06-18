@@ -242,7 +242,7 @@ namespace UIdesign
 
             //Console.WriteLine("[1] Title = " + Application.Current.Windows[2]);
 
-                MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+            ReadingOnline mainWindow = Application.Current.MainWindow as ReadingOnline;
                 mainWindow.Down_Load(sender, e, f1);
         }
 
@@ -253,7 +253,7 @@ namespace UIdesign
         ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();//书架页
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-                MainWindow mainwin = Application.Current.MainWindow as MainWindow;
+                ReadingOnline mainwin = Application.Current.MainWindow as ReadingOnline;
                 mainwin.Add_Bksf(sender, e, f1);
         }
 

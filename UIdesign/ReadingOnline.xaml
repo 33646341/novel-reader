@@ -1,4 +1,4 @@
-﻿<Window x:Name="window" x:Class="UIdesign.MainWindow"
+﻿<Window Title="ReadingOnline" x:Class="UIdesign.ReadingOnline"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,8 +7,7 @@
         xmlns:data="clr-namespace:UIdesign"
         xmlns:vm="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1120" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" Height="800" Width="1120" WindowStartupLocation="CenterScreen"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Window.Resources>
         <Style x:Key="ListItemstyle" TargetType="ListViewItem">
@@ -18,7 +17,6 @@
             <EventSetter Event="MouseLeftButtonDown" Handler="ItemClick"/>
         </Style>
         <local:Fiction x:Key="Fic"/>
-
     </Window.Resources>
     <Grid x:Name="Total_grid">
         <Grid.RowDefinitions>
@@ -84,7 +82,7 @@
                                     <DataGridTextColumn Binding="{Binding Author}" Header="作者" IsReadOnly="True"/>
                                 </DataGrid.Columns>
                                 <DataGrid.ContextMenu>
-                                    <ContextMenu Visibility="{Binding Conmenu}">
+                                    <ContextMenu >
                                         <MenuItem Header="查看详情" Click="InfoPage"/>
                                         <MenuItem Header="添加书架" Click="BookShelf"/>
                                         <MenuItem Header="添加下载" Click="DownLoadBook"/>
@@ -111,7 +109,7 @@
                         
                         <TabItem  Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
                             <TabItem.Header>
-                                <hc:Badge Text="{Binding }" BadgeMargin="80,-14,-20,0" Height="30">
+                                <hc:Badge x:Name="tip" Text="{Binding Dwnum}" BadgeMargin="80,-14,-20,0" Height="30">
                                     正在下载
                                 </hc:Badge>
                             </TabItem.Header>
@@ -142,6 +140,7 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
+                                
                             </StackPanel>
 
                         </TabItem>
