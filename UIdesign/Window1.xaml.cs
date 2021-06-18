@@ -204,6 +204,13 @@ namespace UIdesign
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            //foreach(Window a in Application.Current.Windows)
+            //{
+            //    Console.WriteLine("Title = " + a.Title);
+            //}
+
+            //Console.WriteLine("[1] Title = " + Application.Current.Windows[2]);
+
                 MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
                 mainWindow.Down_Load(sender, e, f1);
         }
