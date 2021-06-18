@@ -141,6 +141,7 @@
                 <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="35" Margin="11,7,0,17.333" TextWrapping="Wrap" Text="阅读进度" VerticalAlignment="center" Width="80" BorderBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="#FFF6F5F5" FontSize="15" Background="{x:Null}" SelectionBrush="{x:Null}"/>
 
             </Grid>
+            <Button x:Name="readbtn"  Content="" Style="{StaticResource ButtonWarning}" hc:IconElement.Geometry="{StaticResource AudioGeometry}" Padding="6" HorizontalAlignment="Left" Margin="146,11,0,0" VerticalAlignment="Top" Width="34" Height="33" Click="Button_Click_4"/>
         </Grid>
         <Grid x:Name="Grid2" Grid.Row="2" Background="#FFFFFF">
             <Grid.ColumnDefinitions>

@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novel_Spider", "..\Novel_Sp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovelManager", "..\NovelManager\NovelManager\NovelManager.csproj", "{62A76172-9A41-495F-AA3C-88BC15FD5314}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadTool", "..\ReadTool\ReadTool\ReadTool.csproj", "{B6112AEE-4BEA-41FB-8A7F-41D654A69DE8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{62A76172-9A41-495F-AA3C-88BC15FD5314}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62A76172-9A41-495F-AA3C-88BC15FD5314}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62A76172-9A41-495F-AA3C-88BC15FD5314}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6112AEE-4BEA-41FB-8A7F-41D654A69DE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6112AEE-4BEA-41FB-8A7F-41D654A69DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6112AEE-4BEA-41FB-8A7F-41D654A69DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6112AEE-4BEA-41FB-8A7F-41D654A69DE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

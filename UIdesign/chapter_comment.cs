@@ -27,7 +27,7 @@ namespace ReadTool
         public string load_comment(string novel_name, string chapter_name,string comment_path)//得到评论，需要给出小说名称、章节名称
         {
             string chapter_comment = "";
-            if (Directory.Exists(comment_path + "/History/" + novel_name + "/" + chapter_name + ".txt"))
+            if (File.Exists(comment_path + "/History/" + novel_name + "/" + chapter_name + ".txt"))
             {
                 using (StreamReader sr = new StreamReader(comment_path + "/History/" + novel_name + "/" + chapter_name + ".txt", Encoding.UTF8))
                 {

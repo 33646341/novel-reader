@@ -319,5 +319,35 @@ namespace UIdesign
             }
 
         }
+        chapter_reader cr = new chapter_reader();
+        Boolean isreading = false;
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            if(isreading == false)
+            {
+                cr.speak_begin(content);
+                isreading = true;
+            }
+            else
+            {
+                cr.pause_and_resume();
+                if (cr.tag == false)
+                {
+                    var color1 = (Color)ColorConverter.ConvertFromString("#555");
+                    System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+                    readbtn.Background = BColor;
+
+                }
+                else
+                {
+                    var color1 = (Color)ColorConverter.ConvertFromString("#FFE9AF20");
+                    System.Windows.Media.Brush BColor = new SolidColorBrush(color1);
+                    readbtn.Background = BColor;
+                }
+
+            }
+            
+
+        }
     }
 }
