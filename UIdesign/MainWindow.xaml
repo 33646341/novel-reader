@@ -281,10 +281,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        
-            <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="{DynamicResource PrimaryBrush}" Grid.Row="3" Grid.ColumnSpan="2" Width="50" Height="50" RenderTransformOrigin="0.452,3.676" Grid.Column="2" Margin="257,293.333,250.333,179.333" />
-        
-       
-        <!--TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></-->
+        <hc:LoadingCircle Visibility="{Binding ShowProgress}" HorizontalAlignment="Center"  Foreground="{DynamicResource PrimaryBrush}" Grid.Row="3" Grid.ColumnSpan="2" Width="50" Height="50" RenderTransformOrigin="0.452,3.676" Grid.Column="2" Margin="257,293.333,250.333,179.333" />
+        <hc:LoadingLine x:Name="loading_state" Visibility="{Binding DwnProgress}" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></hc:LoadingLine>
+        <TextBlock x:Name="search_stat" Grid.Row="4" FontSize="30" Grid.Column="4" Grid.ColumnSpan="1"></TextBlock>
     </Grid>
 </Window>

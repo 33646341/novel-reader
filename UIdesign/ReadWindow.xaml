@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:UIdesign"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Name="Window1" x:Class="UIdesign.ReadWindow"
         mc:Ignorable="d"
-        Title="ReadWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen">
+        Title="ReadWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen"
+    Keyboard.KeyDown="Grid_PreviewKeyDown">
     <Window.Resources>
 
         <Style TargetType="{x:Type ProgressBar}">
@@ -178,7 +179,7 @@
                     <hc:Poptip  Content="按ESC退出全屏" PlacementType="TopLeft"/>
                 </hc:Poptip.Instance>
             </Button>-->
-            <Button x:Name="fullbtn" Style="{StaticResource ButtonPrimary}" RenderTransformOrigin="0.312,0.372" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667"  Width="173" Height="31" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" PreviewKeyDown="Grid_PreviewKeyDown"/>
+            <Button x:Name="fullbtn" Style="{StaticResource ButtonPrimary}" RenderTransformOrigin="0.312,0.372" Content="展开全屏" Grid.Column="3" HorizontalAlignment="Stretch" Margin="28.333,79,28.333,9.667"  Width="173" Height="31" FontSize="12" Background="#FF4654F1" BorderBrush="#FF5A5858" Foreground="#FFF5F2F2" Click="Button_Click_1" />
 
 
             <!--<Button x:Name="bigger" Content="+" Grid.Column="1" HorizontalAlignment="Left" Margin="80.333,40,0,0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="0.208,0" Visibility="Hidden" Background="#FFA46464" Foreground="#FFFCFAFA" FontSize="15" Height="34" Click="bigger_Click"/>

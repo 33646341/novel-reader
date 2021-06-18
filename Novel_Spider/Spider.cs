@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using System.Net;
-using System.Text.RegularExpressions;
 using System.IO.Compression;
-using System.Threading;
-using NovelManager;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 //using System.Data.SQLite;
 
 namespace Novel_Spider
@@ -121,7 +119,7 @@ namespace Novel_Spider
                             chapter_num.RemoveAt(0);
                             chapter_sum.RemoveAt(0);
                             download_progress = 100;
-                            MessageBox.Show("下载完一本！");
+                            //MessageBox.Show("下载完一本！");
                             if (chapter_sum.Count != 0)
                                 download_progress = 0;
                             //MethodInvoker mi = new MethodInvoker(() =>

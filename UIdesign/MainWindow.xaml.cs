@@ -28,6 +28,7 @@ using HandyControl.Controls;
 using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
+using ReadTool;
 
 namespace UIdesign
 {
@@ -177,10 +178,8 @@ namespace UIdesign
                 var color1 = (Color)ColorConverter.ConvertFromString("#3d6633");
                 state.Foreground = new SolidColorBrush(color1);
                 state.Content = $"Loading...";
-
             });
 
-            //textstat(sender, "加载中");
             new Thread(() =>
             {
 
@@ -308,10 +307,7 @@ namespace UIdesign
 
                     });
                     ShowProgress = Visibility.Collapsed;
-                    //textstat(sender, "无结果！");
                 }
-
-
             }).Start();
         }
         //public void textstat(object sender,string stat)
@@ -424,8 +420,8 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis, li, emp);  //Login为窗口名，把要跳转的新窗口实例化
-
+                    Window1 login1 = new Window1(lis, li,emp);  //Login为窗口名，把要跳转的新窗口实例化
+                   
                     login1.Show();
                 });
             }).Start();
@@ -549,7 +545,12 @@ namespace UIdesign
         {
             object sen = this.LV_loadedPage.SelectedItems[0];
             Fiction emp = sen as Fiction;
-            toinfopage(emp);
+            this_chapter_list t1 = new this_chapter_list();
+            This_chapter_list l1 = new This_chapter_list();
+            l1 = t1.Get_chapter("C:\\User\\ASW\\Desktop\\down\\Novel\\" + emp.Name);
+            
+            Window1 login1 = new Window1(null,null, emp, true, l1);  //Login为窗口名，把要跳转的新窗口实例化
+            login1.Show();
         }
         public void Del_bk(object sender, RoutedEventArgs e)
         {
@@ -646,76 +647,99 @@ namespace UIdesign
         //已完成中每项是可删除
         Novel_Spider.Spider dwn = new Novel_Spider.Spider();
         bool is_prepared = false;
+        
+        private Visibility dwnProgress = Visibility.Collapsed;
+        public Visibility DwnProgress
+        {
+            get { return dwnProgress; }
+            set
+            {
+                dwnProgress = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(DwnProgress)));
+            }
+        }
+
+
         public void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
         {
 
             LV_DwnPage.ItemsSource = progress;//绑定数据源
-                                              //dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
             dwn.novel_name = fic.Name;
+            new Thread(() =>//显示添加下载状态
+            {   while (!dwn.down_or_not()) {//未成功时进入while循环 ，成功时退出循环
+                                            //添加中
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        search_stat.Text = "添加中...";
+                        Thread.Sleep(1000);
+                        search_stat.Text = "";
+                        DwnProgress = Visibility.Visible;
+
+                    });
+                }
+                Dispatcher.Invoke(delegate ()
+                {
+                    DwnProgress = Visibility.Collapsed;
+                    Thread.Sleep(1000);
+                    search_stat.Text = "添加成功";
+                    Thread.Sleep(1000);
+                    search_stat.Text = "";
+
+                });
+                is_prepared = true;
+                //添加进度条
+            }).Start();
             new Thread(() =>//后端添加到下载队列
             {
-                //dwn.button3_Click(sender, e);//添加按钮，添加到队列开始下载
                 dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
-                while (!dwn.down_or_not()) ;
-                is_prepared = true;
-                //System.Windows.Forms.MessageBox.Show("添加成功！");
-
             }).Start();
-
             Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
             if (progress != null)
             {
                 fiction.Barvalue = 0;
             }
-
             progress.Add(fiction);
-
         }
+
+
+
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
-
-            if (is_prepared == true)
+            new Thread(() =>
             {
-                is_prepared = false;
+                if (is_prepared == true)
+                {
+                    is_prepared = false;
 
-                Dwn_start.IsEnabled = false;
-                Dwn_stop.IsEnabled = true;
-
-                dwn.download_novel();
-            }
-
-
-
+                    Dispatcher.Invoke(delegate ()
+                    {
+                    Dwn_start.IsEnabled = false;
+                    Dwn_stop.IsEnabled = true;
+                    });
+                    dwn.download_novel();
+                }
+            }).Start();
 
             new Thread(() =>//前端下载进度显示，显示第一条
             {
-                //MessageBox.Show($"{form.barvalue}");
-                if (progress[0].Barvalue == 100)
-                {
-                    ;
-                }
-                while (dwn.tag)
+                while (dwn.tag && progress.Count > 0)
                 {
                     if (dwn.barvalue <= 100)
                     {
                         progress[0].Barvalue = dwn.barvalue;
                         //Thread.Sleep(100);
                     }
-
-                    if (progress.Count > 0 && progress[0].Barvalue >= 100)
+                    if (progress[0].Barvalue >= 100)
                     {
                         progress[0].Barvalue = 0;
-                        System.Windows.Forms.MessageBox.Show("睡眠态！");
+                        //System.Windows.Forms.MessageBox.Show("睡眠态！");
                         Dispatcher.Invoke(delegate ()
                         {
-                            System.Windows.Forms.MessageBox.Show($"实际：{dwn.barvalue}");
-                            System.Windows.Forms.MessageBox.Show($"显示：{progress[0].Barvalue}");
-
+                            //System.Windows.Forms.MessageBox.Show($"实际：{dwn.barvalue}");
+                            //System.Windows.Forms.MessageBox.Show($"显示：{progress[0].Barvalue}");
                             loaded.Add(progress[0]);
-                            //Thread.Sleep(2000);
                             progress.Remove(progress[0]);
-                            System.Windows.Forms.MessageBox.Show("删除表项第一个！");
-                            /// 放置数据库代码progress[0]，其中的四个属性
+                            // System.Windows.Forms.MessageBox.Show("删除表项第一个！");
                         });
                     }
                 }
@@ -728,7 +752,7 @@ namespace UIdesign
             Dwn_stop.IsEnabled = false;
             dwn.download_pause();
             Dwn_start.IsEnabled = true;
-        }
+    }
 
         private void ItemClick(object sender, MouseButtonEventArgs e)
         {
@@ -810,9 +834,9 @@ namespace UIdesign
 
     public class Fiction : INotifyPropertyChanged
     {
-        private string fic_name;
-        private double barvalue;
-        private string fic_author;
+        public string fic_name;
+        public double barvalue;
+        public string fic_author;
         private string fic_url;
         private string id;
         public Fiction()
