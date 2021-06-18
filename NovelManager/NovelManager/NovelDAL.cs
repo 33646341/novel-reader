@@ -50,7 +50,7 @@ namespace NovelManager
             return ExecuteReader($@"
                 SELECT `nid`,`name`,`author`,`url`,`image`,`imageURL`
                 FROM novel
-                WHERE starred is not NULL
+                WHERE starred = 1
                 order by nid
             ");
         }
