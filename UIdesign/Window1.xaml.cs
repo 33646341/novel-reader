@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Net;
 using System.Text.RegularExpressions;
+using ReadTool;
 
 
 
@@ -35,58 +36,116 @@ namespace UIdesign
         List<chapter_list> l2;
 
         int seed = 0;
-        public Window1(List<chapter_list> l1, fiction_info a,Fiction f)
+        public Window1(List<chapter_list> l1, fiction_info a,Fiction f,Boolean isonline, This_chapter_list prolist)
         {
             InitializeComponent();
             l2 = l1;
-            Fiction_name.Text = a.col_fiction_name;
-            Author_name.Text = a.col_fiction_author + " | " + a.col_fiction_type;
-            Total_number.Text = $"小说 | " + a.col_fiction_stata;
-            this.detaillist.ItemsSource = alllist;
-            this.notelist1.ItemsSource = notelist;
-            //this.introduction.Text = a.col_fiction_introduction;
-            this.surfaceimg.Source = new BitmapImage(new Uri(a.col_url_poster));
-            f1 = f;
-            for (int i = 0; i < l1.Count; i++)
+            
+            if (!isonline)
             {
-                int l = 0;
-                string chapter_name = "";
-                string chapter_number = "";
-                
-                for (; l < l1[i].col_chapter_name.Length; l++)
+                Fiction_name.Text = a.col_fiction_name;
+                Author_name.Text = a.col_fiction_author + " | " + a.col_fiction_type;
+                Total_number.Text = $"小说 | " + a.col_fiction_stata;
+                this.detaillist.ItemsSource = alllist;
+                this.notelist1.ItemsSource = notelist;
+                //this.introduction.Text = a.col_fiction_introduction;
+                this.surfaceimg.Source = new BitmapImage(new Uri(a.col_url_poster));
+                f1 = f;
+                for (int i = 0; i < l1.Count; i++)
                 {
-                    if (l1[i].col_chapter_name[l] == '章') break;
-                    if (l1[i].col_chapter_name[l] != '章' && l == l1[i].col_chapter_name.Length - 1)
+                    int l = 0;
+                    string chapter_name = "";
+                    string chapter_number = "";
+
+                    for (; l < l1[i].col_chapter_name.Length; l++)
                     {
-                        chapter_name = l1[i].col_chapter_name;
-                        chapter_number = "章节数格式不规范！";
+                        if (l1[i].col_chapter_name[l] == '章') break;
+                        if (l1[i].col_chapter_name[l] != '章' && l == l1[i].col_chapter_name.Length - 1)
+                        {
+                            chapter_name = l1[i].col_chapter_name;
+                            chapter_number = "章节数格式不规范！";
+                        }
+
                     }
-                    
-                }
-                if (l < l1[i].col_chapter_name.Length)
-                {
-                    chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
-                    if (chapter_name == "") chapter_name = "章节名称格式不规范!";
-                    //if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
-                    chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
-                }
-                
-                Random rd = new Random(seed);  //无参即为使用系统时钟为种子
-                string ss=rd.Next(100).ToString();
-                int v = int.Parse(ss);
-                seed = seed+5;
-                var chapterlist1 = new Chapterlist()
-                {
+                    if (l < l1[i].col_chapter_name.Length)
+                    {
+                        chapter_name = l1[i].col_chapter_name.Substring(l + 1, l1[i].col_chapter_name.Length - l - 1);
+                        if (chapter_name == "") chapter_name = "章节名称格式不规范!";
+                        //if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
+                        chapter_number = l1[i].col_chapter_name.Substring(0, l + 1);
+                    }
 
-                    number = chapter_number,
-                    name = chapter_name,
-                    url = l1[i].col_chapter_url,
-                    value = v
-                };
+                    Random rd = new Random(seed);  //无参即为使用系统时钟为种子
+                    string ss = rd.Next(100).ToString();
+                    int v = int.Parse(ss);
+                    seed = seed + 5;
+                    var chapterlist1 = new Chapterlist()
+                    {
 
-                alllist.Add(chapterlist1);
+                        number = chapter_number,
+                        name = chapter_name,
+                        url = l1[i].col_chapter_url,
+                        value = v,
+                        content=""
+                    };
+
+                    alllist.Add(chapterlist1);
+                }
 
             }
+            else
+            {
+                MessageBox.Show(prolist.chapter_name.Count.ToString());
+                Fiction_name.Text = f.fic_name;
+                Author_name.Text = f.fic_author + " | " ;
+                Total_number.Text = $"小说 | 已下载 ";
+                this.detaillist.ItemsSource = alllist;
+                this.notelist1.ItemsSource = notelist;
+                //this.introduction.Text = a.col_fiction_introduction;
+                //this.surfaceimg.Source = new BitmapImage(new Uri(a.col_url_poster));
+                f1 = f;
+                for (int i = 0; i < prolist.chapter_name.Count; i++)
+                {
+                    int l = 0;
+                    string chapter_name = "";
+                    string chapter_number = "";
+
+                    for (; l < prolist.chapter_name.Count; l++)
+                    {
+                        if (prolist.chapter_name[i][l] == '章') break;
+                        if (prolist.chapter_name[i][l] != '章' && l == prolist.chapter_name[i].Length - 1)
+                        {
+                            chapter_name = prolist.chapter_name[i];
+                            chapter_number = "章节数格式不规范！";
+                        }
+
+                    }
+                    if (l < prolist.chapter_name[i][l])
+                    {
+                        chapter_name = prolist.chapter_name[i].Substring(l + 1, prolist.chapter_name[i].Length - l - 1);
+                        if (chapter_name == "") chapter_name = "章节名称格式不规范!";
+                        //if (chapter_name[0] == ':') chapter_name = chapter_name.Substring(1, l1[i].col_chapter_name.Length - l - 1);
+                        chapter_number = prolist.chapter_name[i].Substring(0, l + 1);
+                    }
+
+                    Random rd = new Random(seed);  //无参即为使用系统时钟为种子
+                    string ss = rd.Next(100).ToString();
+                    int v = int.Parse(ss);
+                    seed = seed + 5;
+                    var chapterlist1 = new Chapterlist()
+                    {
+
+                        number = chapter_number,
+                        name = chapter_name,
+                        url = "",
+                        value = v,
+                        content = prolist.chapter_content[i]
+                    };
+
+                    alllist.Add(chapterlist1);
+                }
+            }
+            
             for (int l = 0; l < 4; l++)
             {
                 var note1 = new note()
@@ -116,8 +175,10 @@ namespace UIdesign
         #region 立即阅读
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            
             var firstint = alllist.First();
             var listsize = alllist.Count;
+            MessageBox.Show(firstint.url);
             ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name, l2,0);
             readWindow1.Show();
             
@@ -239,6 +300,7 @@ namespace UIdesign
         public string name { get; set; }
         public string url { get; set; }
         public int value { get; set; }
+        public string content { get; set; }
     }
 
     public class note
