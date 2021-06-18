@@ -39,14 +39,14 @@ namespace UIdesign
     {
         #region 加载圈相关
         public event PropertyChangedEventHandler PropertyChanged;
-        private Visibility menustat = Visibility.Visible;
-        public Visibility Conmenu
+        private int dwnnum = 0;
+        public int Dwnum
         {
-            get { return menustat; }
+            get { return dwnnum; }
             set
             {
-                menustat = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(Conmenu)));
+                dwnnum = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(dwnnum)));
             }
         }
         private Visibility showProgress = Visibility.Collapsed;
@@ -655,7 +655,6 @@ namespace UIdesign
             }
         }
 
-
         public void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
         {
 
@@ -678,6 +677,8 @@ namespace UIdesign
                 DwnProgress = Visibility.Collapsed;
                 Thread.Sleep(1000);
                 search_stat.Text = "添加成功";
+                //
+                Dwnum ++ ;
                 Thread.Sleep(1000);
                 search_stat.Text = "";
                 is_prepared = true;
@@ -914,7 +915,28 @@ namespace UIdesign
         浅紫色
     }
 
-
+    //public class Dwningnum : INotifyPropertyChanged
+    //{
+    //    public string number;
+    //    public string Number
+    //    {
+    //        get { return number; }
+    //        set
+    //        {
+    //            number = value;
+    //            OnPropertyChanged(Number);
+    //        }
+    //    }
+    //    public Dwningnum()
+    //    {
+    //    }
+    //    public event PropertyChangedEventHandler PropertyChanged;
+    //    private void OnPropertyChanged(string info)
+    //    {
+    //        var handler = PropertyChanged;
+    //        handler?.Invoke(this, new PropertyChangedEventArgs(info));
+    //    }
+    //    
+    //}
     #endregion
-
 }
