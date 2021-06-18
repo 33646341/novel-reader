@@ -420,8 +420,9 @@ namespace UIdesign
                 ShowProgress = Visibility.Collapsed;
                 Dispatcher.Invoke(delegate ()
                 {
-                    Window1 login1 = new Window1(lis, li,emp);  //Login为窗口名，把要跳转的新窗口实例化
-                   
+                    This_chapter_list provisionallist = new This_chapter_list();
+                    Window1 login1 = new Window1(lis, li, emp, false, provisionallist);  //Login为窗口名，把要跳转的新窗口实例化
+
                     login1.Show();
                 });
             }).Start();
