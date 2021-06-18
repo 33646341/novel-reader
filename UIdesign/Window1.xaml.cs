@@ -187,11 +187,32 @@ namespace UIdesign
         }
         #endregion
 
+        // 数据库添加已阅读的记录
+        void saveReadRecord(Chapterlist fic,int index)
+        {
+            // 数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(fic.name) == 0)
+            {
+                novelDAL.addNovel(fic.name, fic.url);
+            }
+            var Novel_id = novelDAL.exsitsNovel(fic.name);
+            Console.WriteLine("章节写入阅读记录 Novel_id = " + Novel_id);
+            novelDAL.addChapter(Novel_id, index, fic.name, fic.url);
+            var Chapter_id = novelDAL.exsitsChapter(fic.url);
+            novelDAL.updateChapter(Chapter_id, "readTimes", "1");
+            // 数据库结束
+        }
+
+
+        // 数据库添加已阅读的记录
+
         #region 双击item阅读
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Chapterlist emp = detaillist.SelectedItem as Chapterlist;
             int index = detaillist.SelectedIndex;
+            saveReadRecord(emp, index);
             var listsize = alllist.Count;
             Console.WriteLine(listsize);
             //int index = this.detaillist.Items.IndexOf(emp);
