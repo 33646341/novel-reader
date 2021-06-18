@@ -193,12 +193,14 @@ namespace UIdesign
         void saveReadRecord(Chapterlist fic,int index)
         {
             // 数据库开始
+            var Novel_name = Fiction_name.Text;
+
             var novelDAL = new NovelManager.NovelDAL();
-            if (novelDAL.exsitsNovel(fic.name) == 0)
+            if (novelDAL.exsitsNovel(Novel_name) == 0)
             {
-                novelDAL.addNovel(fic.name, fic.url);
+                novelDAL.addNovel(Novel_name, fic.url);
             }
-            var Novel_id = novelDAL.exsitsNovel(fic.name);
+            var Novel_id = novelDAL.exsitsNovel(Novel_name);
             Console.WriteLine("章节写入阅读记录 Novel_id = " + Novel_id);
             novelDAL.addChapter(Novel_id, index, fic.name, fic.url);
             var Chapter_id = novelDAL.exsitsChapter(fic.url);
