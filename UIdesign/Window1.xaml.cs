@@ -34,13 +34,15 @@ namespace UIdesign
         ObservableCollection<note> notelist = new ObservableCollection<note>();
         Fiction f1 = new Fiction();
         List<chapter_list> l2;
-
+        This_chapter_list pro = new This_chapter_list();
         int seed = 0;
+        bool isonline1;
         public Window1(List<chapter_list> l1, fiction_info a,Fiction f,Boolean isonline, This_chapter_list prolist)
         {
             InitializeComponent();
             l2 = l1;
-            
+            pro = prolist;
+            isonline1 = isonline;
             if (!isonline)
             {
                 Fiction_name.Text = a.col_fiction_name;
@@ -110,7 +112,7 @@ namespace UIdesign
                     string chapter_name = "";
                     string chapter_number = "";
 
-                    for (; l < prolist.chapter_name.Count; l++)
+                    for (; l < prolist.chapter_name[i].Length; l++)
                     {
                         if (prolist.chapter_name[i][l] == '章') break;
                         if (prolist.chapter_name[i][l] != '章' && l == prolist.chapter_name[i].Length - 1)
@@ -120,7 +122,7 @@ namespace UIdesign
                         }
 
                     }
-                    if (l < prolist.chapter_name[i][l])
+                    if (l < prolist.chapter_name[i].Length)
                     {
                         chapter_name = prolist.chapter_name[i].Substring(l + 1, prolist.chapter_name[i].Length - l - 1);
                         if (chapter_name == "") chapter_name = "[无章节名]";
@@ -179,7 +181,7 @@ namespace UIdesign
             var firstint = alllist.First();
             var listsize = alllist.Count;
             //MessageBox.Show(firstint.url);
-            ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name, l2,0);
+            ReadWindow readWindow1 = new ReadWindow(firstint.url, firstint.number, firstint.name, l2,0,isonline1,pro);
             readWindow1.Show();
             
         }
@@ -193,7 +195,7 @@ namespace UIdesign
             var listsize = alllist.Count;
             Console.WriteLine(listsize);
             //int index = this.detaillist.Items.IndexOf(emp);
-            ReadWindow readWindow1 = new ReadWindow(emp.url, emp.number, emp.name,l2,index);
+            ReadWindow readWindow1 = new ReadWindow(emp.url, emp.number, emp.name,l2,index,isonline1,pro);
             readWindow1.Show();
         }
         #endregion

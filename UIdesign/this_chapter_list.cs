@@ -34,7 +34,7 @@ namespace ReadTool
             {
                 using (StreamReader sr = new StreamReader(novel_path + "/" + Chapter_List.chapter_name[i] + ".txt", Encoding.UTF8))
                 {
-                    //Chapter_List.chapter_name.Add("");
+                    Chapter_List.chapter_content.Add("");
                     String line;
                     while ((line = sr.ReadLine()) != null)
                     {
