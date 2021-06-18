@@ -106,7 +106,7 @@
                         <ColumnDefinition Width="758*"/>
                     </Grid.ColumnDefinitions>
                     <TabControl Margin="0,0,9.6,-0.4" Grid.ColumnSpan="2">
-                        
+
                         <TabItem  Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
                             <TabItem.Header>
                                 <hc:Badge x:Name="tip" Text="{Binding Dwnum}" BadgeMargin="80,-14,-20,0" Height="30">
@@ -140,38 +140,27 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                
+
                             </StackPanel>
 
                         </TabItem>
                         <TabItem Header="已下载" IsSelected="True" FontSize="20" Width="200">
-                            <StackPanel>
-                                <ListView x:Name="LV_loadedPage" 
-                              Background="#FFF1ECEC" 
-                              SelectionChanged="LV_loadedPage_SelectionChanged" 
-                              ItemsSource="{Binding Source={StaticResource Fic}}"
-                              ItemContainerStyle="{StaticResource ListItemstyle}"
-                              GridViewColumnHeader.Click="Sort_Click"
-                              Grid.Row="2" Height="618" Margin="0,0,-0.667,0" RenderTransformOrigin="0.5,0.489"
-                              >
-                                    <ListView.View >
-                                        <GridView hc:BackgroundSwitchElement.MouseDownBackground="Black">
-                                            <GridViewColumn x:Name="fic_name" DisplayMemberBinding=
-                          "{Binding Path=Name}" Header="小说名称" Width="200"></GridViewColumn>
-                                            <GridViewColumn x:Name="au_name" DisplayMemberBinding=
-                          "{Binding Path=Author}" Header="作者" Width="200"></GridViewColumn>
-
-                                        </GridView>
-                                    </ListView.View>
-                                    <ListView.ContextMenu >
-                                        <ContextMenu Visibility="{Binding Conmenu}">
+                            <hc:TransitioningContentControl TransitionMode="Top2BottomWithFade">
+                                <DataGrid x:Name="LV_loadedPage" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource Fic}}" hc:DataGridAttach.ShowRowNumber="True" MouseDoubleClick="SListView_ItemDoubleClick">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding Name}" Width="500" Header="小说名称" IsReadOnly="True"/>
+                                        <DataGridTextColumn Binding="{Binding Author}" Header="作者" IsReadOnly="True"/>
+                                    </DataGrid.Columns>
+                                    <DataGrid.ContextMenu>
+                                        <ContextMenu >
                                             <MenuItem Header="查看详情" Click="Dwn_InfoPage"/>
                                             <MenuItem Header="添加书架" Click="Dwn_BookShelf"/>
-                                            <MenuItem Header="删除本书" Click="Del_bk"/>
+                                            <MenuItem Header="删除下载" Click="Del_bk"/>
                                         </ContextMenu>
-                                    </ListView.ContextMenu>
-                                </ListView>
-                            </StackPanel>
+                                    </DataGrid.ContextMenu>
+                                </DataGrid>
+                            </hc:TransitioningContentControl>
+
                         </TabItem>
 
                     </TabControl>
@@ -248,8 +237,12 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid Name="Setting"  Height="180"  VerticalAlignment="Top" Margin="0,486.2,-0.4,-662.2" Grid.Row="1">
-                        <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="0,0,400.2,0" RenderTransformOrigin="0.563,-0.341" VerticalAlignment="Top" />
-                        <UniformGrid Rows="1" Columns="8" Grid.ColumnSpan="3" Margin="0,0,-0.4,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="405*"/>
+                            <ColumnDefinition Width="709*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="阅读设置" Height="41" Width="135" FontSize="18" Margin="289,0,690,0" RenderTransformOrigin="0.563,-0.341" VerticalAlignment="Top" Grid.ColumnSpan="2" />
+                        <UniformGrid Rows="1" Columns="8" Grid.ColumnSpan="2">
                             <!--<hc:Interaction.Triggers>
                                 <hc:EventTrigger EventName="Checked">
                                     <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />

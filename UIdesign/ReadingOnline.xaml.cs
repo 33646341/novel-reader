@@ -612,10 +612,6 @@ namespace UIdesign
             novelDAL.updateNovel(Novel_id, "starred", "1");
             novelDAL.updateNovel(Novel_id, "author", fic.Author);
             // 数据库结束
-
-
-
-
             new Thread(() =>
             {
                 WebClient webClient = new WebClient();
@@ -813,17 +809,13 @@ namespace UIdesign
         #region  设置模式
         public class PropertyGridModel
         {
-            [Category("Category1")]
+            [Category("个人信息")]
             public string 账户名 { get; set; }
-
-            [Category("Category1")]
-            public Gender 主题 { get; set; }
-
-            [Category("Category2")]
-            public int 数字 { get; set; }
-
-            [Category("Category2")]
             public string 读者号 { get; set; }
+            public string 昵称 { get; set; }
+
+            [Category("个性化设置")]
+            public Gender 主题 { get; set; }
 
             public ImageSource DownLoadPath { get; set; }
         }
