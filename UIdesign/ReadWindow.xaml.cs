@@ -206,6 +206,7 @@ namespace UIdesign
             {
                 GroupBox1.Visibility = Visibility.Visible;
                 s = Textnode.Text;
+                Textnode.Focus();
                 addnote.Content = "保存笔记";
                 iswriting = true;
             }

@@ -240,7 +240,7 @@ namespace UIdesign
                                     result = content.TupleDetail(fiction_i.Url);
 
                                 }
-                                fictionResultCache.Add(fiction_i, result); // 加入快表
+                                fictionResultCache.TryAdd(fiction_i, result); // 加入快表
                                 Console.WriteLine($"{fiction_i.Id} Done!");
                                 Dispatcher.Invoke(delegate ()
                                 {
@@ -326,7 +326,7 @@ namespace UIdesign
         }
 
         //打开新窗口
-        Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>> fictionResultCache = new Dictionary<Fiction, Tuple<fiction_info, List<chapter_list>>>();
+        System.Collections.Concurrent.ConcurrentDictionary<Fiction, Tuple<fiction_info, List<chapter_list>>> fictionResultCache = new System.Collections.Concurrent.ConcurrentDictionary<Fiction, Tuple<fiction_info, List<chapter_list>>>();
         private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
@@ -363,7 +363,7 @@ namespace UIdesign
                     result = content.TupleDetail(emp.Url);
                     try
                     {
-                        fictionResultCache.Add(emp, result); // 加入快表
+                        fictionResultCache.TryAdd(emp, result); // 加入快表
 
                     }
                     catch (Exception e)
