@@ -237,7 +237,7 @@
                                            HorizontalAlignment="Left"/>
                                                             <!--Card 的二级内容-->
                                                             <TextBlock TextWrapping="NoWrap" Style="{DynamicResource TextBlockDefault}" TextTrimming="CharacterEllipsis" 
-                                           Text="{Binding}" Margin="0,6,0,0"
+                                           Text="{Binding}"
                                            HorizontalAlignment="Left"/>
                                                         </StackPanel>
                                                     </DataTemplate>
@@ -245,6 +245,13 @@
                                             </hc:Card>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu >
+                                            <MenuItem Header="查看详情" Click="Bok_InfoPage"/>
+                                            <MenuItem Header="移除书架" Click="RemoveBk"/>
+                                            <MenuItem Header="添加下载" Click="Bok_DownLoadBook"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
                                 </ListBox>
                             </Grid>
                         </TabItem>

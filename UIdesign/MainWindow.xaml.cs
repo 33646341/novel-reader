@@ -519,8 +519,8 @@ namespace UIdesign
         }
         public void RemoveBk(object sender, RoutedEventArgs e)
         {
-            object sen = this.Boksf_lv.SelectedItems[0];
-            Fiction emp = sen as Fiction;
+            object sen = this.Boksf_lb.SelectedItems[0];
+            CardModel emp = sen as CardModel;
             Remove_Bksf(sender, e, emp);
         }
         public void Bok_DownLoadBook(object sender, RoutedEventArgs e)
@@ -561,17 +561,16 @@ namespace UIdesign
         ObservableCollection<Fiction> progress = new ObservableCollection<Fiction>();//正下载
         ObservableCollection<Fiction> loaded = new ObservableCollection<Fiction>();//已下载
         ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();//搜索页
-        private void Remove_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        private void Remove_Bksf(object sender, RoutedEventArgs e, CardModel fic)
         {
-            //Boksf_lv.ItemsSource = boksf;
-            //new Thread(() =>//前端添加下载项，无限制
-            //{
-            //    Dispatcher.Invoke(delegate ()
-            //    {
-            //        boksf.Remove(fic);
-            //    });
-
-            //}).Start();
+            Boksf_lv.ItemsSource = boksf;
+            new Thread(() =>//前端添加下载项，无限制
+            {
+                Dispatcher.Invoke(delegate ()
+                {
+                    boksf.Remove(fic);
+                });
+            }).Start();
         }
         public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
@@ -582,8 +581,6 @@ namespace UIdesign
             bi.EndInit();
 
             CardModel bok = new CardModel() { Cover = bi, Fiction = fic.Name, Writer = fic.Author, Url = fic.Url };
-
-
             boksf.Add(bok);
 
             // 数据库开始
@@ -683,7 +680,7 @@ namespace UIdesign
             }).Start();
             new Thread(() =>//后端添加到下载队列
             {
-                dwn.download_add(fic.Url, "C:\\User\\ASW\\Desktop\\down");
+                dwn.download_add(fic.Url, "C://Users//ASW//Desktop//down");
             }).Start();
             Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
             if (progress != null)
@@ -940,7 +937,7 @@ namespace UIdesign
             get { return url; }
             set
             {
-                fiction = value;
+                url = value;
                 OnPropertyChanged(Url);
             }
         }
