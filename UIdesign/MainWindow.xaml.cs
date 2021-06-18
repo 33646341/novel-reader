@@ -580,6 +580,17 @@ namespace UIdesign
                     boksf.Remove(fic);
                 });
             }).Start();
+
+            // 数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(fic.Name) == 0)
+            {
+                novelDAL.addNovel(fic.Name, fic.Url);
+            }
+            var Novel_id = novelDAL.exsitsNovel(fic.Name);
+            Console.WriteLine(Novel_id);
+            novelDAL.updateNovel(Novel_id, "starred", "0");
+            // 数据库结束
         }
         public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
         {
@@ -599,6 +610,7 @@ namespace UIdesign
             var Novel_id = novelDAL.exsitsNovel(fic.Name);
             Console.WriteLine(Novel_id);
             novelDAL.updateNovel(Novel_id, "starred", "1");
+            novelDAL.updateNovel(Novel_id, "author", fic.Author);
             // 数据库结束
 
 
