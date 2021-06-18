@@ -122,7 +122,7 @@ namespace OnlineSearchAndRead
                     chapter_list _tfi = new chapter_list();
                     //获取章节名称及章节链接
                     HtmlNodeCollection _hnc_Fiction_Name_URL = _doc_One.DocumentNode.SelectNodes("//a");
-                    if (_hnc_Fiction_Name_URL != null && _hnc_Fiction_Name_URL.Count > 0)
+                    if (_hnc_Fiction_Name_URL != null && _hnc_Fiction_Name_URL.Count > 0 && _hnc_Fiction_Name_URL[0].InnerText.Trim()!=null && _hnc_Fiction_Name_URL[0].Attributes["href"]!=null)
                     {
                         _tfi.col_chapter_name = _hnc_Fiction_Name_URL[0].InnerText.Trim();
                         _tfi.col_chapter_url = _hnc_Fiction_Name_URL[0].Attributes["href"].Value;
