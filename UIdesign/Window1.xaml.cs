@@ -144,7 +144,10 @@ namespace UIdesign
                         name = chapter_name,
                         url = "",
                         value = v,
-                        content = prolist.chapter_content[i]
+                        content = prolist.chapter_content[i],
+
+                        color = new SolidColorBrush(Color.FromRgb(100, 100, 100))
+
                     };
 
                     alllist.Add(chapterlist1);
