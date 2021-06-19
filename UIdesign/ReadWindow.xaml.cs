@@ -252,14 +252,14 @@ namespace UIdesign
         {
             chapter_comment cc = new chapter_comment();
             s = Textnode.Text;
-            cc.save_comment(novelname1, chaptername, s, "C:\\User\\ASW\\Desktop\\note\\");
+            cc.save_comment(novelname1, chaptername, s, Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             GroupBox1.Visibility = Visibility.Collapsed;
         }
 
         private void checknote_Click(object sender, RoutedEventArgs e)
         {
             chapter_comment cc = new chapter_comment();
-            Textnode.Text = cc.load_comment(novelname1, chaptername,"C:\\User\\ASW\\Desktop\\note\\");
+            Textnode.Text = cc.load_comment(novelname1, chaptername,Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
             GroupBox1.Visibility = Visibility.Visible;
         }
 
