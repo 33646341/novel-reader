@@ -29,6 +29,10 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using ReadTool;
+using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
+using DialogResult = System.Windows.Forms.DialogResult;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace UIdesign
 {
@@ -73,7 +77,7 @@ namespace UIdesign
                 账户名 = "000001",
                 读者号 = "2019305232130",
                 昵称="探险家",
-
+                主题=Gender.天蓝色,
             };
 
             LV_loadedPage.ItemsSource = loaded;
@@ -684,6 +688,7 @@ namespace UIdesign
                 //});
                 //System.Windows.MessageBox.Show("添加中！");
                 dwn.download_add(fic.Url, Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+                //dwn.download_add(fic.Url, dwnPath);
                 //System.Windows.MessageBox.Show("添加成功！");
                 //Dispatcher.Invoke(delegate ()
                 //{
@@ -829,6 +834,7 @@ namespace UIdesign
             public string 账户名 { get; set; }
             public string 读者号 { get; set; }
             public string 昵称 { get; set; }
+            public Gender 主题 { get; set; }
 
 
         }
@@ -839,10 +845,37 @@ namespace UIdesign
             get => (PropertyGridModel)GetValue(DemoModelProperty);
             set => SetValue(DemoModelProperty, value);
         }
+/// <summary> 文件格式过滤器。
+        /// </summary>
+        public string Filter
+        {
+            get { return (string)GetValue(FilterProperty); }
+            set { SetValue(FilterProperty, value); }
+        }
 
+        public static readonly DependencyProperty PathProperty =
+        DependencyProperty.Register("Path", typeof(string), typeof(ReadingOnline), new PropertyMetadata(string.Empty));
+        /// <summary> 选择的路径
+        /// </summary>
+        public string dwnPath
+        {
+            get { return (string)GetValue(PathProperty); }
+            set { SetValue(PathProperty, value); }
+        }
+        public static readonly DependencyProperty FilterProperty =
+        DependencyProperty.Register("Filter", typeof(string), typeof(ReadingOnline), new PropertyMetadata("All|*.*"));
+        
         #endregion
 
-
+        private void 选择路径_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new FolderBrowserDialog { SelectedPath = dwnPath };
+            var res = dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK;
+            if (!res) return;
+            dwnPath = dlg.SelectedPath;
+            dwnpath.IsEnabled = true;
+            dwnpath.Text = dwnPath;
+        }
     }
 
 
@@ -937,10 +970,10 @@ namespace UIdesign
         }
     }
 
-    //public enum Gender
-    //{
-    //    天蓝色,
-    //    浅紫色
-    //}
+    public enum Gender
+    {
+        天蓝色,
+        浅紫色
+    }
     #endregion
 }
