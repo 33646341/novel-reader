@@ -776,6 +776,7 @@ namespace UIdesign
         {
             Dwn_stop.IsEnabled = false;
             dwn.download_pause();
+            is_prepared = true;
             Dwn_start.IsEnabled = true;
     }
 
