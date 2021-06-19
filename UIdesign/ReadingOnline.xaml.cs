@@ -159,31 +159,32 @@ namespace UIdesign
         {
             if (e.Key == Key.Enter)
             {
-                this.Button_Click(sender, e);
+                this.Search_Btn_Click(sender, e);
             }
         }
         #endregion
         #region 首页
         #region 搜索按钮
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Search_Btn_Click(object sender, RoutedEventArgs e)
         {
-
+            #region 后台初始化
             OnlineSearchAndRead.Form1 form = new OnlineSearchAndRead.Form1();
             String kw = keySearch.Text;
             form.querytext = kw;
             List<fiction_info> _fic_info;
+
             // 不使用List类型，可实现自动刷新而不必切换源
             //this.Lv_HomePage.ItemsSource = _ltfi_Search;//数据源
-
             ShowProgress = Visibility.Visible;
-
+            
             Dispatcher.Invoke(delegate ()
             {
                 var color1 = (Color)ColorConverter.ConvertFromString("#3d6633");
                 state.Foreground = new SolidColorBrush(color1);
                 state.Content = $"Loading...";
             });
-
+            #endregion
+            # region 开启搜索线程
             new Thread(() =>
             {
 
@@ -313,15 +314,8 @@ namespace UIdesign
                     ShowProgress = Visibility.Collapsed;
                 }
             }).Start();
+            #endregion
         }
-        //public void textstat(object sender,string stat)
-        //{
-        //    var fe = (FrameworkElement)sender;
-        //    BindingOperations.ClearBinding(search_stat, TextBlock.TextProperty);
-        //    var myDataObject = new MyData(stat);
-        //    var myBinding = new Binding("MyDataProperty") { Source = myDataObject };
-        //    search_stat.SetBinding(TextBlock.TextProperty, myBinding);
-        //}
         #endregion
         #region 双击详情页
         private void SListView_ItemDoubleClick(object sender, MouseButtonEventArgs e)
@@ -735,6 +729,7 @@ namespace UIdesign
 
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
+            #region 后台开始下载
             new Thread(() =>
             {
                 if (is_prepared == true)
@@ -749,7 +744,7 @@ namespace UIdesign
                     dwn.download_novel();
                 }
             }).Start();
-
+            #endregion
             new Thread(() =>//前端下载进度显示，显示第一条
             {
                 while (dwn.tag && progress.Count > 0)
@@ -759,7 +754,7 @@ namespace UIdesign
                         progress[0].Barvalue = dwn.barvalue;
                         //Thread.Sleep(100);
                     }
-                    if (progress[0].Barvalue >= 100)
+                    if (progress[0].Barvalue >= 100 && progress.Count > 0)
                     {
                         progress[0].Barvalue = 0;
                         //System.Windows.Forms.MessageBox.Show("睡眠态！");

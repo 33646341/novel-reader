@@ -60,7 +60,7 @@
                                         </VisualBrush>
                                     </TextBox.Resources>
                                 </TextBox>
-                                <Button x:Name="searchBtn" Margin="0,10" Style="{StaticResource ButtonPrimary}" Width="150" Content="搜 索" Height="52" FontSize="20" Click="Button_Click"/>
+                                <Button x:Name="searchBtn" Margin="0,10" Style="{StaticResource ButtonPrimary}" Width="150" Content="搜 索" Height="52" FontSize="20" Click="Search_Btn_Click"/>
 
                             </WrapPanel>
                         </hc:TransitioningContentControl>
@@ -108,10 +108,7 @@
                     <TabControl Margin="0,0,9.6,-0.4" Grid.ColumnSpan="2">
 
                         <TabItem  Name="Dwning_btn" IsSelected="True" FontSize="20" Width="200" Height="45">
-                            <TabItem.Header>
-                                <hc:Badge x:Name="tip" Text="{Binding Dwnum}" BadgeMargin="80,-14,-20,0" Height="30">
-                                    正在下载
-                                </hc:Badge>
+                            <TabItem.Header>正在下载
                             </TabItem.Header>
                             <StackPanel>
                                 <ListView x:Name="LV_DwnPage" SelectionChanged="LV_DwnPage_SelectionChanged" Height="622" Margin="0,0,-0.4,0" 
@@ -186,7 +183,7 @@
                         <ListBox x:Name="Boksf_lb" Margin="10,0,-0.4,0" BorderThickness="0" Style="{DynamicResource WrapPanelHorizontalListBox}" ItemsSource="{Binding Source={StaticResource Card}}" Height="612" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.406">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="data:CardModel">
-                                    <hc:Card Width="200" BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="8" Footer="{Binding Author}">
+                                    <hc:Card Width="300" BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="8" Footer="{Binding Author}">
                                         <!--Card 的内容部分模板-->
                                         <Border CornerRadius="4,4,0,0" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type hc:Card}}}">
                                             <Image  Source="{Binding Cover}" Stretch="Fill" Height="{Binding Path=Height,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Width="{Binding Path=Width,RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Margin="0,0,0,0" >
