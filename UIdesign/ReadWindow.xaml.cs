@@ -136,7 +136,7 @@ namespace UIdesign
         }
 
 
-        int l = 0;
+        //int l = 0;
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             //l += 1;

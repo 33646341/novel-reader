@@ -69,9 +69,7 @@ namespace UIdesign
             InitializeComponent();
             keySearch.Focus();
 
-            #region
             DataContext = this;
-            #endregion
             DemoModel = new PropertyGridModel
             {
                 账户名 = "000001",
@@ -127,6 +125,8 @@ namespace UIdesign
                 boksf.Add(bok);
             }
 
+            dwnPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            dwnpath.Text = dwnPath;
             // 数据库结束
 
         }
@@ -163,7 +163,7 @@ namespace UIdesign
             }
         }
         #endregion
-        #region 首页
+        #region 首页：搜索按钮，排序，双击
         #region 搜索按钮
         private void Search_Btn_Click(object sender, RoutedEventArgs e)
         {
@@ -197,20 +197,7 @@ namespace UIdesign
                     Dispatcher.Invoke(delegate ()
                     {
                         _ltfi_Search.Clear();
-
-                        // 2021.6.16 转移
-
-                        //searchPanel.Visibility = Visibility.Collapsed;
-                        //searchPanel2.Visibility = Visibility.Collapsed;
-                        //DockPanel.SetDock(searchPanel, Dock.Top);
-                        //searchPanel.Visibility = Visibility.Visible;
-                        //searchPanel2.Visibility = Visibility.Visible;
                     });
-                    //Thread.Sleep(2000);
-                    //Dispatcher.Invoke(delegate ()
-                    //{
-
-                    //});
                     fictionResultCache.Clear();
                     for (int i = 0; i < _fic_info.Count; i++)
                     {
@@ -294,14 +281,6 @@ namespace UIdesign
 
 
                     }
-
-                    //加载一个空的小说详情页网站，提高再次访问时速度
-                    //HtmlWeb _web_Main = new HtmlWeb();
-                    //_web_Main.OverrideEncoding = Encoding.GetEncoding("gb2312");
-                    //HtmlAgilityPack.HtmlDocument _doc_Main = new HtmlAgilityPack.HtmlDocument();
-                    //_doc_Main = _web_Main.Load("https://www.biquzhh.com/13_13134/");
-
-                    //textstat(sender, "就绪");
                 }
                 else
                 {
@@ -325,6 +304,229 @@ namespace UIdesign
 
         //打开新窗口
         System.Collections.Concurrent.ConcurrentDictionary<Fiction, Tuple<fiction_info, List<chapter_list>>> fictionResultCache = new System.Collections.Concurrent.ConcurrentDictionary<Fiction, Tuple<fiction_info, List<chapter_list>>>();
+        
+        #endregion
+        #region 排序代码
+        //单击表头排序
+        GridViewColumnHeader _lastHeaderClicked = null;
+        ListSortDirection _lastDirection = ListSortDirection.Ascending;
+
+        void Sort_Click(object sender, RoutedEventArgs e)
+        {
+            var headerClicked = e.OriginalSource as GridViewColumnHeader;
+            ListSortDirection direction;
+
+            if (headerClicked != null)
+            {
+                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+                {
+                    if (headerClicked != _lastHeaderClicked)
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                    else
+                    {
+                        if (_lastDirection == ListSortDirection.Ascending)
+                        {
+                            direction = ListSortDirection.Descending;
+                        }
+                        else
+                        {
+                            direction = ListSortDirection.Ascending;
+                        }
+                    }
+
+                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
+                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+
+                    Sort(sortBy, direction);
+
+                    if (direction == ListSortDirection.Ascending)
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowUp"] as DataTemplate;
+                    }
+                    else
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowDown"] as DataTemplate;
+                    }
+
+                    // Remove arrow from previously sorted header
+                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
+                    {
+                        _lastHeaderClicked.Column.HeaderTemplate = null;
+                    }
+
+                    _lastHeaderClicked = headerClicked;
+                    _lastDirection = direction;
+                }
+            }
+        }
+        private void Sort(string sortBy, ListSortDirection direction)
+        {
+            ICollectionView dataView =
+              CollectionViewSource.GetDefaultView(Lv_HomePage.ItemsSource);
+            dataView.SortDescriptions.Clear();
+            SortDescription sd = new SortDescription(sortBy, direction);
+            dataView.SortDescriptions.Add(sd);
+            dataView.Refresh();
+        }
+        #endregion
+        #endregion
+        #region 右键功能的定义函数 查看详情，添加/移除书架，添加/删除下载
+        #region 首页右键，查看详情，添加书架，添加下载
+        public void InfoPage(object sender, RoutedEventArgs e)
+        {
+            object sen = this.Lv_HomePage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            toinfopage(emp);
+        }
+        public void BookShelf(object sender, RoutedEventArgs e)
+        {
+            object sen = this.Lv_HomePage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Add_Bksf(sender, e, emp);
+        }
+        public void DownLoadBook(object sender, RoutedEventArgs e)
+        {
+
+            object sen = this.Lv_HomePage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Down_Load(sender, e, emp);
+        }
+        #endregion
+        #region 书架页右键 查看详情，移除书架，添加下载
+        public void Bok_InfoPage(object sender, RoutedEventArgs e)
+        {
+            object sen = this.Boksf_lb.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            toinfopage(emp);
+        }
+        public void RemoveBk(object sender, RoutedEventArgs e)
+        {
+            object sen = this.Boksf_lb.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Remove_Bksf(sender, e, emp);
+        }
+        public void Bok_DownLoadBook(object sender, RoutedEventArgs e)
+        {
+
+            object sen = this.Boksf_lb.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Down_Load(sender, e, emp);
+        }
+
+        #endregion
+        #region 下载页右键 查看详情，添加书架，删除本书
+        public void Dwn_InfoPage(object sender, RoutedEventArgs e)
+        {
+            object sen = this.LV_loadedPage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            this_chapter_list t1 = new this_chapter_list();
+            This_chapter_list l1 = new This_chapter_list();
+            l1 = t1.Get_chapter(dwnPath + "\\Novel\\" + emp.Name);
+            
+            Window1 login1 = new Window1(null,null, emp, true, l1);  //Login为窗口名，把要跳转的新窗口实例化
+            login1.Show();
+        }
+        public void Del_bk(object sender, RoutedEventArgs e)
+        {
+            object sen = this.LV_loadedPage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Del_Loaded(sender, e, emp);
+        }
+        public void Dwn_BookShelf(object sender, RoutedEventArgs e)
+        {
+            object sen = this.LV_loadedPage.SelectedItems[0];
+            Fiction emp = sen as Fiction;
+            Add_Bksf(sender, e, emp);
+        }
+        #endregion
+        #endregion
+        #region 定义集合
+        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();//书架页
+        ObservableCollection<Fiction> progress = new ObservableCollection<Fiction>();//正下载
+        ObservableCollection<Fiction> loaded = new ObservableCollection<Fiction>();//已下载
+        ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();//搜索页
+        #endregion
+        #region 功能函数
+        private void Remove_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            Boksf_lb.ItemsSource = boksf;
+            new Thread(() =>//前端删除下载项，无限制
+            {
+                Dispatcher.Invoke(delegate ()
+                {
+                    boksf.Remove(fic);
+                });
+            }).Start();
+
+            // 数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(fic.Name) == 0)
+            {
+                novelDAL.addNovel(fic.Name, fic.Url);
+            }
+            var Novel_id = novelDAL.exsitsNovel(fic.Name);
+            Console.WriteLine(Novel_id);
+            novelDAL.updateNovel(Novel_id, "starred", "0");
+            // 数据库结束
+        }
+        public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            BitmapImage bi = new BitmapImage();
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            bi.BeginInit();
+            bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
+            bi.EndInit();
+            boksf.Add(fic);
+
+            // 数据库开始
+            var novelDAL = new NovelManager.NovelDAL();
+            if (novelDAL.exsitsNovel(fic.Name) == 0)
+            {
+                novelDAL.addNovel(fic.Name, fic.Url);
+            }
+            var Novel_id = novelDAL.exsitsNovel(fic.Name);
+            Console.WriteLine(Novel_id);
+            novelDAL.updateNovel(Novel_id, "starred", "1");
+            novelDAL.updateNovel(Novel_id, "author", fic.Author);
+            // 数据库结束
+            new Thread(() =>
+            {
+                WebClient webClient = new WebClient();
+                var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
+                var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
+                var imageUrl = "";
+                if (matchResult.Success)
+                {
+                    imageUrl = matchResult.Groups[1].Value;
+                    //HandyControl.Controls.MessageBox.Show(imageUrl);
+
+                    novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
+
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        BitmapImage img = new BitmapImage(new Uri(imageUrl));
+                        fic.Cover = img;
+                    });
+                }
+            }).Start();
+        }
+        private void Del_Loaded(object sender, RoutedEventArgs e, Fiction fic)
+        {
+            LV_loadedPage.ItemsSource = loaded;
+            new Thread(() =>//前端删除下载项，无限制
+            {
+
+                Dispatcher.Invoke(delegate ()
+                {
+                    loaded.Remove(fic);
+                });
+
+            }).Start();
+        }
         private void toinfopage(Fiction emp)
         {
             //Fiction emp = (sender as ListViewItem).Content as Fiction;
@@ -427,226 +629,9 @@ namespace UIdesign
 
         }
         #endregion
-        #region 排序代码
-        //单击表头排序
-        GridViewColumnHeader _lastHeaderClicked = null;
-        ListSortDirection _lastDirection = ListSortDirection.Ascending;
-
-        void Sort_Click(object sender, RoutedEventArgs e)
-        {
-            var headerClicked = e.OriginalSource as GridViewColumnHeader;
-            ListSortDirection direction;
-
-            if (headerClicked != null)
-            {
-                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
-                {
-                    if (headerClicked != _lastHeaderClicked)
-                    {
-                        direction = ListSortDirection.Ascending;
-                    }
-                    else
-                    {
-                        if (_lastDirection == ListSortDirection.Ascending)
-                        {
-                            direction = ListSortDirection.Descending;
-                        }
-                        else
-                        {
-                            direction = ListSortDirection.Ascending;
-                        }
-                    }
-
-                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
-                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
-
-                    Sort(sortBy, direction);
-
-                    if (direction == ListSortDirection.Ascending)
-                    {
-                        headerClicked.Column.HeaderTemplate =
-                          Resources["HeaderTemplateArrowUp"] as DataTemplate;
-                    }
-                    else
-                    {
-                        headerClicked.Column.HeaderTemplate =
-                          Resources["HeaderTemplateArrowDown"] as DataTemplate;
-                    }
-
-                    // Remove arrow from previously sorted header
-                    if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
-                    {
-                        _lastHeaderClicked.Column.HeaderTemplate = null;
-                    }
-
-                    _lastHeaderClicked = headerClicked;
-                    _lastDirection = direction;
-                }
-            }
-        }
-        private void Sort(string sortBy, ListSortDirection direction)
-        {
-            ICollectionView dataView =
-              CollectionViewSource.GetDefaultView(Lv_HomePage.ItemsSource);
-            dataView.SortDescriptions.Clear();
-            SortDescription sd = new SortDescription(sortBy, direction);
-            dataView.SortDescriptions.Add(sd);
-            dataView.Refresh();
-        }
-        #endregion
-        #endregion
-        #region 右键功能 查看详情，添加/移除/删除书架，添加/删除下载
-        #region 首页右键，查看详情，添加书架，添加下载
-        public void InfoPage(object sender, RoutedEventArgs e)
-        {
-            object sen = this.Lv_HomePage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            toinfopage(emp);
-        }
-        public void BookShelf(object sender, RoutedEventArgs e)
-        {
-            object sen = this.Lv_HomePage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            Add_Bksf(sender, e, emp);
-        }
-        public void DownLoadBook(object sender, RoutedEventArgs e)
-        {
-
-            object sen = this.Lv_HomePage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            Down_Load(sender, e, emp);
-        }
-        #endregion
-        #region 书架页右键 查看详情，移除书架，添加下载
-        public void Bok_InfoPage(object sender, RoutedEventArgs e)
-        {
-            object sen = this.Boksf_lb.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            toinfopage(emp);
-        }
-        public void RemoveBk(object sender, RoutedEventArgs e)
-        {
-            object sen = this.Boksf_lb.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            Remove_Bksf(sender, e, emp);
-        }
-        public void Bok_DownLoadBook(object sender, RoutedEventArgs e)
-        {
-
-            object sen = this.Boksf_lb.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            Down_Load(sender, e, emp);
-        }
-
-        #endregion
-        #region 下载页右键 查看详情，添加书架，删除本书
-        public void Dwn_InfoPage(object sender, RoutedEventArgs e)
-        {
-            object sen = this.LV_loadedPage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            this_chapter_list t1 = new this_chapter_list();
-            This_chapter_list l1 = new This_chapter_list();
-            l1 = t1.Get_chapter(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)+"\\Novel\\" + emp.Name);
-            
-            Window1 login1 = new Window1(null,null, emp, true, l1);  //Login为窗口名，把要跳转的新窗口实例化
-            login1.Show();
-        }
-        public void Del_bk(object sender, RoutedEventArgs e)
-        {
-            object sen = this.LV_loadedPage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            Del_Loaded(sender, e, emp);
-        }
-        public void Dwn_BookShelf(object sender, RoutedEventArgs e)
-        {
-            object sen = this.LV_loadedPage.SelectedItems[0];
-            Fiction emp = sen as Fiction;
-            Add_Bksf(sender, e, emp);
-        }
-        #endregion
-        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();//书架页
-        ObservableCollection<Fiction> progress = new ObservableCollection<Fiction>();//正下载
-        ObservableCollection<Fiction> loaded = new ObservableCollection<Fiction>();//已下载
-        ObservableCollection<Fiction> _ltfi_Search = new ObservableCollection<Fiction>();//搜索页
-        private void Remove_Bksf(object sender, RoutedEventArgs e, Fiction fic)
-        {
-            Boksf_lb.ItemsSource = boksf;
-            new Thread(() =>//前端删除下载项，无限制
-            {
-                Dispatcher.Invoke(delegate ()
-                {
-                    boksf.Remove(fic);
-                });
-            }).Start();
-
-            // 数据库开始
-            var novelDAL = new NovelManager.NovelDAL();
-            if (novelDAL.exsitsNovel(fic.Name) == 0)
-            {
-                novelDAL.addNovel(fic.Name, fic.Url);
-            }
-            var Novel_id = novelDAL.exsitsNovel(fic.Name);
-            Console.WriteLine(Novel_id);
-            novelDAL.updateNovel(Novel_id, "starred", "0");
-            // 数据库结束
-        }
-        public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
-        {
-            BitmapImage bi = new BitmapImage();
-            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
-            bi.BeginInit();
-            bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
-            bi.EndInit();
-            boksf.Add(fic);
-
-            // 数据库开始
-            var novelDAL = new NovelManager.NovelDAL();
-            if (novelDAL.exsitsNovel(fic.Name) == 0)
-            {
-                novelDAL.addNovel(fic.Name, fic.Url);
-            }
-            var Novel_id = novelDAL.exsitsNovel(fic.Name);
-            Console.WriteLine(Novel_id);
-            novelDAL.updateNovel(Novel_id, "starred", "1");
-            novelDAL.updateNovel(Novel_id, "author", fic.Author);
-            // 数据库结束
-            new Thread(() =>
-            {
-                WebClient webClient = new WebClient();
-                var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
-                var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
-                var imageUrl = "";
-                if (matchResult.Success)
-                {
-                    imageUrl = matchResult.Groups[1].Value;
-                    //HandyControl.Controls.MessageBox.Show(imageUrl);
-
-                    novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
-
-                    Dispatcher.Invoke(delegate ()
-    {
-        BitmapImage img = new BitmapImage(new Uri(imageUrl));
-        fic.Cover = img;
-    });
-                }
-            }).Start();
-        }
-        private void Del_Loaded(object sender, RoutedEventArgs e, Fiction fic)
-        {
-            LV_loadedPage.ItemsSource = loaded;
-            new Thread(() =>//前端删除下载项，无限制
-            {
-
-                Dispatcher.Invoke(delegate ()
-                {
-                    loaded.Remove(fic);
-                });
-
-            }).Start();
-        }
-        #endregion
         #region 下载页：正在下载中每项是进度条，可暂停可删除，下载完成放入已完成队列。
         //已完成中每项是可删除
+        #region 连接后台程序代码，进度条设置
         Novel_Spider.Spider dwn = new Novel_Spider.Spider();
         bool is_prepared = false;
         
@@ -660,49 +645,28 @@ namespace UIdesign
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(DwnProgress)));
             }
         }
-
+        #endregion
         public void Down_Load(object sender, RoutedEventArgs e, Fiction fic)
         {
-
             LV_DwnPage.ItemsSource = progress;//绑定数据源
             dwn.novel_name = fic.Name;
             if (!dwn.down_or_not())
-            {//未成功时进入while循环 ，成功时退出循环
-             //添加中
-
+            {
                 search_stat.Text = "";
                 DwnProgress = Visibility.Visible;
-
-
-                new Thread(() =>//显示添加下载状态
+                string dpath = dwnPath;
+                new Thread(() =>//开启线程调用后台程序，添加下载
             {
-                //Dispatcher.Invoke(delegate ()
-                //{
-                //    search_stat.Text = "添加中...";
-                //});
-                //System.Windows.MessageBox.Show("添加中！");
-                dwn.download_add(fic.Url, Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
-                //dwn.download_add(fic.Url, dwnPath);
-                //System.Windows.MessageBox.Show("添加成功！");
-                //Dispatcher.Invoke(delegate ()
-                //{
-                //    search_stat.Text = "添加成功";
-                //});
-                //添加进度条
+                dwn.download_add(fic.Url, dpath);
             }).Start();
-
-                new Thread(() =>
+                new Thread(() =>//显示添加下载状态
                 {
                     while (true)
                     {
                         if (dwn.down_or_not())
                         {
                             DwnProgress = Visibility.Collapsed;
-                            Thread.Sleep(1000);
-
-                            //
                             Dwnum++;
-                            Thread.Sleep(1000);
                             this.Dispatcher.Invoke(
                new Action(
                     delegate
@@ -716,7 +680,6 @@ namespace UIdesign
                     }
                 }
                 ).Start();
-
                 Fiction fiction = new Fiction(fic.Name, dwn.barvalue, fic.Author, fic.Url);
                 if (progress != null)
                 {
@@ -726,7 +689,7 @@ namespace UIdesign
             }
 
         }
-
+        #region 开始下载按钮
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
             #region 后台开始下载
@@ -772,6 +735,8 @@ namespace UIdesign
 
             }).Start();
         }
+        #endregion
+        #region 停止下载按钮
         private void Dwn_stop_Click(object sender, RoutedEventArgs e)
         {
             Dwn_stop.IsEnabled = false;
@@ -779,7 +744,7 @@ namespace UIdesign
             is_prepared = true;
             Dwn_start.IsEnabled = true;
     }
-
+        #endregion
         private void ItemClick(object sender, MouseButtonEventArgs e)
         {
             //Dwn_start.Visibility = Visibility.Visible;
@@ -787,9 +752,16 @@ namespace UIdesign
         }
         #endregion
         #region 设置页 设置存放路径
-
+        private void 选择路径_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new FolderBrowserDialog { SelectedPath = dwnPath };
+            var res = dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK;
+            if (!res) return;
+            dwnPath = dlg.SelectedPath;
+            dwnpath.IsEnabled = true;
+            dwnpath.Text = dwnPath;
+        }
         #endregion
-
         // 2021.6.12 新增
         #region 切换主题
         /// <summary>
@@ -863,15 +835,7 @@ namespace UIdesign
         
         #endregion
 
-        private void 选择路径_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new FolderBrowserDialog { SelectedPath = dwnPath };
-            var res = dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK;
-            if (!res) return;
-            dwnPath = dlg.SelectedPath;
-            dwnpath.IsEnabled = true;
-            dwnpath.Text = dwnPath;
-        }
+        
     }
 
 
