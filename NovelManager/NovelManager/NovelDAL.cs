@@ -219,7 +219,7 @@ namespace NovelManager
                 foreach (var obj in ExecuteReader($@"
                     SELECT chapter.readTimes 
                     FROM chapter 
-                    where curl = {curl};
+                    where curl = '{curl}';
                 "))
                 {
                     if (!obj.IsDBNull(0))
@@ -231,7 +231,6 @@ namespace NovelManager
             }
             return 0;
         }
-
 
         public int isStarred(int nid)
         {
