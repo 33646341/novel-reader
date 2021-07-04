@@ -30,13 +30,13 @@ namespace UIdesign
 
         ObservableCollection<Chapterlist> alllist = new ObservableCollection<Chapterlist>();
         ObservableCollection<note> notelist = new ObservableCollection<note>();
-        Fiction f1 = new Fiction();
+        Book f1 = new Book();
         List<chapter_list> l2;
         This_chapter_list pro = new This_chapter_list();
         int seed = 0;
         bool isonline1;
         string novelname1;
-        public Window1(List<chapter_list> l1, fiction_info a,Fiction f,Boolean isonline, This_chapter_list prolist)
+        public Window1(List<chapter_list> l1, fiction_info a,Book f,Boolean isonline, This_chapter_list prolist)
         {
 
             InitializeComponent();
@@ -253,7 +253,7 @@ namespace UIdesign
         #endregion
 
         #region 加入书架
-        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();//书架页
+        ObservableCollection<Book> boksf = new ObservableCollection<Book>();//书架页
         private void Button_Click(object sender, RoutedEventArgs e)
         {
                 ReadingOnline mainwin = Application.Current.MainWindow as ReadingOnline;
