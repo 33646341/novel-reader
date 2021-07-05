@@ -18,6 +18,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using ReadTool;
 using System.ComponentModel;
+using UIdesign.Entity;
 
 namespace UIdesign
 {
@@ -43,7 +44,7 @@ namespace UIdesign
             l2 = l1;
             pro = prolist;
             isonline1 = isonline;
-            novelname1 = f.fic_name;
+            novelname1 = f.bookName;
             if (!isonline)
             { 
                 Fiction_name.Text = a.col_fiction_name;
@@ -101,8 +102,8 @@ namespace UIdesign
             else
             {
                 MessageBox.Show(prolist.chapter_name.Count.ToString());
-                Fiction_name.Text = f.fic_name;
-                Author_name.Text = "["+f.fic_author + "]" ;
+                Fiction_name.Text = f.bookName;
+                Author_name.Text = "["+f.authorName + "]" ;
                 Total_number.Text = $"小说 | 已下载 ";
                 this.detaillist.ItemsSource = alllist;
                 this.notelist1.ItemsSource = notelist;
@@ -257,7 +258,7 @@ namespace UIdesign
         private void Button_Click(object sender, RoutedEventArgs e)
         {
                 ReadingOnline mainwin = Application.Current.MainWindow as ReadingOnline;
-                mainwin.Add_Bksf(sender, e, f1);
+                mainwin.Add_Bksf((MarkedBook)f1);
         }
 
         //public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)

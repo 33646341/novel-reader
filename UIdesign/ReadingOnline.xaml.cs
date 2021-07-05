@@ -63,10 +63,10 @@ namespace UIdesign
             {
                 Book fiction = new Book()
                 {
-                    Id = obj[0].ToString(),
-                    Name = obj[1].ToString(),
-                    Author = obj[2].ToString(),
-                    Url = obj[3].ToString()
+                    id = obj[0].ToString(),
+                    bookName = obj[1].ToString(),
+                    authorName = obj[2].ToString()
+                    //Url = obj[3].ToString()
                 };
                 loaded.Add(fiction);
             }
@@ -86,12 +86,12 @@ namespace UIdesign
                 bi.UriSource = new Uri(imageURL, UriKind.RelativeOrAbsolute);
                 bi.EndInit();
 
-                Book bok = new Book()
+                MarkedBook bok = new MarkedBook()
                 {
-                    Cover = bi,
-                    Name = obj[1].ToString(),
-                    Author = obj[2].ToString(),
-                    Url = obj[3].ToString()
+                    CoverImage = bi,
+                    bookName = obj[1].ToString(),
+                    authorName = obj[2].ToString(),
+                    id = obj[3].ToString()
                 };
                 boksf.Add(bok);
             }
@@ -138,14 +138,18 @@ namespace UIdesign
                 webClient.Encoding = System.Text.Encoding.UTF8;
                 string searchResultData = webClient.DownloadString($"http://47.106.243.172:8888/book/searchByPage?curr=1&limit=20&keyword={KeyWord}");
                 Root rt = JsonConvert.DeserializeObject<Root>(searchResultData);
-                ObservableCollection<Book> books = new ObservableCollection<Entity.Book>(rt.data.list.Take(10).ToList());
+                ObservableCollection<Book> books = new ObservableCollection<Entity.Book>(rt.data.list);//.Take(10).ToList()
                 //HandyControl.Controls.MessageBox.Info(rt.data.list[0].bookName);
 
                 //List<fiction_info> _fic_info;
 
                 if (books != null)
                 {
-                    Dispatcher.Invoke(() => { searchResultBooks.Clear(); searchResultBooks = books; });
+                    Dispatcher.Invoke(() =>
+                    {
+                        SearchResultBooks.Clear();
+                        SearchResultBooks = books;
+                    });
                     bookResultCacheCollection.Clear();
                     #region
                     /*
@@ -225,7 +229,7 @@ namespace UIdesign
                     Dispatcher.Invoke(delegate ()
                     {
                         // 等到预加载成功的小说超过五个时，才展示出来
-                        if (true || (books.Count > 0 && searchResultBooks.Count == Math.Min(5, books.Count)))
+                        if (true || (books.Count > 0 && SearchResultBooks.Count == Math.Min(5, books.Count)))
                         {
 
                             if (DockPanel.GetDock(searchPanel) != Dock.Top)
@@ -356,7 +360,7 @@ namespace UIdesign
         {
             object sen = this.searchResult_DataGrid.SelectedItems[0];
             Book emp = sen as Book;
-            Add_Bksf(sender, e, emp);
+            Add_Bksf((MarkedBook)emp);
         }
         public void DownLoadBook(object sender, RoutedEventArgs e)
         {
@@ -388,16 +392,17 @@ namespace UIdesign
 
         #endregion
         #region 下载页右键 查看详情，添加书架，删除本书
+        //////////// 下载
         public void Dwn_InfoPage(object sender, RoutedEventArgs e)
         {
-            object sen = this.downloaded_DataGrid.SelectedItems[0];
-            Book emp = sen as Book;
-            this_chapter_list t1 = new this_chapter_list();
-            This_chapter_list l1 = new This_chapter_list();
-            l1 = t1.Get_chapter(dwnPath + "\\Novel\\" + emp.Name);
+            //    object sen = this.downloaded_DataGrid.SelectedItems[0];
+            //    Book emp = sen as Book;
+            //    this_chapter_list t1 = new this_chapter_list();
+            //    This_chapter_list l1 = new This_chapter_list();
+            //    l1 = t1.Get_chapter(dwnPath + "\\Novel\\" + emp.Name);
 
-            Window1 login1 = new Window1(null, null, emp, true, l1);  //Login为窗口名，把要跳转的新窗口实例化
-            login1.Show();
+            //    Window1 login1 = new Window1(null, null, emp, true, l1);  //Login为窗口名，把要跳转的新窗口实例化
+            //    login1.Show();
         }
         public void Del_bk(object sender, RoutedEventArgs e)
         {
@@ -409,7 +414,7 @@ namespace UIdesign
         {
             object sen = this.downloaded_DataGrid.SelectedItems[0];
             Book emp = sen as Book;
-            Add_Bksf(sender, e, emp);
+            Add_Bksf((MarkedBook)emp);
         }
         #endregion
         #endregion
@@ -417,71 +422,75 @@ namespace UIdesign
         private ObservableCollection<Book> boksf = new ObservableCollection<Book>();//书架页
         private ObservableCollection<Book> progress = new ObservableCollection<Book>();//正下载
         private ObservableCollection<Book> loaded = new ObservableCollection<Book>();//已下载
-        private ObservableCollection<Book> searchResultBooks = new ObservableCollection<Book>();//搜索页
         #endregion
         #region 功能函数
+
+        /// <summary>
+        /// //////移除书架
+        /// </summary>
+        /// <param name="fic"></param>
         private void Remove_Bksf(object sender, RoutedEventArgs e, Book fic)
         {
-            bookshelf_ListBox.ItemsSource = boksf;
-            new Thread(() =>//前端删除下载项，无限制
-            {
-                Dispatcher.Invoke(delegate ()
-                {
-                    boksf.Remove(fic);
-                });
-            }).Start();
+            //    bookshelf_ListBox.ItemsSource = boksf;
+            //    new Thread(() =>//前端删除下载项，无限制
+            //    {
+            //        Dispatcher.Invoke(delegate ()
+            //        {
+            //            boksf.Remove(fic);
+            //        });
+            //    }).Start();
 
-            // 数据库开始
-            var novelDAL = new NovelManager.NovelDAL();
-            if (novelDAL.exsitsNovel(fic.Name) == 0)
-            {
-                novelDAL.addNovel(fic.Name, fic.Url);
-            }
-            var Novel_id = novelDAL.exsitsNovel(fic.Name);
-            Console.WriteLine(Novel_id);
-            novelDAL.updateNovel(Novel_id, "starred", "0");
-            // 数据库结束
+            //    // 数据库开始
+            //    var novelDAL = new NovelManager.NovelDAL();
+            //    if (novelDAL.exsitsNovel(fic.Name) == 0)
+            //    {
+            //        novelDAL.addNovel(fic.Name, fic.Url);
+            //    }
+            //    var Novel_id = novelDAL.exsitsNovel(fic.Name);
+            //    Console.WriteLine(Novel_id);
+            //    novelDAL.updateNovel(Novel_id, "starred", "0");
+            //    // 数据库结束
         }
-        public void Add_Bksf(object sender, RoutedEventArgs e, Book fic)
+        public void Add_Bksf(MarkedBook fic)
         {
-            BitmapImage bi = new BitmapImage();
-            // BitmapImage.UriSource must be in a BeginInit/EndInit block.
-            bi.BeginInit();
-            bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
-            bi.EndInit();
-            boksf.Add(fic);
+            //BitmapImage bi = new BitmapImage();
+            //// BitmapImage.UriSource must be in a BeginInit/EndInit block.
+            //bi.BeginInit();
+            //bi.UriSource = new Uri(@"..\..\img\emp.jpg", UriKind.RelativeOrAbsolute);
+            //bi.EndInit();
+            //boksf.Add(fic);
 
-            // 数据库开始
-            var novelDAL = new NovelManager.NovelDAL();
-            if (novelDAL.exsitsNovel(fic.Name) == 0)
-            {
-                novelDAL.addNovel(fic.Name, fic.Url);
-            }
-            var Novel_id = novelDAL.exsitsNovel(fic.Name);
-            Console.WriteLine(Novel_id);
-            novelDAL.updateNovel(Novel_id, "starred", "1");
-            novelDAL.updateNovel(Novel_id, "author", fic.Author);
-            // 数据库结束
-            new Thread(() =>
-            {
-                WebClient webClient = new WebClient();
-                var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
-                var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
-                var imageUrl = "";
-                if (matchResult.Success)
-                {
-                    imageUrl = matchResult.Groups[1].Value;
-                    //HandyControl.Controls.MessageBox.Show(imageUrl);
+            //// 数据库开始
+            //var novelDAL = new NovelManager.NovelDAL();
+            //if (novelDAL.exsitsNovel(fic.bookName) == 0)
+            //{
+            //    novelDAL.addNovel(fic.bookName, fic.Url);
+            //}
+            //var Novel_id = novelDAL.exsitsNovel(fic.Name);
+            //Console.WriteLine(Novel_id);
+            //novelDAL.updateNovel(Novel_id, "starred", "1");
+            //novelDAL.updateNovel(Novel_id, "author", fic.authorName);
+            //// 数据库结束
+            //new Thread(() =>
+            //{
+            //    WebClient webClient = new WebClient();
+            //    var html = webClient.DownloadString(fic.Url.Replace("www", "m"));
+            //    var matchResult = Regex.Match(html, @"og:image"" content=""(.*)""/>");
+            //    var imageUrl = "";
+            //    if (matchResult.Success)
+            //    {
+            //        imageUrl = matchResult.Groups[1].Value;
+            //        //HandyControl.Controls.MessageBox.Show(imageUrl);
 
-                    novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
+            //        novelDAL.updateNovel(Novel_id, "imageURL", imageUrl); // 写入数据库
 
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        BitmapImage img = new BitmapImage(new Uri(imageUrl));
-                        fic.Cover = img;
-                    });
-                }
-            }).Start();
+            //        Dispatcher.Invoke(delegate ()
+            //        {
+            //            BitmapImage img = new BitmapImage(new Uri(imageUrl));
+            //            fic.c = img;
+            //        });
+            //    }
+            //}).Start();
         }
         private void Del_Loaded(object sender, RoutedEventArgs e, Book fic)
         {
@@ -496,105 +505,109 @@ namespace UIdesign
 
             }).Start();
         }
+
+        /// <summary>
+        /// //////转详情
+        /// </summary>
         private void toinfopage(Book emp)
         {
-            //Fiction emp = (sender as ListViewItem).Content as Fiction;
+            //    //Fiction emp = (sender as ListViewItem).Content as Fiction;
 
-            get_homepage_content content = new get_homepage_content();
-            //MessageBox.Show(emp.col_fiction_url);
+            //    get_homepage_content content = new get_homepage_content();
+            //    //MessageBox.Show(emp.col_fiction_url);
 
-            ShowProgress = Visibility.Visible;
-            new Thread(() =>
-            {
-                // 本地调试开始
-                var localServerResult = Settings.ReadSetting("tempChaptersWeb", out string localServer);
-                if (!localServerResult)
-                {
-                    Settings.AddUpdateAppSettings("tempChaptersWeb", "https://static.avosapps.us/chapters.htm");
-                    Settings.ReadSetting("tempChaptersWeb", out localServer);
-                }
-                if (localServer != "")
-                {
-                    //////////////////////////////emp.Url = localServer;
-                }
-                // 本地调试结束
-
-
-                Tuple<fiction_info, List<chapter_list>> result;
-
-                if (bookResultCacheCollection.Keys.Contains(emp))
-                {
-                    result = bookResultCacheCollection[emp];
-                }
-                else if (!searchResultBooks.Contains(emp))
-                {
-                    // 如果不是从搜索页发出的请求，那就直接查
-                    result = content.TupleDetail(emp.Url);
-                    try
-                    {
-                        bookResultCacheCollection.TryAdd(emp, result); // 加入快表
-
-                    }
-                    catch (Exception e)
-                    {
-                        HandyControl.Controls.MessageBox.Show(e.Message);
-                    }
-
-                }
-                else
-                {
-                    //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
-                    while (!bookResultCacheCollection.Keys.Contains(emp))
-                    {
-                        Thread.Sleep(100);
-                    }
-                    result = bookResultCacheCollection[emp];
-                }
+            //    ShowProgress = Visibility.Visible;
+            //    new Thread(() =>
+            //    {
+            //        // 本地调试开始
+            //        var localServerResult = Settings.ReadSetting("tempChaptersWeb", out string localServer);
+            //        if (!localServerResult)
+            //        {
+            //            Settings.AddUpdateAppSettings("tempChaptersWeb", "https://static.avosapps.us/chapters.htm");
+            //            Settings.ReadSetting("tempChaptersWeb", out localServer);
+            //        }
+            //        if (localServer != "")
+            //        {
+            //            //////////////////////////////emp.Url = localServer;
+            //        }
+            //        // 本地调试结束
 
 
+            //        Tuple<fiction_info, List<chapter_list>> result;
+
+            //        if (bookResultCacheCollection.Keys.Contains(emp))
+            //        {
+            //            result = bookResultCacheCollection[emp];
+            //        }
+            //        else if (!searchResultBooks.Contains(emp))
+            //        {
+            //            // 如果不是从搜索页发出的请求，那就直接查
+            //            result = content.TupleDetail(emp.Url);
+            //            try
+            //            {
+            //                bookResultCacheCollection.TryAdd(emp, result); // 加入快表
+
+            //            }
+            //            catch (Exception e)
+            //            {
+            //                HandyControl.Controls.MessageBox.Show(e.Message);
+            //            }
+
+            //        }
+            //        else
+            //        {
+            //            //思路二，等待快表加载完，直到快表有才结束，不贸然加载（也没必要）
+            //            while (!bookResultCacheCollection.Keys.Contains(emp))
+            //            {
+            //                Thread.Sleep(100);
+            //            }
+            //            result = bookResultCacheCollection[emp];
+            //        }
 
 
 
-                /*
-                // 先查快表
-                if (fictionResultCache.Keys.Contains(emp))
-                {
-                    result = fictionResultCache[emp];
-                }
-                else
-                {
-                    result = content.TupleDetail(emp.Url);
-                    try
-                    {
-                        fictionResultCache.Add(emp, result); // 加入快表
 
-                    }catch(Exception e)
-                    {
-                        HandyControl.Controls.MessageBox.Show(e.Message);
-                    }
-                }
-                // 查快表结束
-                */
 
-                if (result == null)
-                {
-                    HandyControl.Controls.MessageBox.Info("您的请求过于频繁，请稍候再试。");
-                    return;
-                }
+            //        /*
+            //        // 先查快表
+            //        if (fictionResultCache.Keys.Contains(emp))
+            //        {
+            //            result = fictionResultCache[emp];
+            //        }
+            //        else
+            //        {
+            //            result = content.TupleDetail(emp.Url);
+            //            try
+            //            {
+            //                fictionResultCache.Add(emp, result); // 加入快表
 
-                List<chapter_list> lis = result.Item2;
-                //MessageBox.Show(lis[1].col_chapter_content);
-                fiction_info li = result.Item1;
-                //MessageBox.Show(li.col_fiction_introduction);
-                ShowProgress = Visibility.Collapsed;
-                Dispatcher.Invoke(delegate ()
-                {
-                    This_chapter_list provisionallist = new This_chapter_list();
-                    Window1 login1 = new Window1(lis, li, emp, false, provisionallist);  //Login为窗口名，把要跳转的新窗口实例化
+            //            }catch(Exception e)
+            //            {
+            //                HandyControl.Controls.MessageBox.Show(e.Message);
+            //            }
+            //        }
+            //        // 查快表结束
+            //        */
 
-                    login1.Show();
-                });
-            }).Start();
+            //        if (result == null)
+            //        {
+            //            HandyControl.Controls.MessageBox.Info("您的请求过于频繁，请稍候再试。");
+            //            return;
+            //        }
+
+            //        List<chapter_list> lis = result.Item2;
+            //        //MessageBox.Show(lis[1].col_chapter_content);
+            //        fiction_info li = result.Item1;
+            //        //MessageBox.Show(li.col_fiction_introduction);
+            //        ShowProgress = Visibility.Collapsed;
+            //        Dispatcher.Invoke(delegate ()
+            //        {
+            //            This_chapter_list provisionallist = new This_chapter_list();
+            //            Window1 login1 = new Window1(lis, li, emp, false, provisionallist);  //Login为窗口名，把要跳转的新窗口实例化
+
+            //            login1.Show();
+            //        });
+            //    }).Start();
 
         }
         #endregion
@@ -618,7 +631,7 @@ namespace UIdesign
         public void Down_Load(object sender, RoutedEventArgs e, Book fic)
         {
             LV_DwnPage.ItemsSource = progress;//绑定数据源
-            dwn.novel_name = fic.Name;
+            dwn.novel_name = fic.bookName;
             if (!dwn.down_or_not())
             {
                 search_stat.Text = "";
@@ -626,7 +639,7 @@ namespace UIdesign
                 string dpath = dwnPath;
                 new Thread(() =>//开启线程调用后台程序，添加下载
             {
-                dwn.download_add(fic.Url, dpath);
+                dwn.download_add(fic.id, dpath);
             }).Start();
                 new Thread(() =>//显示添加下载状态
                 {
@@ -649,61 +662,67 @@ namespace UIdesign
                     }
                 }
                 ).Start();
-                Book fiction = new Book(fic.Name, dwn.barvalue, fic.Author, fic.Url);
+
+                DownloadingBook downloadingBook = (DownloadingBook)fic;
                 if (progress != null)
                 {
-                    fiction.Barvalue = 0;
+                    downloadingBook.DownloadingProgress = 0;
                 }
-                progress.Add(fiction);
+                progress.Add(downloadingBook);
             }
 
         }
         #region 开始下载按钮
+
         private void Dwn_start_Click(object sender, RoutedEventArgs e)
         {
-            #region 后台开始下载
-            new Thread(() =>
+            /*
+    #region 后台开始下载
+    new Thread(() =>
+    {
+        if (is_prepared == true)
+        {
+            is_prepared = false;
+
+            Dispatcher.Invoke(delegate ()
             {
-                if (is_prepared == true)
-                {
-                    is_prepared = false;
-
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        Dwn_start.IsEnabled = false;
-                        Dwn_stop.IsEnabled = true;
-                    });
-                    dwn.download_novel();
-                }
-            }).Start();
-            #endregion
-            new Thread(() =>//前端下载进度显示，显示第一条
-            {
-                while (dwn.tag && progress.Count > 0)
-                {
-                    if (dwn.barvalue <= 100)
-                    {
-                        progress[0].Barvalue = dwn.barvalue;
-                        //Thread.Sleep(100);
-                    }
-                    if (progress[0].Barvalue >= 100 && progress.Count > 0)
-                    {
-                        progress[0].Barvalue = 0;
-                        //System.Windows.Forms.MessageBox.Show("睡眠态！");
-                        Dispatcher.Invoke(delegate ()
-                        {
-                            //System.Windows.Forms.MessageBox.Show($"实际：{dwn.barvalue}");
-                            //System.Windows.Forms.MessageBox.Show($"显示：{progress[0].Barvalue}");
-                            loaded.Add(progress[0]);
-                            progress.Remove(progress[0]);
-                            // System.Windows.Forms.MessageBox.Show("删除表项第一个！");
-                        });
-                    }
-                }
-
-
-            }).Start();
+                Dwn_start.IsEnabled = false;
+                Dwn_stop.IsEnabled = true;
+            });
+            dwn.download_novel();
         }
+    }).Start();
+    #endregion
+    new Thread(() =>//前端下载进度显示，显示第一条
+    {
+        while (dwn.tag && progress.Count > 0)
+        {
+            if (dwn.barvalue <= 100)
+            {
+                progress[0].Barvalue = dwn.barvalue;
+                //Thread.Sleep(100);
+            }
+            if (progress[0].Barvalue >= 100 && progress.Count > 0)
+            {
+                progress[0].Barvalue = 0;
+                //System.Windows.Forms.MessageBox.Show("睡眠态！");
+                Dispatcher.Invoke(delegate ()
+                {
+                    //System.Windows.Forms.MessageBox.Show($"实际：{dwn.barvalue}");
+                    //System.Windows.Forms.MessageBox.Show($"显示：{progress[0].Barvalue}");
+                    loaded.Add(progress[0]);
+                    progress.Remove(progress[0]);
+                    // System.Windows.Forms.MessageBox.Show("删除表项第一个！");
+                });
+            }
+        }
+
+
+    }).Start();
+            */
+        }
+
+
         #endregion
         #region 停止下载按钮
         private void Dwn_stop_Click(object sender, RoutedEventArgs e)
@@ -804,7 +823,7 @@ namespace UIdesign
 
         #endregion
 
-        #region 加载圈模型相关
+        #region 加载条 模型相关
         public event PropertyChangedEventHandler PropertyChanged;
         private int dwnnum = 0;
         public int Dwnum
@@ -839,12 +858,59 @@ namespace UIdesign
             return false;
         }
 
-        private string keyWord1;
+        private string keyWord;
 
-        public string KeyWord { get => keyWord1; set => SetProperty(ref keyWord1, value); }
+        public string KeyWord { get => keyWord; set => SetProperty(ref keyWord, value); }
+
+
+        private ObservableCollection<Book> searchResultBooks = new ObservableCollection<Book>();//搜索页
+        public ObservableCollection<Book> SearchResultBooks { get => searchResultBooks; 
+            set => SetProperty(ref searchResultBooks, value); }
         #endregion
     }
     #region 数据源
+
+    public class DownloadingBook : Book, INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        private int downloadingProgress;
+
+        public int DownloadingProgress { get => downloadingProgress; set => SetProperty(ref downloadingProgress, value); }
+    }
+
+    public class MarkedBook : Book, INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        private BitmapImage coverImage;
+
+        public BitmapImage CoverImage { get => coverImage; set => SetProperty(ref coverImage, value); }
+    }
 
     /*
     public class Book : INotifyPropertyChanged

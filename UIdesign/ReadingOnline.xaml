@@ -16,7 +16,6 @@
         <Style x:Key="DwnPage" TargetType="TabItem">
             <EventSetter Event="MouseLeftButtonDown" Handler="ItemClick"/>
         </Style>
-        <local:Book x:Key="Fic"/>
     </Window.Resources>
     <Grid x:Name="Total_grid">
         <Grid.RowDefinitions>
@@ -51,7 +50,7 @@
                         <hc:TransitioningContentControl x:Name="searchPanel" TransitionMode="Top2BottomWithFade" Width="1110">
                             <WrapPanel Height="72" Margin="0,0,0.333,0" Background="White" >
                                 <Label x:Name="state" Content="NOVEL" Margin="0,10" VerticalAlignment="Center" Width="126" Height="53" BorderBrush="{x:Null}" Foreground="#FF555555"/>
-                                <TextBox x:Name="keySearch_TextBox" Margin="10" Width="800" VerticalAlignment="Center" Height="48" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" KeyDown="content_key" Text="{Binding keyWord}">
+                                <TextBox x:Name="keySearch_TextBox" Margin="10" Width="800" VerticalAlignment="Center" Height="48" FontSize="20" BorderThickness="2" BorderBrush="Black"  Background="#FFEBEBEB" KeyDown="content_key" Text="{Binding KeyWord}">
                                     <TextBox.Resources>
                                         <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="Uniform" AlignmentX="Left" >
                                             <VisualBrush.Visual>
@@ -68,7 +67,7 @@
 
                         <!--<hc:LoadingCircle Width="60" Height="60"  Visibility="{Binding ShowProgress}" Margin="399,0,398.6,0"/>-->
                         <hc:TransitioningContentControl x:Name="searchPanel2" TransitionMode="Top2BottomWithFade">
-                            <DataGrid ItemsSource="{Binding searchResultBooks}" x:Name="searchResult_DataGrid" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" hc:DataGridAttach.ShowRowNumber="True" MouseDoubleClick="SListView_ItemDoubleClick">
+                            <DataGrid ItemsSource="{Binding SearchResultBooks}" x:Name="searchResult_DataGrid" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" hc:DataGridAttach.ShowRowNumber="True" MouseDoubleClick="SListView_ItemDoubleClick">
                                 <DataGrid.Columns>
 
                                     <!--<DataGridTemplateColumn Width="60" CanUserResize="False">
@@ -78,8 +77,15 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>-->
-                                    <DataGridTextColumn Binding="{Binding Name}" Width="500" Header="小说名称" IsReadOnly="True"/>
-                                    <DataGridTextColumn Binding="{Binding Author}" Header="作者" IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding catName}" Header="类别" IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding bookName}" Width="500" Header="小说名称" IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding authorName}" Header="作者" IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding bookStatus}" Header="状态" IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding wordCount}" Header="字数" IsReadOnly="True"/>
+                                    <DataGridTextColumn Binding="{Binding score}" Header="评分" IsReadOnly="True"/>
+
+
+
                                 </DataGrid.Columns>
                                 <DataGrid.ContextMenu>
                                     <ContextMenu >
@@ -115,8 +121,7 @@
                                     正在下载
                                 </TabItem.Header>
                                 <StackPanel>
-                                    <ListView x:Name="LV_DwnPage" Height="622" Margin="0,0,-0.4,0" 
-                                          ItemsSource="{Binding Source={StaticResource Fic}}">
+                                    <ListView x:Name="LV_DwnPage" Height="622" Margin="0,0,-0.4,0" >
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="小说名" Width="300">
@@ -146,7 +151,7 @@
 
                             </TabItem>
                             <TabItem Header="已下载" IsSelected="True" FontSize="20" Width="200"  Height="40">
-                                <DataGrid x:Name="downloaded_DataGrid" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" ItemsSource="{Binding Source={StaticResource Fic}}" hc:DataGridAttach.ShowRowNumber="True" MouseDoubleClick="SListView_ItemDoubleClick">
+                                <DataGrid x:Name="downloaded_DataGrid" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False" hc:DataGridAttach.ShowRowNumber="True" MouseDoubleClick="SListView_ItemDoubleClick">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Binding="{Binding Name}" Width="500" Header="小说名称" IsReadOnly="True"/>
                                         <DataGridTextColumn Binding="{Binding Author}" Header="作者" IsReadOnly="True"/>
@@ -179,13 +184,7 @@
                 </TabItem.Header>
                 <Grid x:Name="Boksf_grid">
                     <Grid>
-                        <Grid.Resources>
-                            <vm:Book x:Key="Card"></vm:Book>
-                        </Grid.Resources>
-                        <Grid.DataContext>
-                            <Binding Source="{StaticResource Card}"/>
-                        </Grid.DataContext>
-                        <ListBox x:Name="bookshelf_ListBox" Margin="10,0,-0.4,0" BorderThickness="0" Style="{DynamicResource WrapPanelHorizontalListBox}" ItemsSource="{Binding Source={StaticResource Card}}" Height="612" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.406">
+                        <ListBox x:Name="bookshelf_ListBox" Margin="10,0,-0.4,0" BorderThickness="0" Style="{DynamicResource WrapPanelHorizontalListBox}" Height="612" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.406">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="data:CardModel">
                                     <hc:Card Width="300" BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="8" Footer="{Binding Author}">
