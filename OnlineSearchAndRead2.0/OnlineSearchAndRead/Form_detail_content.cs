@@ -21,9 +21,7 @@ namespace OnlineSearchAndRead
 
 
         //操作线程
-        //查找小说线程
-        Thread _thread_Search_Fiction;
-        Thread _thread_Search_Chapter;
+
         public Form_detail_content()
         {
             InitializeComponent();

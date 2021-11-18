@@ -47,7 +47,7 @@
                 </hc:TagContainer>
                 <hc:TagContainer ItemContainerStyle="{StaticResource TagCustomStyle}" Margin="11" Width="420" Padding="5" ItemsSource="{Binding DataList}"/>
                 <DockPanel LastChildFill="True" Margin="11,0,11,11">
-                    <Button Command="{Binding AddItemCmd}" Margin="10,0,0,0" DockPanel.Dock="Right" Content="right"/>
+                    <Button Command="{Binding AddItemCmd}" Margin="10,0,0,0" DockPanel.Dock="Right" Content="rightright"/>
                     <TextBox Text="{Binding TagName}"/>
                 </DockPanel>
 

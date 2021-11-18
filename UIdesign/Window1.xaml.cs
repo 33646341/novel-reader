@@ -18,6 +18,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using ReadTool;
 using System.ComponentModel;
+using UIdesign.Entity;
 
 namespace UIdesign
 {
@@ -30,20 +31,20 @@ namespace UIdesign
 
         ObservableCollection<Chapterlist> alllist = new ObservableCollection<Chapterlist>();
         ObservableCollection<note> notelist = new ObservableCollection<note>();
-        Fiction f1 = new Fiction();
+        Book f1 = new Book();
         List<chapter_list> l2;
         This_chapter_list pro = new This_chapter_list();
         int seed = 0;
         bool isonline1;
         string novelname1;
-        public Window1(List<chapter_list> l1, fiction_info a,Fiction f,Boolean isonline, This_chapter_list prolist)
+        public Window1(List<chapter_list> l1, fiction_info a,Book f,Boolean isonline, This_chapter_list prolist)
         {
 
             InitializeComponent();
             l2 = l1;
             pro = prolist;
             isonline1 = isonline;
-            novelname1 = f.fic_name;
+            novelname1 = f.bookName;
             if (!isonline)
             { 
                 Fiction_name.Text = a.col_fiction_name;
@@ -101,8 +102,8 @@ namespace UIdesign
             else
             {
                 MessageBox.Show(prolist.chapter_name.Count.ToString());
-                Fiction_name.Text = f.fic_name;
-                Author_name.Text = "["+f.fic_author + "]" ;
+                Fiction_name.Text = f.bookName;
+                Author_name.Text = "["+f.authorName + "]" ;
                 Total_number.Text = $"小说 | 已下载 ";
                 this.detaillist.ItemsSource = alllist;
                 this.notelist1.ItemsSource = notelist;
@@ -253,11 +254,11 @@ namespace UIdesign
         #endregion
 
         #region 加入书架
-        ObservableCollection<Fiction> boksf = new ObservableCollection<Fiction>();//书架页
+        ObservableCollection<Book> boksf = new ObservableCollection<Book>();//书架页
         private void Button_Click(object sender, RoutedEventArgs e)
         {
                 ReadingOnline mainwin = Application.Current.MainWindow as ReadingOnline;
-                mainwin.Add_Bksf(sender, e, f1);
+                mainwin.Add_Bksf((MarkedBook)f1);
         }
 
         //public void Add_Bksf(object sender, RoutedEventArgs e, Fiction fic)
