@@ -88,10 +88,10 @@
 
                                 </DataGrid.Columns>
                                 <DataGrid.ContextMenu>
-                                    <ContextMenu >
+                                    <ContextMenu  >
                                         <MenuItem Header="查看详情" Click="InfoPage"/>
-                                        <MenuItem Header="添加书架" Click="BookShelf"/>
-                                        <MenuItem Header="添加下载" Click="DownLoadBook"/>
+                                        <!--<MenuItem Header="添加书架" Click="BookShelf"/>
+                                        <MenuItem Header="添加下载" Click="DownLoadBook"/>-->
                                     </ContextMenu>
                                 </DataGrid.ContextMenu>
                             </DataGrid>
@@ -99,7 +99,7 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
-            <TabItem IsSelected="True" Width="255" >
+            <TabItem Visibility="Collapsed" Width="255" >
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\download.png" Width="24" Height="24"/>
@@ -175,7 +175,7 @@
                 </hc:TransitioningContentControl>
 
             </TabItem>
-            <TabItem IsSelected="True" FontSize="20"  Width="255">
+            <TabItem Visibility="Collapsed" FontSize="20"  Width="255">
                 <TabItem.Header>
                     <WrapPanel>
                         <Image Source="img\bookshelf.png" Width="24" Height="24"/>
